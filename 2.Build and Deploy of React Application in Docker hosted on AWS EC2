@@ -47,3 +47,6 @@ ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker stop 938
 ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker start 938
 938
 ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$
+
+Step11: Again after reconnecting ec2 u can enter this command
+  sudo systemctl enable docker
