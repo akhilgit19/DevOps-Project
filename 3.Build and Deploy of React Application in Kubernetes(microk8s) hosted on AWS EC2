@@ -1,0 +1,45 @@
+Step1:
+
+Last login: Thu Aug 15 04:16:37 2024 from 119.82.104.102
+ubuntu@ip-172-31-30-239:~$ ls
+Gold_Site_Ecommerce
+ubuntu@ip-172-31-30-239:~$ cd Gold_Site_Ecommerce
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ ls
+Jenkinsfile  golddockerfile     package.json  src   test2023
+README.md    package-lock.json  public        test
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo systemctl enable docker
+Synchronizing state of docker.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable docker
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker images
+REPOSITORY     TAG       IMAGE ID       CREATED       SIZE
+react-docker   latest    b58557d0e9fc   2 hours ago   45.9MB
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ cd ..
+ubuntu@ip-172-31-30-239:~$ sudo docker images
+REPOSITORY     TAG       IMAGE ID       CREATED       SIZE
+react-docker   latest    b58557d0e9fc   2 hours ago   45.9MB
+
+ubuntu@ip-172-31-30-239:~$ sudo docker login
+Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+Username: akhilpagadapoola
+Password: 
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+Login Succeeded
+ubuntu@ip-172-31-30-239:~$ sudo docker tag react-docker:latest akhilpagadapoola/react-nginx:latest
+ubuntu@ip-172-31-30-239:~$ sudo docker push akhilpagadapoola/react-nginx:latest
+The push refers to repository [docker.io/akhilpagadapoola/react-nginx]
+9577f12cf2c6: Pushed 
+28d40eb13793: Mounted from library/nginx 
+2ee64cbdc81d: Mounted from library/nginx 
+a0bde08c3815: Mounted from library/nginx 
+3be2be874bba: Mounted from library/nginx 
+fb5df5db7bbd: Mounted from library/nginx 
+eadc278e8f9e: Mounted from library/nginx 
+9dca7439e1b3: Mounted from library/nginx 
+b895814e9e64: Mounted from library/nginx 
+latest: digest: sha256:c0bfd2d84cfe823ba61d04a775e6b999907264c3f6f04cbcbc615e7d6f7689e6 size: 2200
+ubuntu@ip-172-31-30-239:~$
