@@ -1,0 +1,49 @@
+Step1-ubuntu@ip-172-31-30-239:~$ cat /etc/os-release
+Step2-ubuntu@ip-172-31-30-239:~$ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+Step3-#ubuntu@ip-172-31-30-239:~$ # Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+Step4 - ubuntu@ip-172-31-30-239:~$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+Step5- ubuntu@ip-172-31-30-239:~$ docker --version
+
+Step6-
+ubuntu@ip-172-31-30-239:~$ git --version
+
+Step7-
+ubuntu@ip-172-31-30-239:~$ ls
+ubuntu@ip-172-31-30-239:~$ git clone https://github.com/Hari0o/Gold_Site_Ecommerce.git
+
+Step8-
+ubuntu@ip-172-31-30-239:~$ cd Gold_Site_Ecommerce
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ ls
+Jenkinsfile  golddockerfile     package.json  src   test2023
+
+Step9-ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker build -t react-docker -f golddockerfile .
+
+Step10-
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ ls
+Jenkinsfile  README.md  golddockerfile  package-lock.json  package.json  public  src  test  test2023
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker images
+REPOSITORY     TAG       IMAGE ID       CREATED         SIZE
+react-docker   latest    b58557d0e9fc   2 minutes ago   45.9MB
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker run --name react-nginx-deploy -p 80:80 -d react-docker
+938e50cdb4530aa0b6da62ca2a22cdb25c84457930b148a8c673ff51ff519a21
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                               NAMES
+938e50cdb453   react-docker   "/docker-entrypoint.…"   7 seconds ago   Up 6 seconds   0.0.0.0:80->80/tcp, :::80->80/tcp   react-nginx-deploy
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker stop 938
+938
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker start 938
+938
+ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$
