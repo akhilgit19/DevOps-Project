@@ -1,24 +1,9 @@
-Step1:
+In docker server
 
-Last login: Thu Aug 15 04:16:37 2024 from 119.82.104.102
-ubuntu@ip-172-31-30-239:~$ ls
-Gold_Site_Ecommerce
-ubuntu@ip-172-31-30-239:~$ cd Gold_Site_Ecommerce
-ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ ls
-Jenkinsfile  golddockerfile     package.json  src   test2023
-README.md    package-lock.json  public        test
-ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo systemctl enable docker
-Synchronizing state of docker.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
-Executing: /usr/lib/systemd/systemd-sysv-install enable docker
-ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ sudo docker images
-REPOSITORY     TAG       IMAGE ID       CREATED       SIZE
-react-docker   latest    b58557d0e9fc   2 hours ago   45.9MB
-ubuntu@ip-172-31-30-239:~/Gold_Site_Ecommerce$ cd ..
-ubuntu@ip-172-31-30-239:~$ sudo docker images
-REPOSITORY     TAG       IMAGE ID       CREATED       SIZE
-react-docker   latest    b58557d0e9fc   2 hours ago   45.9MB
-
-ubuntu@ip-172-31-30-239:~$ sudo docker login
+ubuntu@ip-172-31-21-226:~/Gold_Site_Ecommerce$ sudo docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS         PORTS                               NAMES
+33837931464e   react-docker-image   "/docker-entrypoint.…"   21 minutes ago   Up 2 minutes   0.0.0.0:80->80/tcp, :::80->80/tcp   react-nginx-deploy
+ubuntu@ip-172-31-21-226:~/Gold_Site_Ecommerce$ sudo docker login
 Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
 You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
 
@@ -29,10 +14,10 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
-ubuntu@ip-172-31-30-239:~$ sudo docker tag react-docker:latest akhilpagadapoola/react-nginx:latest
-ubuntu@ip-172-31-30-239:~$ sudo docker push akhilpagadapoola/react-nginx:latest
-The push refers to repository [docker.io/akhilpagadapoola/react-nginx]
-9577f12cf2c6: Pushed 
+ubuntu@ip-172-31-21-226:~/Gold_Site_Ecommerce$ sudo docker tag react-docker-image:latest akhilpagadapoola/react-nginx-repo:latest
+ubuntu@ip-172-31-21-226:~/Gold_Site_Ecommerce$ sudo docker push akhilpagadapoola/react-nginx-repo:latest
+The push refers to repository [docker.io/akhilpagadapoola/react-nginx-repo]
+3ee85ba4dd56: Pushed 
 28d40eb13793: Mounted from library/nginx 
 2ee64cbdc81d: Mounted from library/nginx 
 a0bde08c3815: Mounted from library/nginx 
@@ -41,46 +26,9 @@ fb5df5db7bbd: Mounted from library/nginx
 eadc278e8f9e: Mounted from library/nginx 
 9dca7439e1b3: Mounted from library/nginx 
 b895814e9e64: Mounted from library/nginx 
-latest: digest: sha256:c0bfd2d84cfe823ba61d04a775e6b999907264c3f6f04cbcbc615e7d6f7689e6 size: 2200
-ubuntu@ip-172-31-30-239:~$
+latest: digest: sha256:0a3bf9050709a264ef84669d7406f5cefd0edcb4a1b90033ff327d5c71e0514c size: 2200
+ubuntu@ip-172-31-21-226:~/Gold_Site_Ecommerce$ 
 
 
-Step2:
+Now create a new kubernetes server 
 
-Create a new kubneter server in new ec2
-
-ubuntu@ip-172-31-17-3:~$ sudo snap install microk8s --classic
-microk8s (1.30/stable) v1.30.3 from Canonical✓ installed
-ubuntu@ip-172-31-17-3:~$ microk8s status --wait-ready
-Insufficient permissions to access MicroK8s.
-You can either try again with sudo or add the user ubuntu to the 'microk8s' group:
-
-    sudo usermod -a -G microk8s ubuntu
-    sudo chown -R ubuntu ~/.kube
-
-After this, reload the user groups either via a reboot or by running 'newgrp microk8s'.
-ubuntu@ip-172-31-17-3:~$ sudo usermod -a -G microk8s ubuntu
-ubuntu@ip-172-31-17-3:~$ sudo su - root
-root@ip-172-31-17-3:~# sudo su - ubuntu
-ubuntu@ip-172-31-17-3:~$ 
-microk8s kubectl get all --all-namespaces
-NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
-kube-system   pod/calico-kube-controllers-796fb75cc-spcvr   1/1     Running   0          3m19s
-kube-system   pod/calico-node-6wnwk                         1/1     Running   0          3m19s
-kube-system   pod/coredns-5986966c54-7d67k                  1/1     Running   0          3m19s
-
-NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
-default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  3m32s
-kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   3m23s
-
-NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   3m23s
-
-NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           3m23s
-kube-system   deployment.apps/coredns                   1/1     1            1           3m24s
-
-NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       3m22s
-kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       3m22s
-ubuntu@ip-172-31-17-3:~$ 
