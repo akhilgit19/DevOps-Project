@@ -43,3 +43,44 @@ eadc278e8f9e: Mounted from library/nginx
 b895814e9e64: Mounted from library/nginx 
 latest: digest: sha256:c0bfd2d84cfe823ba61d04a775e6b999907264c3f6f04cbcbc615e7d6f7689e6 size: 2200
 ubuntu@ip-172-31-30-239:~$
+
+
+Step2:
+
+Create a new kubneter server in new ec2
+
+ubuntu@ip-172-31-17-3:~$ sudo snap install microk8s --classic
+microk8s (1.30/stable) v1.30.3 from Canonical✓ installed
+ubuntu@ip-172-31-17-3:~$ microk8s status --wait-ready
+Insufficient permissions to access MicroK8s.
+You can either try again with sudo or add the user ubuntu to the 'microk8s' group:
+
+    sudo usermod -a -G microk8s ubuntu
+    sudo chown -R ubuntu ~/.kube
+
+After this, reload the user groups either via a reboot or by running 'newgrp microk8s'.
+ubuntu@ip-172-31-17-3:~$ sudo usermod -a -G microk8s ubuntu
+ubuntu@ip-172-31-17-3:~$ sudo su - root
+root@ip-172-31-17-3:~# sudo su - ubuntu
+ubuntu@ip-172-31-17-3:~$ 
+microk8s kubectl get all --all-namespaces
+NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
+kube-system   pod/calico-kube-controllers-796fb75cc-spcvr   1/1     Running   0          3m19s
+kube-system   pod/calico-node-6wnwk                         1/1     Running   0          3m19s
+kube-system   pod/coredns-5986966c54-7d67k                  1/1     Running   0          3m19s
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
+default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  3m32s
+kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   3m23s
+
+NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   3m23s
+
+NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           3m23s
+kube-system   deployment.apps/coredns                   1/1     1            1           3m24s
+
+NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
+kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       3m22s
+kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       3m22s
+ubuntu@ip-172-31-17-3:~$ 
