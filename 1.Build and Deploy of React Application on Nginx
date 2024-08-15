@@ -21,7 +21,7 @@ Step17-  cd /etc/nginx/
 Step18- ls
 Step19- cd sites-available
 Step20- ls
-Step21 - vi default
+Step21 - sudo vi default
 Step22- cd /var/www/html
 Step23- ls
 Step24- sudo su - ubuntu
@@ -31,5 +31,5 @@ Step27- sudo cp -R build/ /var/www/html/
 Step28- cd build/
 Step29- ls
 Step30- sudo systemctl status nginx
-Step31- sudo systemctl restart ninx
+Step31- sudo systemctl restart nginx
 
