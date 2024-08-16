@@ -106,13 +106,28 @@ NAME                                     READY   STATUS    RESTARTS   AGE
 react-nginx-deployment-959dfb7cb-l72gt   1/1     Running   0          22s
 react-nginx-deployment-959dfb7cb-ndxp9   1/1     Running   0          22s
 ubuntu@ip-172-31-40-15:~$ sudo vi react-service.yaml
+ubuntu@ip-172-31-40-55:~$ cat react-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+  namespace: react-nginx
+spec:
+  selector:
+    app: react
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
 ubuntu@ip-172-31-40-15:~$ kubectl apply -f  react-service.yaml
 service/react-service created
 ubuntu@ip-172-31-40-15:~$ kubectl get svc -n react-nginx
 NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 react-service   ClusterIP   10.152.183.246   <none>        80/TCP    15s
 ubuntu@ip-172-31-40-15:~$ curl http://10.152.183.246
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.ec03feae.js"></script><link href="/static/css/main.cd48fc57.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>ubuntu@ip-172-31-40-15:~$ microk8s enable ingress
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.ec03feae.js"></script><link href="/static/css/main.cd48fc57.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+
+ubuntu@ip-172-31-40-15:~$ microk8s enable ingress
 Infer repository core for addon ingress
 Enabling Ingress
 ingressclass.networking.k8s.io/public created
