@@ -69,8 +69,6 @@ NAMESPACE     NAME                                                DESIRED   CURR
 kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       46s
 kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       46s
 ubuntu@ip-172-31-40-15:~$ alias kubectl="microk8s kubectl"
-ubuntu@ip-172-31-40-15:~$ kubectl create ns react-microk8s
-namespace/react-microk8s created
 ubuntu@ip-172-31-40-15:~$ kubectl create ns react-nginx
 namespace/react-nginx created
 ubuntu@ip-172-31-40-15:~$ ls
