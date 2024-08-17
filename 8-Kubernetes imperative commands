@@ -254,3 +254,144 @@ spec:
   type: ClusterIP
 status:
   loadBalancer: {}
+
+
+
+Kubernetes imperative commands are more useful and make your work easier especially when you want to work faster or save time. if you are giving exams like CKA, you must be aware of this to save lot of time.
+
+since we have have used microk8s, let us use alias command or .bashrc file, please do note that if you have updated alias command in .bashrc, we don't need to run alias command everytime we turn on the server
+
+case1: run alias command every time you log into server
+alias kubectl="microk8s kubectl"
+Copy
+          
+        
+case2: Update the command in .bashrc file so we don't have to run command every time we login
+sudo vi .bashrc
+Copy
+                               
+        
+place the command as shown in screenshot
+
+Note: Do not disturb any other contents of the file.
+
+once you placed the command, sign out and sign in to user, you can simply switch to any other user and login to our user for changes to take place
+sudo su - root
+Copy
+sudo su - ubuntu
+Copy
+
+
+Now lets start with commands, for our practise, we recommend creating seperate namespace first as not to disturb existing resources
+kubectl create ns practise
+Copy
+
+
+
+For the pods:
+
+case1: to make pod up directly
+kubectl run podname --image=nginx -n practise
+Copy
+
+
+In place of podname, you can give any of your desired name, in image, you have to give image that you created or that already exists in dockerhub. i am taking nginx as an image for example, and -n flag stands for namespace
+
+As you can see this command created pod directly, you can verify with this command
+kubectl get pods -n practise
+Copy
+
+
+case2: To check what command does and not to run any pod
+Now if you don't want to run the pods, rather check what does command do, run the command
+kubectl run podname --image=nginx -n practise --dry-run=client -o yaml
+Copy
+
+
+This does not start the pod, but shows what the command would do
+case3: In case you want to edit the file, like manifest file
+kubectl run podname --image=nginx -n practise --dry-run=client -o yaml > manifest.yaml
+Copy
+
+
+i have taken manifest.yaml as an example you can give any name that you desire
+now you can edit the file
+sudo vi manifest.yaml
+Copy
+
+
+now make the changes that you want to
+
+
+here i have made changes like podname to podname2 , and image nginx to alpine2.once the changes are done, run the command
+kubectl apply -f manifest.yaml
+Copy
+
+
+OTHER COMMANDS:
+in case you forgot any command, if you had remember first lines of command , you can use help command
+
+kubectl run --help
+Copy
+
+
+As you can see this can help you to get with examples
+
+In case the pod is already running and you want to check the detailed information of pod
+
+kubectl describe pod podname -n practise
+Copy
+
+
+
+In case, you want to check the logs of pod,
+kubectl logs -f podname -n practise
+Copy
+
+
+In case you want to edit the existing pod that is already running,generally below command is not recommended unless we need to make a quick fix
+kubectl edit pod podname -n practise
+Copy
+
+
+
+
+In case, you want to delete the pod
+
+kubectl delete pod podname -n practise
+Copy
+
+
+Similarly for Deployment:
+
+ Play with these commands to get real-time practise
+
+kubectl create deployment deploymentname --image=nginx --replicas=2 --port=80 -n practise
+Copy
+
+
+
+Similarly for Service:
+
+kubectl create service clusterip service-name --tcp=8080:80 -n practise
+Copy
+
+
+
+You can play with more commands based on cheat sheet from kubernetes official documentation - click here to navigate
+
+once you are done with practise, delete namespace to delete all your resources at once
+
+To check what is present in your namespace.
+
+kubectl get all -n practise
+Copy
+
+
+
+Now to delete all these resources at once
+
+kubectl delete ns practise
+Copy
+
+Note: Deleting namespace is never recommended in real-time scenarios
