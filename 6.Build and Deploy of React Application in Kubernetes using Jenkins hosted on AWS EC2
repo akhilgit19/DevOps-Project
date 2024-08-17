@@ -1,0 +1,239 @@
+This can be done with existing setup of your resources from Previous Projects
+
+Image: Ubuntu Server 24.04
+
+Type: t3.medium
+
+cost charges may incur using t3 medium, so make sure to stop once project is done
+
+#Note: AWS Free Tier is only for 750 Hours per year, so make sure you stop instance once you are done with the project
+Jenkins is most popular CI/CD tool that is used to setup pipelines, these pipelines help us in building and deploying with just a click
+
+We will set up a pipeline to our project in such a way that any commit or code changes will deploy into our website directly 
+
+Let us take a new AWS EC2 Server and configure jenkins on it
+
+Lets install Jenkins from its official documentation
+
+Before we install jenkins, install Java
+
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre
+java -version
+Copy
+Now lets install jenkins
+
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins
+Copy
+Verify Jenkins installation by command
+jenkins --version
+Copy
+
+
+Now let us enable jenkins so that even if system is rebooted, jenkins runs as soon as system
+is up , also start jenkins and check status of jenkins
+
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+Copy
+
+
+Now lets configure Jenkins, Jenkins by default runs on port 8080
+
+Add 8080 to inbound rules of AWSEC2 server in which jenkins is running
+
+
+Now your jenkins URL will be http://{AWS_PUBLIC_IP}:8080,access this URL to configure jenkins and If you are accessing for first time, you will be displayed this page
+
+
+
+
+Now get the password from your AWS EC2 server by running command
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+Copy
+
+
+Copy and paste the password in jenkins page, once password is authenticated
+
+
+go with install suggested plugins, we can install custom plugins later based on requirement
+
+
+its recommended to create an Admin user
+
+
+and then 
+
+
+since our public Ip changes, everytime as we are not using AWS elastic IP, i will be skipping this step
+
+Our final page after configuration
+
+We configure jenkins successfully
+
+
+Only for first time, we need to configure jenkins from next time, we will login with username and password that we created as first admin
+
+
+you can login with First admin user created or you can give username as admin and password is the password fetched from /var/lib/jenkins/secrets/initialAdminPassword when we initially logged in
+
+
+
+Now before we began, In last project we have used installed Ansible in BuildServer and we have written two playbooks inside Buildserver, we asked ansible to run build.yaml in BuildServer and deploy.yaml in DeployServer, we triggered both the playbooks from inside BuildServer 
+
+Now lets make a connection between JenkinsServer and BuildServer,so we can ask Jenkins to run ansible playbooks that are inside BuildServer
+
+We will switch to Jenkins user and generate key-pair
+
+sudo su - jenkins
+Copy
+ssh-keygen
+Copy
+
+
+as you can see from above screenshot keys were created in path /var/lib/jenkins/.ssh, get the contents of public key from that path
+
+
+copy the contents of public key and log in to BuildServer
+sudo vi /home/ubuntu/.ssh/authorized_keys
+Copy
+
+
+Now come back to Jenkins server, and let us test the connection, copy AWS private IP of BuildServer and test connection
+ssh ubuntu@{BuildServer_Private_IP}
+Copy
+
+
+now we are inside buildserver from JenkinsServer, type exit to come back to our Jenkins Server
+exit
+Copy
+
+
+Build and Deploy of React Application
+since we established connection, let us write our Jenkinsfile first
+
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build Docker images on Build Server') {
+            steps {
+                script {
+                    // Execute Ansible playbook on Build Server
+                    sh "ssh ubuntu@172.31.42.119 'ansible-playbook /home/ubuntu/build.yaml'"                    // 'ansible-playbook /home/ubuntu/playbook.yaml'"
+                
+                    
+                    }
+            }
+        }
+        
+        stage('Deploy Script on Deploy Server') {
+            steps {
+                script {
+                    // Execute deployment playbook on Deploy Server
+                    sh "ssh ubuntu@172.31.42.119 'ansible-playbook /home/ubuntu/deploy.yaml'"
+                }
+            }
+        }
+    }
+}
+Copy
+
+In the above jenkins file, agent- any is where we are asking jenkins to run on any nodes that are available. since we have not configured any nodes, these pipelines will run on master jenkins server. ".sh" indicates shell and command followed by it indicates jenkins to login to buildserver and run playbook build.yaml in stage-1 and run playbook deploy.yaml in stage-2, the IP mentioned is Private IP address of Build Server
+
+Now, lets include this file in the Github react project in which we want to deploy
+name it as Jenkinsfile
+
+
+
+Now go back to our Jenkins URL. click on New item
+
+
+
+
+give a name and click on pipeline project
+
+
+
+now make sure to select this option as we will use webhooks
+
+
+
+click on dropdown and change it to Pipeline from SCM
+
+
+
+then select git in SCM and copy our react project git URL, you can leave credentials to none as it is public repository
+
+
+
+change branch specifier to branch in which jenkinsfile is present and script path to name of jenkinsfile you gave
+
+
+since in our case it is main branch and Jenkinsfile, we will make changes accordingly
+
+
+click on apply and save
+
+Click on Buildnow for pipeline to start
+
+This is manual build and deployment
+
+Since we want to automate Build and Deployment whenever developer commits code, we will use webhooks
+
+Go to your Github repo for which we want deployment
+
+click on settings
+
+click on Webhooks and add Webhook
+
+Add http://{AWS_EC2_Public_ip}:8080/github-webhook/ , here AWS EC2 Public IP refers to server in which Jenkins is installed
+
+
+change content type to application/json and add webhook
+
+
+Now we have configured Webhook with push event, this means whenever code is pushed to repository.
+
+Jenkins will trigger pipeline as we have selected Github hook trigger for Git scm polling while configuring pipeline
+
+let us test this by making changes in our code,as of now our website looks like this
+
+
+
+And now let us use change in code from testsss for Hands to Testing for Demo
+
+
+As soon as i commited code, jenkins triggered pipeline because of webhook  configuration that we made.
+
+
+
+
+
+
+As soon as pipeline finished, our website updated.
+
+
+
+Build and Deployment is successfully completed using Jenkins Pipeline
+
+if you want to check logs of pipeline 
+
+click on number here like #1 or #2
+
+
+click on Console output , you can check logs even when pipeline is running.
+
+
+
+
+
+With this Our Build and Deploy Series has been completed
