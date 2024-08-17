@@ -1,0 +1,89 @@
+SSH is known as secure shell or secure socket shell and to put it in simple words, SSH is used to authenticate using key-pairs and establishes secure connection. with this we can avoid authentication using passwords.
+
+SSH authentication requires public key and private key. private key will be present with the user and public key will be put inside the server.
+
+the same public key can be put in any number of servers. and to authenticate these servers. only the private key linked to public key can grant access.
+
+let us understand this concept in detail with demo by practising.
+
+For Demo, take two AWS EC2 instances
+
+run this below command in aws ec2 to generate key-pair, public key and private key
+
+
+
+ssh-keygen
+Copy
+
+
+once you give this command, now if you go to path where key is saved, you can see the path here
+after you run the command
+
+
+navigate now to that path
+
+cd /home/ubuntu/.ssh
+Copy
+
+
+now if you view the files here, you will be able to find two keys here,id_ed25519 and id_ed25519.pub. it can also be id_rsa and id_rsa.pub in your case. public key ends with .pub and other key is our private key
+
+
+Now we need to keep priavte key safe  and confidential with us and public key should be placed in server we want to authenticate using this private key
+Now copy the contents of public key by simple view the public key by cat command
+
+cat id_ed55219.pub
+Copy
+
+
+copy this by simple select and copy. once copied, login to server you want to authenticate using this private key
+
+Please do note that the IP where we generated key pair is 172.31.40.140 from screenshots
+
+now lets login to different server and , other server IP is 172.31.36.16.
+
+We have to place our public key in authorized_keys of server, run the below command to edit authorized_keys file
+
+sudo vi /home/ubuntu/.ssh/authorized_keys
+Copy
+
+
+paste the public key that we copied from server IP 172.31.40.140 by "insert" key to be able to edit file and paste normally left mouse click and paste
+
+
+
+
+
+
+
+
+save and exit the file press "esc key" and then :wq
+
+:wq means save and exit and :q implies quit without saving and vi stands as our editor here.
+
+Now once you have placed your key, lets go back to our old server to check authentication
+
+Now for the user to get refreshed and able to authenticate, we will sign out and sign in to user. simple way is to switch to different user and sign back into the user with which we generated key
+
+sudo su - root
+Copy
+sudo su - ubuntu
+Copy
+
+
+now let us check the authentication, with the private key. you need to know the path of your private key
+
+you can check with command 
+
+ssh -i /home/ubuntu/.ssh/id_ed25519 ubuntu@172.31.36.16
+Copy
+here after -i flag comes private key and ubuntu is the user with which we are trying to login and 172.31.36.16 is the IP of the other server
+
+
+
+Now you can see from below screenshot, we are in the Ip 172.31.40.140 and we are able to connect to 172.31.36.16(the Ip in which we have placed our public key). This shows our authentication is successfull
+
+
+
+when you create an AWS EC2 instance with key-pair. this works the same way. private key is given to you and public key is placed inside AWS EC2 server. 
+
