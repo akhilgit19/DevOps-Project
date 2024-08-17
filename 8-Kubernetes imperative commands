@@ -1,0 +1,256 @@
+ubuntu@ip-172-31-44-123:~$ alias kubectl="microk8s kubectl"
+ubuntu@ip-172-31-44-123:~$ sudo vi .bashrc
+ubuntu@ip-172-31-44-123:~$ sudo su - root
+root@ip-172-31-44-123:~# sudo su - ubuntu
+ubuntu@ip-172-31-44-123:~$ kubectl create ns practise
+namespace/practise created
+ubuntu@ip-172-31-44-123:~$ kubectl run podname1 --image=nginx -n practise
+pod/podname1 created
+ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
+NAME       READY   STATUS    RESTARTS   AGE
+podname1   1/1     Running   0          53s
+ubuntu@ip-172-31-44-123:~$ kubectl run podname --image=nginx -n practise --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: podname
+  name: podname
+  namespace: practise
+spec:
+  containers:
+  - image: nginx
+    name: podname
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+ubuntu@ip-172-31-44-123:~$ kubectl run podname --image=nginx -n practise --dry-run=client -o yaml > test.yaml
+ubuntu@ip-172-31-44-123:~$ sudo test.yaml
+sudo: test.yaml: command not found
+ubuntu@ip-172-31-44-123:~$ sudo vi test.yaml
+ubuntu@ip-172-31-44-123:~$ kubectl apply -f test.yaml
+pod/podname2 created
+ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
+NAME       READY   STATUS             RESTARTS      AGE
+podname1   1/1     Running            0             8m39s
+podname2   0/1     CrashLoopBackOff   1 (10s ago)   11s
+ubuntu@ip-172-31-44-123:~$ cat test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: podname2
+  name: podname2
+  namespace: practise
+spec:
+  containers:
+  - image: alpine
+    name: podname
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+ubuntu@ip-172-31-44-123:~$ kubectl describe pod podname1 -n practise
+Name:             podname1
+Namespace:        practise
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-44-123/172.31.44.123
+Start Time:       Sat, 17 Aug 2024 13:48:56 +0000
+Labels:           run=podname1
+Annotations:      cni.projectcalico.org/containerID: bc56dd2a6a21956f4e1ebdfa3aba1fea721277ca154b531b5da93f2abc6c2ee3
+                  cni.projectcalico.org/podIP: 10.1.171.161/32
+                  cni.projectcalico.org/podIPs: 10.1.171.161/32
+Status:           Running
+IP:               10.1.171.161
+IPs:
+  IP:  10.1.171.161
+Containers:
+  podname1:
+    Container ID:   containerd://bf7428c35e62b98e4b190ba57d2769ed59fa5532905c190eeedca321eb717496
+    Image:          nginx
+    Image ID:       docker.io/library/nginx@sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 17 Aug 2024 13:49:03 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-plqjn (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-plqjn:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>
+ubuntu@ip-172-31-44-123:~$ kubectl describe pod podname2 -n practise
+Name:             podname2
+Namespace:        practise
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-44-123/172.31.44.123
+Start Time:       Sat, 17 Aug 2024 13:57:24 +0000
+Labels:           run=podname2
+Annotations:      cni.projectcalico.org/containerID: 95b038f84914ec83d7cd97a179093018fd386783892df333f82fb6e7d690ac41
+                  cni.projectcalico.org/podIP: 10.1.171.162/32
+                  cni.projectcalico.org/podIPs: 10.1.171.162/32
+Status:           Running
+IP:               10.1.171.162
+IPs:
+  IP:  10.1.171.162
+Containers:
+  podname:
+    Container ID:   containerd://4275faa9ef455f00c045b46c064dc84dafc2f314e804fde9771885c9f1c11c11
+    Image:          alpine
+    Image ID:       docker.io/library/alpine@sha256:0a4eaa0eecf5f8c050e5bba433f58c052be7587ee8af3e8b3910ef9ab5fbe9f5
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sat, 17 Aug 2024 13:58:10 +0000
+      Finished:     Sat, 17 Aug 2024 13:58:10 +0000
+    Ready:          False
+    Restart Count:  3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d4jd8 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-d4jd8:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  61s                default-scheduler  Successfully assigned practise/podname2 to ip-172-31-44-123
+  Normal   Pulled     60s                kubelet            Successfully pulled image "alpine" in 366ms (366ms including waiting). Image size: 3626744 bytes.
+  Normal   Pulled     60s                kubelet            Successfully pulled image "alpine" in 141ms (141ms including waiting). Image size: 3626744 bytes.
+  Normal   Pulled     44s                kubelet            Successfully pulled image "alpine" in 140ms (140ms including waiting). Image size: 3626744 bytes.
+  Normal   Pulling    15s (x4 over 61s)  kubelet            Pulling image "alpine"
+  Normal   Created    15s (x4 over 60s)  kubelet            Created container podname
+  Normal   Started    15s (x4 over 60s)  kubelet            Started container podname
+  Normal   Pulled     15s                kubelet            Successfully pulled image "alpine" in 160ms (160ms including waiting). Image size: 3626744 bytes.
+  Warning  BackOff    0s (x6 over 59s)   kubelet            Back-off restarting failed container podname in pod podname2_practise(69f1c9c4-a044-4581-ae61-5fe0cc9328d8)
+ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
+NAME       READY   STATUS      RESTARTS      AGE
+podname1   1/1     Running     0             10m
+podname2   0/1     Completed   4 (46s ago)   92s
+ubuntu@ip-172-31-44-123:~$ kubectl logs -f podname1 -n practise
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2024/08/17 13:49:03 [notice] 1#1: using the "epoll" event method
+2024/08/17 13:49:03 [notice] 1#1: nginx/1.27.1
+2024/08/17 13:49:03 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14) 
+2024/08/17 13:49:03 [notice] 1#1: OS: Linux 6.8.0-1009-aws
+2024/08/17 13:49:03 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 65536:65536
+2024/08/17 13:49:03 [notice] 1#1: start worker processes
+2024/08/17 13:49:03 [notice] 1#1: start worker process 29
+2024/08/17 13:49:03 [notice] 1#1: start worker process 30
+ubuntu@ip-172-31-44-123:~$ kubectl create deployment deploymentname --image=nginx --replicas=2 --port=80 -n practise --dry-run=client -o yaml > testl.yaml
+ubuntu@ip-172-31-44-123:~$ ls
+bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  testl.yaml
+ubuntu@ip-172-31-44-123:~$ cat testl.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: deploymentname
+  name: deploymentname
+  namespace: practise
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deploymentname
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: deploymentname
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+ubuntu@ip-172-31-44-123:~$ kubectl apply -f test1.yaml
+error: the path "test1.yaml" does not exist
+ubuntu@ip-172-31-44-123:~$ ls
+bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  testl.yaml
+ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
+NAME       READY   STATUS             RESTARTS      AGE
+podname2   0/1     CrashLoopBackOff   7 (50s ago)   11m
+ubuntu@ip-172-31-44-123:~$ kubectl create service clusterip service-name --tcp=8080:80 -n practise > test2.yaml
+ubuntu@ip-172-31-44-123:~$ ls
+bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  test2.yaml  testl.yaml
+ubuntu@ip-172-31-44-123:~$ cat test2.yaml
+service/service-name created
+ubuntu@ip-172-31-44-123:~$ ls
+bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  test2.yaml  testl.yaml
+ubuntu@ip-172-31-44-123:~$ rm -rf test2.yaml
+ubuntu@ip-172-31-44-123:~$ kubectl create service clusterip service-name --tcp=8080:80 -n practise --dry-run=client -o yaml > test2.yaml
+ubuntu@ip-172-31-44-123:~$ cat test2.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: service-name
+  name: service-name
+  namespace: practise
+spec:
+  ports:
+  - name: 8080-80
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: service-name
+  type: ClusterIP
+status:
+  loadBalancer: {}
