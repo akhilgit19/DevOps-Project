@@ -1,0 +1,250 @@
+Configuration to be used for this project:
+Image: Ubuntu Server 24.04
+
+Type: t3.micro
+
+In case, you want to use same as Docker image, make project with t3.large . make sure you set remote configurations and ssh key connection if you are using t3.micro
+
+the below project is setup in assumption of having both docker and ansible in single server and with type t3.large
+
+#Note: AWS Free Tier is only for 750 Hours per year, so make sure you stop instance once you are done with the project
+
+
+Before We start this Ansible, i recommend you to watch all the other series, as we are making changes to single react project from the start
+
+We will use the same project here
+
+Ansible is widely popular configuration management tool and can be installed in one server and you can run tasks in other servers if Ansible Master(server in which ansible is installed ) and other servers have SSH connection
+
+Ansible files must be saved with .yaml or .yml extension
+
+Before, We proceed on Ansible, let us move Bash scripts that we have written in Part-4 to Github repository
+
+
+We will use this repository as a part of our project
+We will install Ansible in our Build Server and then we will make an SSH  connection to our Deployserver from BuildServer
+
+We will ask Ansible to run build.sh script in Buildserver and then deploy.sh in Deployserver
+
+We will write a ansible playbook to achieve this, playbook is a set of tasks to be performed
+
+let us now start with project by installing Ansible
+
+login to Buildserver and install ansible by running these commands
+
+
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible 
+Copy
+
+
+
+check ansible installation by command
+
+ansible --version
+Copy
+
+
+ansible config file shows None, by default ansible creates config file.
+##note: if config file does not show none for you , no need to create config file
+###if config file shows none#######################################
+let us create a default config file
+sudo mkdir -p /etc/ansible
+sudo touch /etc/ansible/ansible.cfg
+sudo touch /etc/ansible/hosts
+Copy
+We have created ansible directory in etc and and ansible.cfg file and hosts file inside ansible directory
+
+Now lets edit the config file
+sudo vi /etc/ansible/ansible.cfg
+Copy
+Paste the contents
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+private_key_file = /path/to/your/private/key
+Copy
+Now before we make changes to private key path, let us create a ssh-key file for ansible using command
+ssh-keygen
+Copy
+
+copy the private key path that is shown in brackets of Enter file in which to save the key(),
+if you have used the default
+so now our ansible.cfg file is updated in this way
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+private_key_file = /home/ubuntu/.ssh/id_ed25519
+Copy
+Now you can verify our ansible config file by ansible --version, it will show config file now
+ansible --version
+Copy
+
+
+##########################################################################
+
+Now when we created ssh-keygen as part of ansible config file creation, it generates two keys
+private key and public key
+
+
+
+recommend you to create key pair for ansible
+copy the contents of public key
+
+
+it cab be id_rsa and id_rsa.pub keys in your case, copy the contents of id_rsa.pub if so
+Now login to your Deployserver and in /home/ubuntu/.ssh/authorized_keys, we will paste the
+copied public key to establish connection
+sudo vi /home/ubuntu/.ssh/authorized_keys
+Copy
+
+Note:You can paste the public key in any number of servers,you want to delegate your ansible tasks
+
+When AWS EC2 is stopped and started again, its public Ip changes but private IP remains the same.
+
+We will make use of this , copy Deployserver private IP address.
+
+Come back to BuildServer and in /etc/ansible/hosts , we will update this server ip 
+
+hosts file is a file in which we will update IP's or hostnames or servers in which we want to ansible to run
+
+By default hosts file is /etc/ansible/hosts,
+sudo vi /etc/ansible/hosts
+Copy
+
+
+here in above screenshot [deployserver] means group, anything inside [] is considered group
+and when we specify in ansible playbook hosts:deployserver, ansible executes tasks in all
+the Ip's that are under the group
+
+Now let us check ansible connection of hosts by command
+ansible all -m ping
+Copy
+
+so we were able to make connection between build server and deploy server through ansible
+since our ansible is in buildserver, let us write two playbook in BuildServer one playbook to build images and other playbook to deploy images
+Build of React Application
+Let us grab some examples on how to run bash scripts in ansible from ansible official documentation .since we have our ansible on the same server in which we are building docker images,we will write playbook to execute tasks on localhost
+---
+- name: Playbook to build our docker image
+  hosts: localhost
+  tasks:  
+   - name: remove existing bashscripts directory and ignore task if bashscripts folder is not there
+     ansible.builtin.shell:
+       cmd: sudo rm -r bashscripts
+     ignore_errors: yes    
+       
+   - name: create new bashscripts directory
+     ansible.builtin.shell:
+       cmd: sudo mkdir bashscripts         
+
+   - name: clone bash scripts repo into server
+     ansible.builtin.shell:
+       cmd: sudo git clone https://github.com/Hari0o/react-nginx_bashscripts.git
+       chdir: bashscripts/
+
+   - name: giving ownership to build.sh and giving excecuting permissions to build.sh
+     ansible.builtin.shell:
+       cmd: sudo chown ubuntu build.sh && sudo chmod 744 build.sh
+       chdir: bashscripts/react-nginx_bashscripts
+
+   - name: running script to make build
+     ansible.builtin.shell: 
+       cmd: ./build.sh
+       chdir: bashscripts/react-nginx_bashscripts/
+Copy
+
+Here in the top, we have asked in first step to remove directory bashscripts and we also added attribute ignore_errors:yes attribute to task-1, ansible executes tasks one by one. In case if task-1 fails, it will not proceed to task-2 and will kill playbook execution throwing error.In the above playbook, i have used only shell module, you can use different modules likewise one for git and many. you can find modules with examples in ansible docs
+
+Now before running playbook you can check syntax of playbook with command
+ansible-playbook build.yaml --syntax-check
+Copy
+
+
+
+Now lets run our playbook as we see no syntax error
+ansible-playbook build.yaml
+Copy
+
+
+once playbook is completed, you can verify in our docker hub last push time of image
+
+
+Our build is successful and pushed to Docker hub
+
+Deploy of React Application
+Now let us write another playbook in Buildserver to deploy kubernetes in our Deployserver
+since Deployserver is a remote server, we made ssh connection and verified connectivity already
+
+---
+- name: Playbook to deploy our application in kubernetes
+  hosts: deployserver
+  tasks:  
+   - name: remove existing bashscripts directory and ignore task if bashscripts folder is not there
+     ansible.builtin.shell:
+       cmd: sudo rm -r bashscripts
+     ignore_errors: yes    
+       
+   - name: create new bashscripts directory
+     ansible.builtin.shell:
+       cmd: sudo mkdir bashscripts         
+
+   - name: clone bash scripts repo into server
+     ansible.builtin.shell:
+       cmd: sudo git clone https://github.com/Hari0o/react-nginx_bashscripts.git
+       chdir: bashscripts/
+
+   - name: giving ownership to build.sh and giving excecuting permissions to deploy.sh
+     ansible.builtin.shell:
+       cmd: sudo chown ubuntu deploy.sh && sudo chmod 744 deploy.sh
+       chdir: bashscripts/react-nginx_bashscripts
+
+   - name: running script to make build
+     ansible.builtin.shell: 
+       cmd: ./deploy.sh
+       chdir: bashscripts/react-nginx_bashscripts/
+Copy
+
+In the above task-3 "&&" represents one command after other, it is linux command and in hosts , we mentioned deployserver, it is the group name that we added in /etc/ansible/hosts file and check syntax by
+ansible-playbook deploy.yaml --syntax-check
+Copy
+
+
+Now let us run the playbook by command
+
+ansible-playbook deploy.yaml
+Copy
+
+
+
+
+once playbook is done, verify pods restart time in Deployserver
+
+kubectl get pods -n react-nginx
+Copy
+
+
+This shows our Deployment is successful
+
+####To Add work with different hosts file##############################
+In case, you want to work with different hosts file instead of default hosts file
+create a host file with any name , let us create testhosts with dummy data
+
+In this case, the command to be run as
+ansible-playbook -i testhosts deploy.yaml
+Copy
+here in the above example testhosts refer to inventory
+#################################################################
+Domain visibility
+Go for AWS EC2, security groups and In inbound rules allow port 80,as our nginx listens on port 80
+
+
+post that copy AWS EC2 public IP,
+
+Log into your GoDaddy Console and My Products >Domain > DNS.In A records, paste the AWS EC2 public IP
+
+Now we will be able to access our domain in which we can see our React application that we have built and deployed
+
+AWS public IP changes once the system is stopped and started back. to avoid this, we can use AWS Elastic IP with some cost charges
