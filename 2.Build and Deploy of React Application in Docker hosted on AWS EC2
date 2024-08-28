@@ -397,7 +397,54 @@ CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS  
 ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ 
 
 
+====================================================
+Last login: Wed Aug 28 14:50:09 2024 from 49.43.217.177
+ubuntu@ip-172-31-80-228:~$ ls
+Gold_Site_Ecommerce-1
+ubuntu@ip-172-31-80-228:~$ cd  Gold_Site_Ecommerce-1
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                               NAMES
+352b35df1649   react-docker   "/docker-entrypoint.…"   13 minutes ago   Up 13 minutes   0.0.0.0:80->80/tcp, :::80->80/tcp   react-docker-container
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker stop 352
+352
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker start 352
+352
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                               NAMES
+352b35df1649   react-docker   "/docker-entrypoint.…"   14 minutes ago   Up 30 seconds   0.0.0.0:80->80/tcp, :::80->80/tcp   react-docker-container
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker images
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+react-docker   latest    d95499485667   22 minutes ago   46MB
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker login
 
+USING WEB BASED LOGIN
+To sign in with credentials on the command line, use 'docker login -u <username>'
+
+Your one-time device confirmation code is: BCZD-KHCF
+Press ENTER to open your browser or submit your device code here: https://login.docker.com/activate
+
+Waiting for authentication in the browser…
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+Login Succeeded
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker tag react-nginx-docker:latest akhilpagadapoola/react-nginx:latest
+Error response from daemon: No such image: react-nginx-docker:latest
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker tag react-docker:latest akhilpagadapoola/react-nginx:latest
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ sudo docker push akhilpagadapoola/react-nginx:latest
+The push refers to repository [docker.io/akhilpagadapoola/react-nginx]
+5b4f5e50d498: Pushed 
+26d9c9583797: Mounted from library/nginx 
+2cdd4bacf827: Mounted from library/nginx 
+f3719eb0da5e: Mounted from library/nginx 
+9a2d14b22cbe: Mounted from library/nginx 
+16f2939def51: Mounted from library/nginx 
+b65aff7ee426: Mounted from library/nginx 
+c028c01f43bc: Mounted from library/nginx 
+78561cef0761: Mounted from library/nginx 
+latest: digest: sha256:154a55b3eddd0c618ff264d4cb1414958a86452f08f4e3def468f17a2f821de0 size: 2200
+ubuntu@ip-172-31-80-228:~/Gold_Site_Ecommerce-1$ 
 ==================================================
 
 Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
