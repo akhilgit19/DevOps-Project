@@ -1,3 +1,8 @@
+What Can you expect from Blog:
+How to generate SSH key pair
+How to place public key in server that we need to authenticate
+How to authenticate to server using private key
+
 SSH is known as secure shell or secure socket shell and to put it in simple words, SSH is used to authenticate using key-pairs and establishes secure connection. with this we can avoid authentication using passwords.
 
 SSH authentication requires public key and private key. private key will be present with the user and public key will be put inside the server.
@@ -87,3 +92,143 @@ Now you can see from below screenshot, we are in the Ip 172.31.40.140 and we are
 
 when you create an AWS EC2 instance with key-pair. this works the same way. private key is given to you and public key is placed inside AWS EC2 server. 
 
+
+===================================================
+ubuntu@ip-172-31-88-79:~$ ls
+ubuntu@ip-172-31-88-79:~$ ssh-keygen
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/ubuntu/.ssh/id_ed25519
+Your public key has been saved in /home/ubuntu/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:z5EDg8vgrqoSW1/zIzTLQbcIoJS/rcGFTU7PqTvVOko ubuntu@ip-172-31-88-79
+The key's randomart image is:
++--[ED25519 256]--+
+|  .              |
+| o.  o .         |
+|....B + +        |
+|.  +.*.=.o .     |
+|  . =o+oS.+      |
+|. .= oB..+ o     |
+| + .+Eo*. o      |
+|o  ooo+oo        |
+|=..  .o...       |
++----[SHA256]-----+
+ubuntu@ip-172-31-88-79:~$ ls -la
+total 28
+drwxr-x--- 4 ubuntu ubuntu 4096 Aug 29 06:47 .
+drwxr-xr-x 3 root   root   4096 Aug 29 06:43 ..
+-rw-r--r-- 1 ubuntu ubuntu  220 Mar 31 08:41 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Mar 31 08:41 .bashrc
+drwx------ 2 ubuntu ubuntu 4096 Aug 29 06:47 .cache
+-rw-r--r-- 1 ubuntu ubuntu  807 Mar 31 08:41 .profile
+drwx------ 2 ubuntu ubuntu 4096 Aug 29 06:48 .ssh
+ubuntu@ip-172-31-88-79:~$ cd .ssh
+ubuntu@ip-172-31-88-79:~/.ssh$ ls -lhtr
+total 12K
+-rw------- 1 ubuntu ubuntu 401 Aug 29 06:44 authorized_keys
+-rw-r--r-- 1 ubuntu ubuntu 104 Aug 29 06:48 id_ed25519.pub
+-rw------- 1 ubuntu ubuntu 419 Aug 29 06:48 id_ed25519
+ubuntu@ip-172-31-88-79:~/.ssh$ cat id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMbqfu2LSPIfxMUT0FqLx1ab5NyiNGcvmYAojIdkhl94 ubuntu@ip-172-31-88-79
+
+In deploy server:
+====================
+
+ubuntu@ip-172-31-90-241:~$ ls -la
+total 28
+drwxr-x--- 4 ubuntu ubuntu 4096 Aug 29 06:47 .
+drwxr-xr-x 3 root   root   4096 Aug 29 06:44 ..
+-rw-r--r-- 1 ubuntu ubuntu  220 Mar 31 08:41 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Mar 31 08:41 .bashrc
+drwx------ 2 ubuntu ubuntu 4096 Aug 29 06:47 .cache
+-rw-r--r-- 1 ubuntu ubuntu  807 Mar 31 08:41 .profile
+drwx------ 2 ubuntu ubuntu 4096 Aug 29 06:44 .ssh
+ubuntu@ip-172-31-90-241:~$ cd .ssh
+ubuntu@ip-172-31-90-241:~/.ssh$ ls
+authorized_keys
+ubuntu@ip-172-31-90-241:~/.ssh$ sudo vi authorized_keys
+ubuntu@ip-172-31-90-241:~/.ssh$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVA5nCXya/TUhzTiH4a5aPZMj6D9KUay7Diu7o0u6vPTKRM+jTi4cll30TQPW/ekw3fBdmD00KzXbTVm+3EmaY4DeK2/CP3v3s25kRLq4C9enjlVLk5+gMQui6rYmIb6oRTVfXlrpEww4XFs2+Z3zh/gMuATSzO8Jjb2aevW2Q9vDano4WJ2YwXeKyH4BPLEYnZSYfQ+b7TcyFxfjjxNrzrk+XUOVNMfAPhOtPIum8Y4QbVkgSNXqA+MjnD7i7Q4JQKOqIEcXYwzBGB1krDbXw7UEKnC4JJFmMge1FedKUvYtqwc0xtKPdEPFqoDvqVza7tA5Br7dA5m96o9klLXd7 react-nginx-keypair
+
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMbqfu2LSPIfxMUT0FqLx1ab5NyiNGcvmYAojIdkhl94 ubuntu@ip-172-31-88-79
+ubuntu@ip-172-31-90-241:~/.ssh$ 
+
+Back in Build Server:
+========================
+
+ubuntu@ip-172-31-88-79:~/.ssh$ ssh ubuntu@172.31.90.241
+The authenticity of host '172.31.90.241 (172.31.90.241)' can't be established.
+ED25519 key fingerprint is SHA256:BClNJxNPdR5MJGkFyhj08MbHdDnJnXTV5aIYheN70wM.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '172.31.90.241' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Aug 29 06:51:19 UTC 2024
+
+  System load:  0.0               Processes:             108
+  Usage of /:   22.9% of 6.71GB   Users logged in:       1
+  Memory usage: 21%               IPv4 address for enX0: 172.31.90.241
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Thu Aug 29 06:47:58 2024 from 49.43.217.177
+ubuntu@ip-172-31-90-241:~$ exit
+logout
+Connection to 172.31.90.241 closed.
+ubuntu@ip-172-31-88-79:~/.ssh$ ls -la
+total 28
+drwx------ 2 ubuntu ubuntu 4096 Aug 29 06:51 .
+drwxr-x--- 4 ubuntu ubuntu 4096 Aug 29 06:47 ..
+-rw------- 1 ubuntu ubuntu  401 Aug 29 06:44 authorized_keys
+-rw------- 1 ubuntu ubuntu  419 Aug 29 06:48 id_ed25519
+-rw-r--r-- 1 ubuntu ubuntu  104 Aug 29 06:48 id_ed25519.pub
+-rw------- 1 ubuntu ubuntu  978 Aug 29 06:51 known_hosts
+-rw-r--r-- 1 ubuntu ubuntu  142 Aug 29 06:51 known_hosts.old
+ubuntu@ip-172-31-88-79:~/.ssh$ ssh -i id_ed25519 ubuntu@172.31.90.241
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Aug 29 06:51:19 UTC 2024
+
+  System load:  0.0               Processes:             108
+  Usage of /:   22.9% of 6.71GB   Users logged in:       1
+  Memory usage: 21%               IPv4 address for enX0: 172.31.90.241
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Thu Aug 29 06:51:19 2024 from 172.31.88.79
+ubuntu@ip-172-31-90-241:~$ 
