@@ -1,0 +1,269 @@
+What Can you expect from Blog:
+How SSL works in simple terms
+Difference between free and paid SSL
+How to Activate SSL Certificate
+How to upload SSL Certificate using Github
+How to configure SSL Certificate using secrets in kubernetes for our application
+Why do Kubernetes secrets is not preferred for high sensitive data.
+Scroll down in the Blog to see activation and configuration of SSL,Also it is Good to know the concepts of SSH- click here and kubernetes imperative commands - click here. Before we begin
+
+Secure Sockets Layer (SSL) 
+
+let us understand SSL concept in simple terms, You can open any website in your browser. 
+
+
+
+
+
+and click on this icon beside URL, if it shows connection is secure, then website is SSL configured.
+
+What happens if website does not have SSL?
+
+lets say, our popular site amazon.com from where we shop does not have SSL, and you decide to buy something and you open the website in your browser , sign in to your account, check out and enter your credit card details to buy that time. As we assume the website does not have SSL, any middleman or hacker can read the data before it gets transferred to website thereby stealing your confidential data.
+
+Now lets say the website have SSL, now you entered your credit card info , this gets encrypted and even if hacker or middleman receives this data, it will be useless to him. this encrypted data can only get decrypted at our server in which we run the application
+
+How Does SSL work?
+
+Browser connects to a web server (website) secured with SSL (https). Browser requests that the server identify itself.
+Server sends a copy of its SSL Certificate, including the server’s public key.
+Browser checks the certificate root against a list of trusted CAs and that the certificate is unexpired, unrevoked, and that its common name is valid for the website that it is connecting to. If the browser trusts the certificate, it creates, encrypts, and sends back a symmetric session key using the server’s public key.
+Server decrypts the symmetric session key using its private key and sends back an acknowledgement encrypted with the session key to start the encrypted session.
+Server and Browser now encrypt all transmitted data with the session key.
+The above 5 points is an explanation that i have copied on explanation inspired from Digicert, you can read more about SSL from their official site - click here
+
+Also you can get SSL certificate for free from letsencrypt - click here . letsencrypt is sponsored by big giants like Google, Amazon, Meta, Cisco, SAP...and many. But it's still not preferred by most companies 
+
+Free vs Paid SSL Certificate:
+The Validity Factor
+Generally, free SSL certificates, like Let’s Encrypt are valid for 30 or 90 days. If you go with the free SSL certificates, you need to renew them immediately after 90 days.
+
+It becomes a hectic task. On the other hand, when it comes to Paid SSLs, they are valid for 1 or 2 years.
+
+Thus, you don’t have to go into the hectic renewal process now and then! The best part is whenever your SSL is about to expire, you will receive reminder emails regarding the renewals.
+
+Support
+What if you get into a security issue? You need someone to deal with the issue, right? With a free SSL certificate, you do not get any support from the providers.
+
+In this scenario, you have to go through the old forums. Whereas with paid SSL, you get complete support from the Certificate Authority.
+
+Customer Trust
+The most vital factor that keeps a business going is the customers’ trust! They might not trust you because you don’t offer an SSL certificate issued by a reputable Certificate Authority. It ultimately affects your brand’s reputation and your business.
+
+Alternatively, SSL certificates come with a trust seal which you can place on your website to boost your visitors’ confidence. Free SSL does not come with such types of site seals.
+
+you can read more about free vs paid SSL here - Median blog
+As our SSL Certificate configuration depends on our ongoing project, Request you to complete the series - Build and Deploy Series. if you have the time constraint, please do finish part-3 first and then come back to the blog to understand better on what we are doing
+Activation of SSL in our Project
+Now let us get back into our project, for this project i have taken an SSL certificate from NameCheap website as i was able to find SSL certificate for affordable price for this project like 500 INR. Based on brand and type of  SSL certificates, prices may differ on websites. 
+Once we bought an SSL Certificate, we need to activate SSL, you can also contact support for activation of SSL certificate
+
+
+
+Once you bought the SSL Certificate, log into the server that you have your application running. you can run the below command in any server.But prefer the server in which your application is running as we need the key to be in same server. if you have run the command in different server. you have to go through process of getting private key inside your server
+openssl req -new -newkey rsa:2048 -nodes -keyout haridev.key -out haridev.csr
+Copy
+on the command -out stands for output, we are asking output to save in particular files with names haridev.key and haridev.csr, you can choose filenames anything of your choice
+once you enter the above command, it will ask you for few details, you may choose to fill or ignore other values except one main value that is common name, enter your domain name with www,
+In our case, we entered as www.hari-dev.com
+
+
+
+Now once the command is done, you can check the files created using ls command
+ls | grep haridev
+Copy
+
+
+Now we need to get the contents of CSR.
+cat haridev.csr
+Copy
+
+
+copy the contents of CSR here, and now login back into our namecheap account. 
+Account> SSL Certificates and follow the process as shown in Official Namecheap 
+follow the video here from 00:47 NameCheap SSL Activation video . Please do provide an email that is accessible to you. 
+Once that is Done, We need to verify for NameCheap that Domain belongs to us, follow the video from here - Verify our Domain . since in the video the domain belongs to NameCheap, CNAME record has been added in NameCheap. In our case, we add CNAME record to GoDaddy as we bought our Domain from GoDaddy.
+
+once you are done with the steps, your SSL Activation might take 24hrs to 48hrs to activate. once it is activated. You will get a mail to your registered address you gave while activating SSL.
+Alternately, you can login to your namecheap account, Account> SSL Certificates and now you will get Download option
+
+
+once you click on Download, you will receive files in this way in a zipped format
+
+
+These would be contents of the file
+
+
+Upload  SSL Certificate using Github in our Project
+Now we need to upload this files into our server. We will discuss about various ways to upload a file in server in later part of the project.
+For our comfort and time being upload files into your github account. this is not recommend way. but upload it for temporary
+Go to your Github account, click on New Repository
+
+
+You can leave the repository as public as we will keep the file in Git for a very short time
+
+
+Once the repo is created, click on upload an existing file 
+
+
+
+
+upload our SSL Certificate that we downloaded
+and click on commit changes
+
+
+once committed, click on code and copy the URL.
+
+
+Now login to AWS EC2 Server in which our application is running.
+Run the git clone command
+git clone 
+https://github.com/Hari0o/SSL_temporary.gitCopy
+Note: URL might differ in your case
+
+
+Verify if you have the files inside server
+
+
+Once you are sure, Come back to your repository and delete the Repository as SSL data is confidential
+click on settings
+
+
+and scroll down to the end till you see a option of delete the repository
+
+
+Installation of  SSL Certificate  in our Project
+Now once you have your SSL files ready in your server.
+
+
+As you can see file is in .zip format , you can either unzip in your windows and upload in Github.To unzip zip files in linux , we use unzip tool
+run the command to install unzip
+sudo apt install unzip
+Copy
+
+
+Now run the command, unzip followed by your file name
+unzip www_hari-dev.shop.zip
+Copy
+
+Now run these commands
+openssl pkcs7 -print_certs -in www_hari-dev_shop.p7b -out haridev_tls.crt
+Copy
+change the name of www_hari-dev_shop.p7b with the name that is available in your SSL certificate file. and file in -out can be given any name,i have given haridev_tls.cert
+Now we will merge ca_buncle file and the new crt output that we generated from .p7b files into single file
+cat www_hari-dev_shop.ca-bundle haridev_tls.crt > combined_tls.crt
+Copy
+
+
+Now copy the private key that we have generated along with CSR at the beginning copy the private key to path where combined_tls.crt is present to make our work easier
+cp haridev.key SSL_temporary/
+Copy
+Now we have our certificate file and private key in the same place.And we are running our application inside kubernetes
+so create a secret using kubernetes in the same namespace that we have our ingress running
+since we are running application in microk8s run alias command or update the command in .bashrc as shown in blog - kubernetes imperative commands (please do refer the blog to know how to work faster with kubernetes)
+kubectl create secret tls hari-dev-ssl --cert=combined_tls.crt --key=haridev.key -n react-nginx
+Copy
+kubectl get secrets -n react-nginx
+Copy
+
+
+Now if you see our ingress file without SSL certificate would look like this
+apiVersion: networking.k8s.io/v1kind: Ingressmetadata:  name: react-ingress  namespace: react-microk8s  annotations:    nginx.ingress.kubernetes.io/rewrite-target: /spec:  rules:  - host: hari-dev.shop    http:      paths:      - pathType: Prefix        path: /        backend:          service:            name: react-service            port:              number: 80
+Copy
+
+
+
+
+Now since we have our SSL configured in our secrets, we need to include secrets in our ingress file
+so our new ingress file would look like this
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-ingress
+  namespace: react-microk8s
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+      - hari-dev.shop
+    secretName: hari-dev-ssl
+  rules:
+  - host: hari-dev.shop
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: react-service
+            port:
+               number: 80
+Copy
+As you can see from the above file, we have added tls column in our spec(specification) with domain name and our secret name.
+once you have done changes, delete the existing ingress
+kubectl delete ingress react-ingress -n react-nginx
+Copy
+
+
+
+Now run the manifest file that we have made changes now.
+
+kubectl apply -f react-ingress.yaml
+Copy
+
+
+
+
+
+
+once ingress is up, you can that our site now shows secure
+
+
+
+
+
+
+
+
+We have successfully configured SSL to our website.
+
+
+Why Kubernetes Secrets is not Preferred for sensitive Data
+
+Also please do know why kubernetes secrets are not preferred in most cases for sensitive information.
+let us understand this by practical cases. kubernetes secrets are generally base64 encoded
+
+Let us create a generic secret by using imperative commands
+
+kubectl create secret generic test --from-literal=secret1=this_is_A_top_secret
+Copy
+here test is the name , secret1 is the key and this_is_A_top_secret is the value
+
+
+
+
+Now run command:
+
+kubectl edit secret test
+Copy
+
+
+
+
+As you could see, our value has been changed from this_is_A_top_secret to dGhpc19pc19BX3RvcF9zZWNyZXQ= making it look encrypted and no one would be able to understand the value behind it.
+
+You can copy the value and run the below command in any linux server 
+
+echo "dGhpc19pc19BX3RvcF9zZWNyZXQ=" | base64 -d
+Copy
+
+
+
+
+
+
+
+As you can see, it exposed data with single command, it encrypts with base64 which when secret file is get caught to any wrong person can easily be decoded by him with single command.
+
+This concludes our blog.
