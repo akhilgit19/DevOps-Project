@@ -269,3 +269,334 @@ Log into your GoDaddy Console and My Products >Domain > DNS.In A records, paste 
 Now we will be able to access our domain in which we can see our React application that we have built and deployed
 
 AWS public IP changes once the system is stopped and started back. to avoid this, we can use AWS Elastic IP with some cost charges
+
+
+
+=================================
+
+
+
+ubuntu@ip-172-31-80-228:~$ sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible 
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease 
+Hit:4 https://download.docker.com/linux/ubuntu noble InRelease                 
+Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease               
+Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [469 kB]
+Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [7764 B]
+Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [339 kB]
+Fetched 941 kB in 1s (1192 kB/s)                         
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+99 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+software-properties-common is already the newest version (0.99.48).
+software-properties-common set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 99 not upgraded.
+Repository: 'Types: deb
+URIs: https://ppa.launchpadcontent.net/ansible/ansible/ubuntu/
+Suites: noble
+Components: main
+'
+Description:
+Ansible is a radically simple IT automation platform that makes your applications and systems easier to deploy. Avoid writing scripts or custom code to deploy and update your applications— automate in a language that approaches plain English, using SSH, with no agents to install on remote systems.
+
+http://ansible.com/
+
+If you face any issues while installing Ansible PPA, file an issue here:
+https://github.com/ansible-community/ppa/issues
+More info: https://launchpad.net/~ansible/+archive/ubuntu/ansible
+Adding repository.
+Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease   
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease 
+Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease               
+Hit:5 https://download.docker.com/linux/ubuntu noble InRelease                 
+Get:6 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble InRelease [17.8 kB]
+Get:7 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 Packages [776 B]
+Get:8 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main Translation-en [472 B]
+Fetched 19.1 kB in 1s (17.6 kB/s)       
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  ansible-core python3-jmespath python3-kerberos python3-nacl
+  python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm
+  python3-resolvelib python3-winrm python3-xmltodict sshpass
+Suggested packages:
+  python-nacl-doc python3-gssapi python3-invoke
+The following NEW packages will be installed:
+  ansible ansible-core python3-jmespath python3-kerberos python3-nacl
+  python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm
+  python3-resolvelib python3-winrm python3-xmltodict sshpass
+0 upgraded, 13 newly installed, 0 to remove and 99 not upgraded.
+Need to get 18.5 MB of archives.
+After this operation, 203 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-packaging all 24.0-1 [41.1 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-resolvelib all 1.0.1-1 [25.7 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-jmespath all 1.0.1-1 [21.3 kB]
+Get:4 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-kerberos amd64 1.1.14-3.1build9 [21.2 kB]
+Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-nacl amd64 1.5.0-4build1 [57.9 kB]
+Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-ntlm-auth all 1.5.0-1 [21.3 kB]
+Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-paramiko all 2.12.0-2ubuntu4 [137 kB]
+Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-requests-ntlm all 1.1.0-3 [6308 B]
+Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-xmltodict all 0.13.0-1 [13.4 kB]
+Get:10 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-winrm all 0.4.3-2 [31.9 kB]
+Get:11 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
+Get:12 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible-core all 2.16.10-1ppa~noble [1032 kB]
+Get:13 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible all 9.9.0-1ppa~noble [17.1 MB]
+Fetched 18.5 MB in 3s (7394 kB/s)    
+Selecting previously unselected package python3-packaging.
+(Reading database ... 68007 files and directories currently installed.)
+Preparing to unpack .../00-python3-packaging_24.0-1_all.deb ...
+Unpacking python3-packaging (24.0-1) ...
+Selecting previously unselected package python3-resolvelib.
+Preparing to unpack .../01-python3-resolvelib_1.0.1-1_all.deb ...
+Unpacking python3-resolvelib (1.0.1-1) ...
+Selecting previously unselected package ansible-core.
+Preparing to unpack .../02-ansible-core_2.16.10-1ppa~noble_all.deb ...
+Unpacking ansible-core (2.16.10-1ppa~noble) ...
+Selecting previously unselected package ansible.
+Preparing to unpack .../03-ansible_9.9.0-1ppa~noble_all.deb ...
+Unpacking ansible (9.9.0-1ppa~noble) ...
+Selecting previously unselected package python3-jmespath.
+Preparing to unpack .../04-python3-jmespath_1.0.1-1_all.deb ...
+Unpacking python3-jmespath (1.0.1-1) ...
+Selecting previously unselected package python3-kerberos.
+Preparing to unpack .../05-python3-kerberos_1.1.14-3.1build9_amd64.deb ...
+Unpacking python3-kerberos (1.1.14-3.1build9) ...
+Selecting previously unselected package python3-nacl.
+Preparing to unpack .../06-python3-nacl_1.5.0-4build1_amd64.deb ...
+Unpacking python3-nacl (1.5.0-4build1) ...
+Selecting previously unselected package python3-ntlm-auth.
+Preparing to unpack .../07-python3-ntlm-auth_1.5.0-1_all.deb ...
+Unpacking python3-ntlm-auth (1.5.0-1) ...
+Selecting previously unselected package python3-paramiko.
+Preparing to unpack .../08-python3-paramiko_2.12.0-2ubuntu4_all.deb ...
+Unpacking python3-paramiko (2.12.0-2ubuntu4) ...
+Selecting previously unselected package python3-requests-ntlm.
+Preparing to unpack .../09-python3-requests-ntlm_1.1.0-3_all.deb ...
+Unpacking python3-requests-ntlm (1.1.0-3) ...
+Selecting previously unselected package python3-xmltodict.
+Preparing to unpack .../10-python3-xmltodict_0.13.0-1_all.deb ...
+Unpacking python3-xmltodict (0.13.0-1) ...
+Selecting previously unselected package python3-winrm.
+Preparing to unpack .../11-python3-winrm_0.4.3-2_all.deb ...
+Unpacking python3-winrm (0.4.3-2) ...
+Selecting previously unselected package sshpass.
+Preparing to unpack .../12-sshpass_1.09-1_amd64.deb ...
+Unpacking sshpass (1.09-1) ...
+Setting up python3-ntlm-auth (1.5.0-1) ...
+Setting up python3-resolvelib (1.0.1-1) ...
+Setting up python3-kerberos (1.1.14-3.1build9) ...
+Setting up sshpass (1.09-1) ...
+Setting up python3-xmltodict (0.13.0-1) ...
+Setting up python3-packaging (24.0-1) ...
+Setting up python3-jmespath (1.0.1-1) ...
+Setting up python3-nacl (1.5.0-4build1) ...
+Setting up python3-requests-ntlm (1.1.0-3) ...
+Setting up ansible-core (2.16.10-1ppa~noble) ...
+Setting up python3-winrm (0.4.3-2) ...
+Setting up ansible (9.9.0-1ppa~noble) ...
+Setting up python3-paramiko (2.12.0-2ubuntu4) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...                                                           
+Scanning linux images...                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@ip-172-31-80-228:~$ ansible --version
+ansible [core 2.16.10]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  ansible collection location = /home/ubuntu/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible
+  python version = 3.12.3 (main, Apr 10 2024, 05:33:47) [GCC 13.2.0] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = True
+ubuntu@ip-172-31-80-228:~$ sudo mkdir -p /etc/ansible
+sudo touch /etc/ansible/ansible.cfg
+sudo touch /etc/ansible/hosts
+ubuntu@ip-172-31-80-228:/etc/ansible$ ls
+ansible.cfg  hosts  roles
+ubuntu@ip-172-31-80-228:/etc/ansible$ sudo vi /etc/ansible/ansible.cfg
+ubuntu@ip-172-31-80-228:/etc/ansible$ ssh-keygen
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/ubuntu/.ssh/id_ed25519
+Your public key has been saved in /home/ubuntu/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:yo6HEVxi9URw9RaRonCMQZZv5sjX1cCLubA7+2rsuAM ubuntu@ip-172-31-80-228
+The key's randomart image is:
++--[ED25519 256]--+
+|     o*B+...oo   |
+|    o.=+o ..+.   |
+|   o o +.. +o+   |
+|    o   * o.o .  |
+|     o =S+ o     |
+|    E.o.+ o      |
+|     +oo .       |
+|    .oo.=        |
+|    ..+=+=.      |
++----[SHA256]-----+
+ubuntu@ip-172-31-80-228:/etc/ansible$ sudo vi /etc/ansible/ansible.cfg
+ubuntu@ip-172-31-80-228:/etc/ansible$ ansible --version
+ansible [core 2.16.10]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  ansible collection location = /home/ubuntu/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible
+  python version = 3.12.3 (main, Apr 10 2024, 05:33:47) [GCC 13.2.0] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = True
+ubuntu@ip-172-31-80-228:/$ sudo su - ubuntu
+ubuntu@ip-172-31-80-228:~$ pwd
+/home/ubuntu
+ubuntu@ip-172-31-80-228:~$ ls -a
+.   .ansible       .bash_logout  .cache    .ssh                       Gold_Site_Ecommerce-1  gold
+..  .bash_history  .bashrc       .profile  .sudo_as_admin_successful  build.sh
+ubuntu@ip-172-31-80-228:~$ cd .ssh
+ubuntu@ip-172-31-80-228:~/.ssh$ ls
+authorized_keys  id_ed25519  id_ed25519.pub
+ubuntu@ip-172-31-80-228:~/.ssh$ ls -lhtr
+total 12K
+-rw------- 1 ubuntu ubuntu 404 Aug 28 14:48 authorized_keys
+-rw-r--r-- 1 ubuntu ubuntu 105 Aug 29 03:15 id_ed25519.pub
+-rw------- 1 ubuntu ubuntu 419 Aug 29 03:15 id_ed25519
+ubuntu@ip-172-31-80-228:~/.ssh$ cat id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGTtQ6ZVCAO0z1XmhSmjxN4l3dG9H77N98OZ3QWSUE8c ubuntu@ip-172-31-80-228
+ubuntu@ip-172-31-80-228:~/.ssh$ sudo vi /etc/ansible/hosts
+ubuntu@ip-172-31-80-228:~/.ssh$ ansible all -m ping
+The authenticity of host '172.31.94.133 (172.31.94.133)' can't be established.
+ED25519 key fingerprint is SHA256:v1UVo9CD5vegzuFvucbY0QO+cRiRstMDFMqrar6pUv8.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? 
+172.31.94.133 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: Host key verification failed.",
+    "unreachable": true
+}
+ubuntu@ip-172-31-80-228:~/.ssh$ ansible all -m ping
+The authenticity of host '172.31.94.133 (172.31.94.133)' can't be established.
+ED25519 key fingerprint is SHA256:v1UVo9CD5vegzuFvucbY0QO+cRiRstMDFMqrar6pUv8.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+172.31.94.133 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+ubuntu@ip-172-31-80-228:~/.ssh$ ssh ubuntu@172.31.94.133
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Aug 29 03:26:02 UTC 2024
+
+  System load:  0.37              Temperature:           -273.1 C
+  Usage of /:   52.4% of 6.71GB   Processes:             155
+  Memory usage: 24%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.94.133
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Thu Aug 29 03:24:37 2024 from 172.31.80.228
+ubuntu@ip-172-31-94-133:~$ exit
+logout
+Connection to 172.31.94.133 closed.
+ubuntu@ip-172-31-80-228:~/.ssh$ cd ..
+ubuntu@ip-172-31-80-228:~$ ls
+Gold_Site_Ecommerce-1  build.sh  gold
+ubuntu@ip-172-31-80-228:~$ sudo vi build.yaml
+ubuntu@ip-172-31-80-228:~$ ansible-playbook build.yaml --syntax-check
+
+playbook: build.yaml
+ubuntu@ip-172-31-80-228:~$ cat build.yaml
+---
+- name: Playbook to build our docker image
+  hosts: localhost
+  tasks:  
+   - name: remove existing bashscripts directory and ignore task if bashscripts folder is not there
+     ansible.builtin.shell:
+       cmd: sudo rm -r bashscripts
+     ignore_errors: yes    
+       
+   - name: create new bashscripts directory
+     ansible.builtin.shell:
+       cmd: sudo mkdir bashscripts         
+
+   - name: clone bash scripts repo into server
+     ansible.builtin.shell:
+       cmd: sudo git clone https://github.com/akhilgit19/react-nginx_bashscripts.git
+       chdir: bashscripts/
+
+   - name: giving ownership to build.sh and giving excecuting permissions to build.sh
+     ansible.builtin.shell:
+       cmd: sudo chown ubuntu build.sh && sudo chmod 744 build.sh
+       chdir: bashscripts/react-nginx_bashscripts
+
+   - name: running script to make build
+     ansible.builtin.shell: 
+       cmd: ./build.sh
+       chdir: bashscripts/react-nginx_bashscripts/
+ubuntu@ip-172-31-80-228:~$ ansible-playbook build.yaml
+
+PLAY [Playbook to build our docker image] **********************************************************
+
+TASK [Gathering Facts] *****************************************************************************
+ok: [localhost]
+
+TASK [remove existing bashscripts directory and ignore task if bashscripts folder is not there] ****
+fatal: [localhost]: FAILED! => {"changed": true, "cmd": "sudo rm -r bashscripts", "delta": "0:00:00.017217", "end": "2024-08-29 03:29:49.576688", "msg": "non-zero return code", "rc": 1, "start": "2024-08-29 03:29:49.559471", "stderr": "rm: cannot remove 'bashscripts': No such file or directory", "stderr_lines": ["rm: cannot remove 'bashscripts': No such file or directory"], "stdout": "", "stdout_lines": []}
+...ignoring
+
+TASK [create new bashscripts directory] ************************************************************
+changed: [localhost]
+
+TASK [clone bash scripts repo into server] *********************************************************
+changed: [localhost]
+
+TASK [giving ownership to build.sh and giving excecuting permissions to build.sh] ******************
+changed: [localhost]
+
+TASK [running script to make build] ****************************************************************
+changed: [localhost]
+
+PLAY RECAP *****************************************************************************************
+localhost                  : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+
+ubuntu@ip-172-31-80-228:~$ 
+
