@@ -599,4 +599,62 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
 
 ubuntu@ip-172-31-80-228:~$ 
+ubuntu@ip-172-31-80-228:~$ sudo vi deploy.yaml
+ubuntu@ip-172-31-80-228:~$ cat deploy.yaml
+---
+- name: Playbook to deploy our application in kubernetes
+  hosts: deployserver
+  tasks:  
+   - name: remove existing bashscripts directory and ignore task if bashscripts folder is not there
+     ansible.builtin.shell:
+       cmd: sudo rm -r bashscripts
+     ignore_errors: yes    
+       
+   - name: create new bashscripts directory
+     ansible.builtin.shell:
+       cmd: sudo mkdir bashscripts         
+
+   - name: clone bash scripts repo into server
+     ansible.builtin.shell:
+       cmd: sudo git clone https://github.com/akhilgit19/react-nginx_bashscripts.git
+       chdir: bashscripts/
+
+   - name: giving ownership to build.sh and giving excecuting permissions to deploy.sh
+     ansible.builtin.shell:
+       cmd: sudo chown ubuntu deploy.sh && sudo chmod 744 deploy.sh
+       chdir: bashscripts/react-nginx_bashscripts
+
+   - name: running script to make build
+     ansible.builtin.shell: 
+       cmd: ./deploy.sh
+       chdir: bashscripts/react-nginx_bashscripts/
+ubuntu@ip-172-31-80-228:~$ ansible-playbook deploy.yaml --syntax-check
+
+playbook: deploy.yaml
+ubuntu@ip-172-31-80-228:~$ ansible-playbook deploy.yaml
+
+PLAY [Playbook to deploy our application in kubernetes] ********************************************
+
+TASK [Gathering Facts] *****************************************************************************
+ok: [172.31.94.133]
+
+TASK [remove existing bashscripts directory and ignore task if bashscripts folder is not there] ****
+fatal: [172.31.94.133]: FAILED! => {"changed": true, "cmd": "sudo rm -r bashscripts", "delta": "0:00:00.036901", "end": "2024-08-29 03:39:27.637056", "msg": "non-zero return code", "rc": 1, "start": "2024-08-29 03:39:27.600155", "stderr": "rm: cannot remove 'bashscripts': No such file or directory", "stderr_lines": ["rm: cannot remove 'bashscripts': No such file or directory"], "stdout": "", "stdout_lines": []}
+...ignoring
+
+TASK [create new bashscripts directory] ************************************************************
+changed: [172.31.94.133]
+
+TASK [clone bash scripts repo into server] *********************************************************
+changed: [172.31.94.133]
+
+TASK [giving ownership to build.sh and giving excecuting permissions to deploy.sh] *****************
+changed: [172.31.94.133]
+
+TASK [running script to make build] ****************************************************************
+changed: [172.31.94.133]
+
+PLAY RECAP *****************************************************************************************
+172.31.94.133              : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+
 
