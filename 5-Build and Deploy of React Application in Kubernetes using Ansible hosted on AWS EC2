@@ -484,6 +484,12 @@ total 12K
 -rw------- 1 ubuntu ubuntu 419 Aug 29 03:15 id_ed25519
 ubuntu@ip-172-31-80-228:~/.ssh$ cat id_ed25519.pub
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGTtQ6ZVCAO0z1XmhSmjxN4l3dG9H77N98OZ3QWSUE8c ubuntu@ip-172-31-80-228
+ubuntu@ip-172-31-94-133:~$ sudo vi /home/ubuntu/.ssh/authorized_keys
+ubuntu@ip-172-31-94-133:~$ cat /home/ubuntu/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwFLFI3EzSLOSviWlFWrO8z3bTFcodDBieWGSHBCQSQjYo8iXXg9R6ZTv3u7arGQwGmfVp4P83PVfkPYvEFfrevyG224cHFlScWnLoUIfq/JisBlv0eYFr+kRWk7cDViqIf7oFPsDcppSrV5NYAHak5TUMBHUblDFXmqSQXdwUgj5HdWCPgc4TAH9LrjgX5EHh1DHJkNe+EwO5jIhQaUAkHNs1CB4bgjzINDqM1wpOps6qSzYj4lp1s4V4CBclHuT7K4hzwJ14flELQ0hJeNMkS3hMndrAOfa/W3HRPc3nNLLobBTqYda3NG47dAWJld3osviemfn4VIUR69OBh+r5 kubernetes_key_pair
+
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGTtQ6ZVCAO0z1XmhSmjxN4l3dG9H77N98OZ3QWSUE8c ubuntu@ip-172-31-80-228
 ubuntu@ip-172-31-80-228:~/.ssh$ sudo vi /etc/ansible/hosts
 ubuntu@ip-172-31-80-228:~/.ssh$ ansible all -m ping
 The authenticity of host '172.31.94.133 (172.31.94.133)' can't be established.
