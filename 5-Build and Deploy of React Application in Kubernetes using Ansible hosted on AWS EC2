@@ -1,3 +1,24 @@
+Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
+
+The series focuses mainly on Build and Deploy and also may not follow best practises of DevOps but we will speak about the best practises and places where in our project to be improved to make it a secured setup.
+
+##Note: The video above here demonstrates blog in Telugu, recommend watching the video in separate tab and blog in seperate tab for easy practise.
+
+
+
+
+
+click here to navigate to YouTube
+
+We recommend access the blog through your laptop/Computer for better visibility.The coloured texts are links that can help you navigate to particular topic and each code snippet has copy button appears when hovered, This blog particularly designed with screenshots to help you practise and gain confidence on DevOps world##
+
+What Can you expect from Blog:
+Installation of Ansible
+Troubleshoot Ansible Installation if config file is missed
+How to make connection between servers for Ansible using SSH
+How to update default hosts file with groups
+How to check ansible hosts connection using ping
+How to run ansible playbooks, updating ignore_errors and syntax check 
 Configuration to be used for this project:
 Image: Ubuntu Server 24.04
 
