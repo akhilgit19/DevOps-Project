@@ -1,124 +1,278 @@
-ubuntu@ip-172-31-44-123:~$ alias kubectl="microk8s kubectl"
-ubuntu@ip-172-31-44-123:~$ sudo vi .bashrc
-ubuntu@ip-172-31-44-123:~$ sudo su - root
-root@ip-172-31-44-123:~# sudo su - ubuntu
-ubuntu@ip-172-31-44-123:~$ kubectl create ns practise
-namespace/practise created
-ubuntu@ip-172-31-44-123:~$ kubectl run podname1 --image=nginx -n practise
-pod/podname1 created
-ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
-NAME       READY   STATUS    RESTARTS   AGE
-podname1   1/1     Running   0          53s
-ubuntu@ip-172-31-44-123:~$ kubectl run podname --image=nginx -n practise --dry-run=client -o yaml
+ubuntu@ip-172-31-83-13:~$ sudo snap install microk8s --classic
+microk8s (1.30/stable) v1.30.3 from Canonical✓ installed
+ubuntu@ip-172-31-83-13:~$ microk8s status --wait-ready
+Insufficient permissions to access MicroK8s.
+You can either try again with sudo or add the user ubuntu to the 'microk8s' group:
+
+    sudo usermod -a -G microk8s ubuntu
+    sudo chown -R ubuntu ~/.kube
+
+After this, reload the user groups either via a reboot or by running 'newgrp microk8s'.
+ubuntu@ip-172-31-83-13:~$ sudo usermod -a -G microk8s ubuntu
+ubuntu@ip-172-31-83-13:~$ sudo su - root
+root@ip-172-31-83-13:~# sudo su - ubuntu
+ubuntu@ip-172-31-83-13:~$ microk8s kubectl get all --all-namespaces
+NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
+kube-system   pod/calico-kube-controllers-796fb75cc-pckkb   1/1     Running   0          2m48s
+kube-system   pod/calico-node-z2cft                         1/1     Running   0          2m48s
+kube-system   pod/coredns-5986966c54-xjphd                  1/1     Running   0          2m48s
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
+default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  2m56s
+kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   2m53s
+
+NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   2m49s
+
+NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           2m49s
+kube-system   deployment.apps/coredns                   1/1     1            1           2m53s
+
+NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
+kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       2m49s
+kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       2m49s
+ubuntu@ip-172-31-83-13:~$ kubectl create ns react-nginx-namespace
+Command 'kubectl' not found, did you mean:
+  command 'kubectx' from deb kubectx (0.9.5-1ubuntu0.1)
+Try: sudo apt install <deb name>
+ubuntu@ip-172-31-83-13:~$ alias kubectl="microk8s kubectl"
+ubuntu@ip-172-31-83-13:~$ sudo vi .bashrc
+ubuntu@ip-172-31-83-13:~$ sudo su - root
+root@ip-172-31-83-13:~# sudo su - ubuntu
+ubuntu@ip-172-31-83-13:~$ kubectl create ns react-nginx-namespace
+namespace/react-nginx-namespace created
+ubuntu@ip-172-31-83-13:~$ kubectl run pod --help
+Create and run a particular image in a pod.
+
+Examples:
+  # Start a nginx pod
+  kubectl run nginx --image=nginx
+  
+  # Start a hazelcast pod and let the container expose port 5701
+  kubectl run hazelcast --image=hazelcast/hazelcast --port=5701
+  
+  # Start a hazelcast pod and set environment variables "DNS_DOMAIN=cluster" and
+"POD_NAMESPACE=default" in the container
+  kubectl run hazelcast --image=hazelcast/hazelcast --env="DNS_DOMAIN=cluster"
+--env="POD_NAMESPACE=default"
+  
+  # Start a hazelcast pod and set labels "app=hazelcast" and "env=prod" in the container
+  kubectl run hazelcast --image=hazelcast/hazelcast --labels="app=hazelcast,env=prod"
+  
+  # Dry run; print the corresponding API objects without creating them
+  kubectl run nginx --image=nginx --dry-run=client
+  
+  # Start a nginx pod, but overload the spec with a partial set of values parsed from JSON
+  kubectl run nginx --image=nginx --overrides='{ "apiVersion": "v1", "spec": { ... } }'
+  
+  # Start a busybox pod and keep it in the foreground, don't restart it if it exits
+  kubectl run -i -t busybox --image=busybox --restart=Never
+  
+  # Start the nginx pod using the default command, but use custom arguments (arg1 .. argN) for that
+command
+  kubectl run nginx --image=nginx -- <arg1> <arg2> ... <argN>
+  
+  # Start the nginx pod using a different command and custom arguments
+  kubectl run nginx --image=nginx --command -- <cmd> <arg1> ... <argN>
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is missing in the
+	template. Only applies to golang and jsonpath output formats.
+
+    --annotations=[]:
+	Annotations to apply to the pod.
+
+    --attach=false:
+	If true, wait for the Pod to start running, and then attach to the Pod as if 'kubectl
+	attach ...' were called.  Default false, unless '-i/--stdin' is set, in which case the
+	default is true. With '--restart=Never' the exit code of the container process is
+	returned.
+
+    --command=false:
+	If true and extra arguments are present, use them as the 'command' field in the container,
+	rather than the 'args' field which is the default.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print the object that
+	would be sent, without sending it. If server strategy, submit server-side request without
+	persisting the resource.
+
+    --env=[]:
+	Environment variables to set in the container.
+
+    --expose=false:
+	If true, create a ClusterIP service associated with the pod.  Requires `--port`.
+
+    --field-manager='kubectl-run':
+	Name of the manager used to track field ownership.
+
+    --image='':
+	The image for the container to run.
+
+    --image-pull-policy='':
+	The image pull policy for the container.  If left empty, this value will not be specified
+	by the client and defaulted by the server.
+
+    -l, --labels='':
+	Comma separated labels to apply to the pod. Will override previous values.
+
+    --leave-stdin-open=false:
+	If the pod is started in interactive mode or with stdin, leave stdin open after the first
+	attach completes. By default, stdin will be closed after the first attach completes.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, name, go-template, go-template-file, template,
+	templatefile, jsonpath, jsonpath-as-json, jsonpath-file).
+
+    --override-type='merge':
+	The method used to override the generated object: json, merge, or strategic.
+
+    --overrides='':
+	An inline JSON override for the generated object. If this is non-empty, it is used to
+	override the generated object. Requires that the object supply a valid apiVersion field.
+
+    --pod-running-timeout=1m0s:
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod
+	is running
+
+    --port='':
+	The port that this container exposes.
+
+    --privileged=false:
+	If true, run the container in privileged mode.
+
+    -q, --quiet=false:
+	If true, suppress prompt messages.
+
+    --restart='Always':
+	The restart policy for this Pod.  Legal values [Always, OnFailure, Never].
+
+    --rm=false:
+	If true, delete the pod after it exits.  Only valid when attaching to the container, e.g.
+	with '--attach' or with '-i/--stdin'.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its annotation. Otherwise,
+	the annotation will be unchanged. This flag is useful when you want to perform kubectl
+	apply on this object in the future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML format.
+
+    -i, --stdin=false:
+	Keep stdin open on the container in the pod, even if nothing is attached.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template, -o=go-template-file.
+	The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    -t, --tty=false:
+	Allocate a TTY for the container in the pod.
+
+Usage:
+  kubectl run NAME --image=image [--env="key=value"] [--port=port] [--dry-run=server|client]
+[--overrides=inline-json] [--command] -- [COMMAND] [args...] [options]
+
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+ubuntu@ip-172-31-83-13:~$ kubectl run nginx-pod --image=nginx -n react-nginx-namespace
+pod/nginx-pod created
+ubuntu@ip-172-31-83-13:~$ kubectl get ns
+NAME                    STATUS   AGE
+default                 Active   6m8s
+kube-node-lease         Active   6m8s
+kube-public             Active   6m8s
+kube-system             Active   6m8s
+react-nginx-namespace   Active   98s
+ubuntu@ip-172-31-83-13:~$ kubectl get pods react-nginx-namespace
+Error from server (NotFound): pods "react-nginx-namespace" not found
+ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          33s
+ubuntu@ip-172-31-83-13:~$ kubectl run nginx-pod --image=nginx -n react-nginx-namespace --dry-run=client -o yaml
 apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: null
   labels:
-    run: podname
-  name: podname
-  namespace: practise
+    run: nginx-pod
+  name: nginx-pod
+  namespace: react-nginx-namespace
 spec:
   containers:
   - image: nginx
-    name: podname
+    name: nginx-pod
     resources: {}
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
-ubuntu@ip-172-31-44-123:~$ kubectl run podname --image=nginx -n practise --dry-run=client -o yaml > test.yaml
-ubuntu@ip-172-31-44-123:~$ sudo test.yaml
-sudo: test.yaml: command not found
-ubuntu@ip-172-31-44-123:~$ sudo vi test.yaml
-ubuntu@ip-172-31-44-123:~$ kubectl apply -f test.yaml
-pod/podname2 created
-ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
-NAME       READY   STATUS             RESTARTS      AGE
-podname1   1/1     Running            0             8m39s
-podname2   0/1     CrashLoopBackOff   1 (10s ago)   11s
-ubuntu@ip-172-31-44-123:~$ cat test.yaml
+ubuntu@ip-172-31-83-13:~$ kubectl run nginx-pod --image=nginx -n react-nginx-namespace --dry-run=client -o yaml > manifest.yaml
+ubuntu@ip-172-31-83-13:~$ ls
+manifest.yaml  snap
+ubuntu@ip-172-31-83-13:~$ sudo vi manifest.yaml
+ubuntu@ip-172-31-83-13:~$ sudo vi manifest.yaml
+ubuntu@ip-172-31-83-13:~$ cat manifest.yaml
 apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: null
   labels:
-    run: podname2
-  name: podname2
-  namespace: practise
+    run: alpine-pod
+  name: alpine-pod
+  namespace: react-ngin-namespace
 spec:
   containers:
   - image: alpine
-    name: podname
+    name: alpine-pod
     resources: {}
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
-ubuntu@ip-172-31-44-123:~$ kubectl describe pod podname1 -n practise
-Name:             podname1
-Namespace:        practise
+ubuntu@ip-172-31-83-13:~$ kubectl apply -f manifest.yaml
+Error from server (NotFound): error when creating "manifest.yaml": namespaces "react-ngin-namespace" not found
+ubuntu@ip-172-31-83-13:~$ sudo vi manifest.yaml
+ubuntu@ip-172-31-83-13:~$ cat manifest.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: alpine-pod
+  name: alpine-pod
+  namespace: react-nginx-namespace
+spec:
+  containers:
+  - image: alpine
+    name: alpine-pod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+ubuntu@ip-172-31-83-13:~$ kubectl apply -f manifest.yaml
+pod/alpine-pod created
+ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
+NAME         READY   STATUS             RESTARTS     AGE
+alpine-pod   0/1     CrashLoopBackOff   1 (6s ago)   9s
+nginx-pod    1/1     Running            0            5m16s
+ubuntu@ip-172-31-83-13:~$ kubectl describe pod alpine-pod -n react-nginx-namespace
+Name:             alpine-pod
+Namespace:        react-nginx-namespace
 Priority:         0
 Service Account:  default
-Node:             ip-172-31-44-123/172.31.44.123
-Start Time:       Sat, 17 Aug 2024 13:48:56 +0000
-Labels:           run=podname1
-Annotations:      cni.projectcalico.org/containerID: bc56dd2a6a21956f4e1ebdfa3aba1fea721277ca154b531b5da93f2abc6c2ee3
-                  cni.projectcalico.org/podIP: 10.1.171.161/32
-                  cni.projectcalico.org/podIPs: 10.1.171.161/32
+Node:             ip-172-31-83-13/172.31.83.13
+Start Time:       Thu, 29 Aug 2024 07:54:22 +0000
+Labels:           run=alpine-pod
+Annotations:      cni.projectcalico.org/containerID: da461626203702c6326e9ffaad35f62f2757fc99090095cde6cacffe049c67a2
+                  cni.projectcalico.org/podIP: 10.1.71.68/32
+                  cni.projectcalico.org/podIPs: 10.1.71.68/32
 Status:           Running
-IP:               10.1.171.161
+IP:               10.1.71.68
 IPs:
-  IP:  10.1.171.161
+  IP:  10.1.71.68
 Containers:
-  podname1:
-    Container ID:   containerd://bf7428c35e62b98e4b190ba57d2769ed59fa5532905c190eeedca321eb717496
-    Image:          nginx
-    Image ID:       docker.io/library/nginx@sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add
-    Port:           <none>
-    Host Port:      <none>
-    State:          Running
-      Started:      Sat, 17 Aug 2024 13:49:03 +0000
-    Ready:          True
-    Restart Count:  0
-    Environment:    <none>
-    Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-plqjn (ro)
-Conditions:
-  Type                        Status
-  PodReadyToStartContainers   True 
-  Initialized                 True 
-  Ready                       True 
-  ContainersReady             True 
-  PodScheduled                True 
-Volumes:
-  kube-api-access-plqjn:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-QoS Class:                   BestEffort
-Node-Selectors:              <none>
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:                      <none>
-ubuntu@ip-172-31-44-123:~$ kubectl describe pod podname2 -n practise
-Name:             podname2
-Namespace:        practise
-Priority:         0
-Service Account:  default
-Node:             ip-172-31-44-123/172.31.44.123
-Start Time:       Sat, 17 Aug 2024 13:57:24 +0000
-Labels:           run=podname2
-Annotations:      cni.projectcalico.org/containerID: 95b038f84914ec83d7cd97a179093018fd386783892df333f82fb6e7d690ac41
-                  cni.projectcalico.org/podIP: 10.1.171.162/32
-                  cni.projectcalico.org/podIPs: 10.1.171.162/32
-Status:           Running
-IP:               10.1.171.162
-IPs:
-  IP:  10.1.171.162
-Containers:
-  podname:
-    Container ID:   containerd://4275faa9ef455f00c045b46c064dc84dafc2f314e804fde9771885c9f1c11c11
+  alpine-pod:
+    Container ID:   containerd://afe873c3e18a37e43ad7b65f3f303aa924fd4e0b50fd6bbe4e615e8011dab431
     Image:          alpine
     Image ID:       docker.io/library/alpine@sha256:0a4eaa0eecf5f8c050e5bba433f58c052be7587ee8af3e8b3910ef9ab5fbe9f5
     Port:           <none>
@@ -128,13 +282,13 @@ Containers:
     Last State:     Terminated
       Reason:       Completed
       Exit Code:    0
-      Started:      Sat, 17 Aug 2024 13:58:10 +0000
-      Finished:     Sat, 17 Aug 2024 13:58:10 +0000
+      Started:      Thu, 29 Aug 2024 07:54:40 +0000
+      Finished:     Thu, 29 Aug 2024 07:54:40 +0000
     Ready:          False
-    Restart Count:  3
+    Restart Count:  2
     Environment:    <none>
     Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d4jd8 (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-mw49c (ro)
 Conditions:
   Type                        Status
   PodReadyToStartContainers   True 
@@ -143,7 +297,7 @@ Conditions:
   ContainersReady             False 
   PodScheduled                True 
 Volumes:
-  kube-api-access-d4jd8:
+  kube-api-access-mw49c:
     Type:                    Projected (a volume that contains injected data from multiple sources)
     TokenExpirationSeconds:  3607
     ConfigMapName:           kube-root-ca.crt
@@ -156,242 +310,102 @@ Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists fo
 Events:
   Type     Reason     Age                From               Message
   ----     ------     ----               ----               -------
-  Normal   Scheduled  61s                default-scheduler  Successfully assigned practise/podname2 to ip-172-31-44-123
-  Normal   Pulled     60s                kubelet            Successfully pulled image "alpine" in 366ms (366ms including waiting). Image size: 3626744 bytes.
-  Normal   Pulled     60s                kubelet            Successfully pulled image "alpine" in 141ms (141ms including waiting). Image size: 3626744 bytes.
-  Normal   Pulled     44s                kubelet            Successfully pulled image "alpine" in 140ms (140ms including waiting). Image size: 3626744 bytes.
-  Normal   Pulling    15s (x4 over 61s)  kubelet            Pulling image "alpine"
-  Normal   Created    15s (x4 over 60s)  kubelet            Created container podname
-  Normal   Started    15s (x4 over 60s)  kubelet            Started container podname
-  Normal   Pulled     15s                kubelet            Successfully pulled image "alpine" in 160ms (160ms including waiting). Image size: 3626744 bytes.
-  Warning  BackOff    0s (x6 over 59s)   kubelet            Back-off restarting failed container podname in pod podname2_practise(69f1c9c4-a044-4581-ae61-5fe0cc9328d8)
-ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
-NAME       READY   STATUS      RESTARTS      AGE
-podname1   1/1     Running     0             10m
-podname2   0/1     Completed   4 (46s ago)   92s
-ubuntu@ip-172-31-44-123:~$ kubectl logs -f podname1 -n practise
-/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
-/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
-10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
-10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
-/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
-/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
-/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
-/docker-entrypoint.sh: Configuration complete; ready for start up
-2024/08/17 13:49:03 [notice] 1#1: using the "epoll" event method
-2024/08/17 13:49:03 [notice] 1#1: nginx/1.27.1
-2024/08/17 13:49:03 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14) 
-2024/08/17 13:49:03 [notice] 1#1: OS: Linux 6.8.0-1009-aws
-2024/08/17 13:49:03 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 65536:65536
-2024/08/17 13:49:03 [notice] 1#1: start worker processes
-2024/08/17 13:49:03 [notice] 1#1: start worker process 29
-2024/08/17 13:49:03 [notice] 1#1: start worker process 30
-ubuntu@ip-172-31-44-123:~$ kubectl create deployment deploymentname --image=nginx --replicas=2 --port=80 -n practise --dry-run=client -o yaml > testl.yaml
-ubuntu@ip-172-31-44-123:~$ ls
-bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  testl.yaml
-ubuntu@ip-172-31-44-123:~$ cat testl.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: deploymentname
-  name: deploymentname
-  namespace: practise
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: deploymentname
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: deploymentname
-    spec:
-      containers:
-      - image: nginx
-        name: nginx
-        ports:
-        - containerPort: 80
-        resources: {}
-status: {}
-ubuntu@ip-172-31-44-123:~$ kubectl apply -f test1.yaml
-error: the path "test1.yaml" does not exist
-ubuntu@ip-172-31-44-123:~$ ls
-bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  testl.yaml
-ubuntu@ip-172-31-44-123:~$ kubectl get pods -n practise
-NAME       READY   STATUS             RESTARTS      AGE
-podname2   0/1     CrashLoopBackOff   7 (50s ago)   11m
-ubuntu@ip-172-31-44-123:~$ kubectl create service clusterip service-name --tcp=8080:80 -n practise > test2.yaml
-ubuntu@ip-172-31-44-123:~$ ls
-bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  test2.yaml  testl.yaml
-ubuntu@ip-172-31-44-123:~$ cat test2.yaml
-service/service-name created
-ubuntu@ip-172-31-44-123:~$ ls
-bashscripts  deploy.sh  react-ingress.yaml  react-nginx-deployment.yaml  react-service.yaml  snap  test.yaml  test2.yaml  testl.yaml
-ubuntu@ip-172-31-44-123:~$ rm -rf test2.yaml
-ubuntu@ip-172-31-44-123:~$ kubectl create service clusterip service-name --tcp=8080:80 -n practise --dry-run=client -o yaml > test2.yaml
-ubuntu@ip-172-31-44-123:~$ cat test2.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    app: service-name
-  name: service-name
-  namespace: practise
-spec:
-  ports:
-  - name: 8080-80
-    port: 8080
-    protocol: TCP
-    targetPort: 80
-  selector:
-    app: service-name
-  type: ClusterIP
-status:
-  loadBalancer: {}
+  Normal   Scheduled  43s                default-scheduler  Successfully assigned react-nginx-namespace/alpine-pod to ip-172-31-83-13
+  Normal   Pulled     42s                kubelet            Successfully pulled image "alpine" in 765ms (765ms including waiting). Image size: 3626744 bytes.
+  Normal   Pulled     41s                kubelet            Successfully pulled image "alpine" in 145ms (145ms including waiting). Image size: 3626744 bytes.
+  Normal   Pulled     26s                kubelet            Successfully pulled image "alpine" in 132ms (132ms including waiting). Image size: 3626744 bytes.
+  Warning  BackOff    13s (x4 over 41s)  kubelet            Back-off restarting failed container alpine-pod in pod alpine-pod_react-nginx-namespace(d37cd982-8906-42ab-9a46-e344d52118b2)
+  Normal   Pulling    0s (x4 over 43s)   kubelet            Pulling image "alpine"
+  Normal   Created    0s (x4 over 42s)   kubelet            Created container alpine-pod
+  Normal   Started    0s (x4 over 42s)   kubelet            Started container alpine-pod
+  Normal   Pulled     0s                 kubelet            Successfully pulled image "alpine" in 157ms (157ms including waiting). Image size: 3626744 bytes.
+ubuntu@ip-172-31-83-13:~$ kubectl describe pod nginx-pod -n react-nginx-namespace
+Name:             nginx-pod
+Namespace:        react-nginx-namespace
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-83-13/172.31.83.13
+Start Time:       Thu, 29 Aug 2024 07:49:15 +0000
+Labels:           run=nginx-pod
+Annotations:      cni.projectcalico.org/containerID: 7ea8167e9c6d5548a87e26144de396ab69d9d26937171f0c361debf467437fae
+                  cni.projectcalico.org/podIP: 10.1.71.67/32
+                  cni.projectcalico.org/podIPs: 10.1.71.67/32
+Status:           Running
+IP:               10.1.71.67
+IPs:
+  IP:  10.1.71.67
+Containers:
+  nginx-pod:
+    Container ID:   containerd://3f3dfc095e084523cf81929f16e2db216f4f0f60520bee24239b11434c2e053c
+    Image:          nginx
+    Image ID:       docker.io/library/nginx@sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 29 Aug 2024 07:49:21 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kq4bs (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-kq4bs:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>
+ubuntu@ip-172-31-83-13:~$ kubectl logs -f alpine-pod -n react-nginx-namespace
+ubuntu@ip-172-31-83-13:~$ kubectl edit pod alpine-pod -n react-nginx-namespace
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
+NAME         READY   STATUS             RESTARTS      AGE
+alpine-pod   0/1     CrashLoopBackOff   4 (84s ago)   2m49s
+nginx-pod    1/1     Running            0             7m56s
+ubuntu@ip-172-31-83-13:~$ kubectl delete pod alpine-pod -n react-nginx-namespace
+pod "alpine-pod" deleted
+ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          8m53s
+ubuntu@ip-172-31-83-13:~$ 
+ubuntu@ip-172-31-83-13:~$ kubectl create deployment react-nginx-deploy -image=nginx --replicas=2 --port=80 -n react-nginx-namespace
+error: unknown shorthand flag: 'i' in -image=nginx
+See 'kubectl create deployment --help' for usage.
+ubuntu@ip-172-31-83-13:~$ kubectl create deployment react-nginx-deploy --image=nginx --replicas=2 --port=80 -n react-nginx-namespace
+deployment.apps/react-nginx-deploy created
+ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
+NAME                                  READY   STATUS    RESTARTS   AGE
+nginx-pod                             1/1     Running   0          16m
+react-nginx-deploy-584fc45bb5-qnkjs   1/1     Running   0          9s
+react-nginx-deploy-584fc45bb5-zsllb   1/1     Running   0          9s
+ubuntu@ip-172-31-83-13:~$ kubectl create service clusterip service-react-nginx --tcp=8080:80 -n react-nginx-namespace
+service/service-react-nginx created
+ubuntu@ip-172-31-83-13:~$ kubectl get all -n react-nginx-namespace
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/nginx-pod                             1/1     Running   0          18m
+pod/react-nginx-deploy-584fc45bb5-qnkjs   1/1     Running   0          2m13s
+pod/react-nginx-deploy-584fc45bb5-zsllb   1/1     Running   0          2m13s
 
+NAME                          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/service-react-nginx   ClusterIP   10.152.183.167   <none>        8080/TCP   26s
 
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/react-nginx-deploy   2/2     2            2           2m13s
 
-Kubernetes imperative commands are more useful and make your work easier especially when you want to work faster or save time. if you are giving exams like CKA, you must be aware of this to save lot of time.
-
-since we have have used microk8s, let us use alias command or .bashrc file, please do note that if you have updated alias command in .bashrc, we don't need to run alias command everytime we turn on the server
-
-case1: run alias command every time you log into server
-alias kubectl="microk8s kubectl"
-Copy
-          
-        
-case2: Update the command in .bashrc file so we don't have to run command every time we login
-sudo vi .bashrc
-Copy
-                               
-        
-place the command as shown in screenshot
-
-Note: Do not disturb any other contents of the file.
-
-once you placed the command, sign out and sign in to user, you can simply switch to any other user and login to our user for changes to take place
-sudo su - root
-Copy
-sudo su - ubuntu
-Copy
-
-
-Now lets start with commands, for our practise, we recommend creating seperate namespace first as not to disturb existing resources
-kubectl create ns practise
-Copy
-
-
-
-For the pods:
-
-case1: to make pod up directly
-kubectl run podname --image=nginx -n practise
-Copy
-
-
-In place of podname, you can give any of your desired name, in image, you have to give image that you created or that already exists in dockerhub. i am taking nginx as an image for example, and -n flag stands for namespace
-
-As you can see this command created pod directly, you can verify with this command
-kubectl get pods -n practise
-Copy
-
-
-case2: To check what command does and not to run any pod
-Now if you don't want to run the pods, rather check what does command do, run the command
-kubectl run podname --image=nginx -n practise --dry-run=client -o yaml
-Copy
-
-
-This does not start the pod, but shows what the command would do
-case3: In case you want to edit the file, like manifest file
-kubectl run podname --image=nginx -n practise --dry-run=client -o yaml > manifest.yaml
-Copy
-
-
-i have taken manifest.yaml as an example you can give any name that you desire
-now you can edit the file
-sudo vi manifest.yaml
-Copy
-
-
-now make the changes that you want to
-
-
-here i have made changes like podname to podname2 , and image nginx to alpine2.once the changes are done, run the command
-kubectl apply -f manifest.yaml
-Copy
-
-
-OTHER COMMANDS:
-in case you forgot any command, if you had remember first lines of command , you can use help command
-
-kubectl run --help
-Copy
-
-
-As you can see this can help you to get with examples
-
-In case the pod is already running and you want to check the detailed information of pod
-
-kubectl describe pod podname -n practise
-Copy
-
-
-
-In case, you want to check the logs of pod,
-kubectl logs -f podname -n practise
-Copy
-
-
-In case you want to edit the existing pod that is already running,generally below command is not recommended unless we need to make a quick fix
-kubectl edit pod podname -n practise
-Copy
-
-
-
-
-In case, you want to delete the pod
-
-kubectl delete pod podname -n practise
-Copy
-
-
-Similarly for Deployment:
-
- Play with these commands to get real-time practise
-
-kubectl create deployment deploymentname --image=nginx --replicas=2 --port=80 -n practise
-Copy
-
-
-
-Similarly for Service:
-
-kubectl create service clusterip service-name --tcp=8080:80 -n practise
-Copy
-
-
-
-You can play with more commands based on cheat sheet from kubernetes official documentation - click here to navigate
-
-once you are done with practise, delete namespace to delete all your resources at once
-
-To check what is present in your namespace.
-
-kubectl get all -n practise
-Copy
-
-
-
-Now to delete all these resources at once
-
-kubectl delete ns practise
-Copy
-
-Note: Deleting namespace is never recommended in real-time scenarios
+NAME                                            DESIRED   CURRENT   READY   AGE
+replicaset.apps/react-nginx-deploy-584fc45bb5   2         2         2       2m13s
+ubuntu@ip-172-31-83-13:~$ kubectl delete ns react-nginx-namespace
+namespace "react-nginx-namespace" deleted
+ubuntu@ip-172-31-83-13:~$ 
