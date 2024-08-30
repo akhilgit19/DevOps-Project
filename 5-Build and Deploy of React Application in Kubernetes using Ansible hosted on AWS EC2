@@ -436,6 +436,21 @@ sudo touch /etc/ansible/hosts
 ubuntu@ip-172-31-80-228:/etc/ansible$ ls
 ansible.cfg  hosts  roles
 ubuntu@ip-172-31-80-228:/etc/ansible$ sudo vi /etc/ansible/ansible.cfg
+ubuntu@ip-172-31-80-18:/$ cat /etc/ansible/ansible.cfg
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+private_key_file = /path/to/your/private/key# Since Ansible 2.12 (core):
+# To generate an example config file (a "disabled" one with all default settings, commented out):
+#               $ ansible-config init --disabled > ansible.cfg
+#
+# Also you can now have a more complete file by including existing plugins:
+# ansible-config init --disabled -t all > ansible.cfg
+
+# For previous versions of Ansible you can check for examples in the 'stable' branches of each version
+# Note that this file was always incomplete  and lagging changes to configuration settings
+
+# for example, for 2.9: https://github.com/ansible/ansible/blob/stable-2.9/examples/ansible.cfg
 ubuntu@ip-172-31-80-228:/etc/ansible$ ssh-keygen
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519): 
