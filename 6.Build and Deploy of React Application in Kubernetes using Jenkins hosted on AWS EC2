@@ -1245,7 +1245,7 @@ Aug 29 05:07:32 ip-172-31-86-238 jenkins[3980]: 2024-08-29 05:07:32.404+0000 [id
 ubuntu@ip-172-31-86-238:~$ cat /var/lib/jenkins/secrets/initialAdminPassword
 cat: /var/lib/jenkins/secrets/initialAdminPassword: Permission denied
 ubuntu@ip-172-31-86-238:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-e1cc6b96858c49c3ac164d5cc139d29f
+d5182b4011624dfd8e39568855b8cc3b
 ubuntu@ip-172-31-86-238:~$ sudo systemctl restart jenkins
 ubuntu@ip-172-31-86-238:~$ sudo su -jenkins
 su: invalid option -- 'j'
