@@ -1,86 +1,39 @@
-
-Last login: Thu Aug 15 20:21:03 on ttys001
-akhilpagadapoola@Akhils-MacBook-Air Kubernetes_keypair % ssh -i "kubernetes_key_pair.pem" ubuntu@ec2-54-205-162-105.compute-1.amazonaws.com
-The authenticity of host 'ec2-54-205-162-105.compute-1.amazonaws.com (54.205.162.105)' can't be established.
-ED25519 key fingerprint is SHA256:ADcfi4QYasACAqTQZSabaoHYm1jLMJ4Eh2U78N8vffQ.
-This key is not known by any other names.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added 'ec2-54-205-162-105.compute-1.amazonaws.com' (ED25519) to the list of known hosts.
-Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1009-aws x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/pro
-
- System information as of Thu Aug 15 16:11:33 UTC 2024
-
-  System load:  0.42              Temperature:           -273.1 C
-  Usage of /:   22.7% of 6.71GB   Processes:             114
-  Memory usage: 6%                Users logged in:       0
-  Swap usage:   0%                IPv4 address for ens5: 172.31.40.15
-
-Expanded Security Maintenance for Applications is not enabled.
-
-0 updates can be applied immediately.
-
-Enable ESM Apps to receive additional future security updates.
-See https://ubuntu.com/esm or run: sudo pro status
-
-
-The list of available updates is more than a week old.
-To check for new updates run: sudo apt update
-
-
-The programs included with the Ubuntu system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
-applicable law.
-
-To run a command as administrator (user "root"), use "sudo <command>".
-See "man sudo_root" for details.
-
-ubuntu@ip-172-31-40-15:~$ sudo snap install microk8s --classic
-microk8s (1.30/stable) v1.30.3 from Canonical✓ installed
-ubuntu@ip-172-31-40-15:~$ sudo usermod -a -G microk8s ubuntu
+ubuntu@ip-172-31-86-66:~$ sudo snap install microk8s --classic
+microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
+ubuntu@ip-172-31-86-66:~$ sudo usermod -a -G microk8s ubuntu
 mkdir ~/.kube
 sudo microk8s kubectl config view --raw > ~/.kube/config
-ubuntu@ip-172-31-40-15:~$ sudo su - root
-sudo su - ubuntu
-root@ip-172-31-40-15:~# sudo su - ubuntu
-ubuntu@ip-172-31-40-15:~$ microk8s kubectl get all --all-namespaces
-NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
-kube-system   pod/calico-kube-controllers-796fb75cc-t96bp   1/1     Running   0          46s
-kube-system   pod/calico-node-mb2hb                         1/1     Running   0          46s
-kube-system   pod/coredns-5986966c54-x5j8m                  1/1     Running   0          46s
+ubuntu@ip-172-31-86-66:~$ sudo su - root
+root@ip-172-31-86-66:~# sudo su - ubuntu
+ubuntu@ip-172-31-86-66:~$ microk8s kubectl get all --all-namespaces
+NAMESPACE     NAME                                          READY   STATUS              RESTARTS   AGE
+kube-system   pod/calico-kube-controllers-796fb75cc-2cvg5   0/1     ContainerCreating   0          39s
+kube-system   pod/calico-node-7gpvg                         1/1     Running             0          40s
+kube-system   pod/coredns-5986966c54-scbrs                  0/1     ContainerCreating   0          39s
 
 NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
-default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  55s
-kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   50s
+default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  47s
+kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   43s
 
 NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   51s
+kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   43s
 
 NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           51s
-kube-system   deployment.apps/coredns                   1/1     1            1           50s
+kube-system   deployment.apps/calico-kube-controllers   0/1     1            0           43s
+kube-system   deployment.apps/coredns                   0/1     1            0           43s
 
 NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       46s
-kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       46s
-ubuntu@ip-172-31-40-15:~$ alias kubectl="microk8s kubectl"
-ubuntu@ip-172-31-40-15:~$ kubectl create ns react-nginx
-namespace/react-nginx created
-ubuntu@ip-172-31-40-15:~$ ls
-snap
-ubuntu@ip-172-31-40-15:~$ sudo vi react-nginx-deployment.yaml
-ubuntu@ip-172-31-40-15:~$ cat react-nginx-deployment.yaml
+kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         0       40s
+kube-system   replicaset.apps/coredns-5986966c54                  1         1         0       40s
+ubuntu@ip-172-31-86-66:~$ alias kubectl="microk8s kubectl"
+ubuntu@ip-172-31-86-66:~$ kubectl create ns react-nginx-namespace
+namespace/react-nginx-namespace created
+ubuntu@ip-172-31-86-66:~$ cat deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-nginx-deployment
-  namespace: react-nginx
+  name: react-deployment
+  namespace: react-nginx-namespace
   labels:
     app: react
 spec:
@@ -98,19 +51,19 @@ spec:
         image: akhilpagadapoola/react-nginx
         ports:
         - containerPort: 80
-ubuntu@ip-172-31-40-15:~$ kubectl apply -f  react-nginx-deployment.yaml
-deployment.apps/react-nginx-deployment created
-ubuntu@ip-172-31-40-15:~$ kubectl get pods -n react-nginx
-NAME                                     READY   STATUS    RESTARTS   AGE
-react-nginx-deployment-959dfb7cb-l72gt   1/1     Running   0          22s
-react-nginx-deployment-959dfb7cb-ndxp9   1/1     Running   0          22s
-ubuntu@ip-172-31-40-15:~$ sudo vi react-service.yaml
-ubuntu@ip-172-31-40-55:~$ cat react-service.yaml
+ubuntu@ip-172-31-86-66:~$ kubectl apply -f deployment.yaml
+deployment.apps/react-deployment created
+ubuntu@ip-172-31-86-66:~$ kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-deployment-959dfb7cb-4hdb8   1/1     Running   0          18s
+react-deployment-959dfb7cb-bg7v5   1/1     Running   0          18s
+ubuntu@ip-172-31-86-66:~$  sudo vi react-service.yaml
+ubuntu@ip-172-31-86-66:~$ cat react-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: react-service
-  namespace: react-nginx
+  namespace: react-nginx-namespace
 spec:
   selector:
     app: react
@@ -118,15 +71,16 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-ubuntu@ip-172-31-40-15:~$ kubectl apply -f  react-service.yaml
-service/react-service created
-ubuntu@ip-172-31-40-15:~$ kubectl get svc -n react-nginx
-NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-react-service   ClusterIP   10.152.183.246   <none>        80/TCP    15s
-ubuntu@ip-172-31-40-15:~$ curl http://10.152.183.246
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.ec03feae.js"></script><link href="/static/css/main.cd48fc57.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
 
-ubuntu@ip-172-31-40-15:~$ microk8s enable ingress
+ubuntu@ip-172-31-86-66:~$ kubectl apply -f react-service.yaml
+service/react-service created
+ubuntu@ip-172-31-86-66:~$ kubectl get svc -n react-microk8s
+No resources found in react-microk8s namespace.
+ubuntu@ip-172-31-86-66:~$ kubectl get svc -n react-nginx-namespace
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+react-service   ClusterIP   10.152.183.47   <none>        80/TCP    18s
+ubuntu@ip-172-31-86-66:~$ curl http://10.152.183.47
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.1d9b5862.js"></script><link href="/static/css/main.cd48fc57.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>ubuntu@ip-172-31-86-66:~$ microk8s enable ingress
 Infer repository core for addon ingress
 Enabling Ingress
 ingressclass.networking.k8s.io/public created
@@ -142,40 +96,42 @@ configmap/nginx-ingress-tcp-microk8s-conf created
 configmap/nginx-ingress-udp-microk8s-conf created
 daemonset.apps/nginx-ingress-microk8s-controller created
 Ingress is enabled
-ubuntu@ip-172-31-40-15:~$ kubectl get all --all-namespaces
-NAMESPACE     NAME                                          READY   STATUS              RESTARTS   AGE
-ingress       pod/nginx-ingress-microk8s-controller-h5k2j   0/1     ContainerCreating   0          7s
-kube-system   pod/calico-kube-controllers-796fb75cc-t96bp   1/1     Running             0          7m29s
-kube-system   pod/calico-node-mb2hb                         1/1     Running             0          7m29s
-kube-system   pod/coredns-5986966c54-x5j8m                  1/1     Running             0          7m29s
-react-nginx   pod/react-nginx-deployment-959dfb7cb-l72gt    1/1     Running             0          2m36s
-react-nginx   pod/react-nginx-deployment-959dfb7cb-ndxp9    1/1     Running             0          2m36s
+ubuntu@ip-172-31-86-66:~$ kubectl get all --all-namespaces
+NAMESPACE               NAME                                          READY   STATUS              RESTARTS   AGE
+ingress                 pod/nginx-ingress-microk8s-controller-tpmxx   0/1     ContainerCreating   0          5s
+kube-system             pod/calico-kube-controllers-796fb75cc-2cvg5   1/1     Running             0          11m
+kube-system             pod/calico-node-7gpvg                         1/1     Running             0          11m
+kube-system             pod/coredns-5986966c54-scbrs                  1/1     Running             0          11m
+react-nginx-namespace   pod/react-deployment-959dfb7cb-4hdb8          1/1     Running             0          2m34s
+react-nginx-namespace   pod/react-deployment-959dfb7cb-bg7v5          1/1     Running             0          2m34s
 
-NAMESPACE     NAME                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
-default       service/kubernetes      ClusterIP   10.152.183.1     <none>        443/TCP                  7m38s
-kube-system   service/kube-dns        ClusterIP   10.152.183.10    <none>        53/UDP,53/TCP,9153/TCP   7m33s
-react-nginx   service/react-service   ClusterIP   10.152.183.246   <none>        80/TCP                   52s
+NAMESPACE               NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
+default                 service/kubernetes      ClusterIP   10.152.183.1    <none>        443/TCP                  11m
+kube-system             service/kube-dns        ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   11m
+react-nginx-namespace   service/react-service   ClusterIP   10.152.183.47   <none>        80/TCP                   68s
 
 NAMESPACE     NAME                                               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-ingress       daemonset.apps/nginx-ingress-microk8s-controller   1         1         0       1            0           <none>                   7s
-kube-system   daemonset.apps/calico-node                         1         1         1       1            1           kubernetes.io/os=linux   7m34s
+ingress       daemonset.apps/nginx-ingress-microk8s-controller   1         1         0       1            0           <none>                   5s
+kube-system   daemonset.apps/calico-node                         1         1         1       1            1           kubernetes.io/os=linux   11m
 
-NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           7m34s
-kube-system   deployment.apps/coredns                   1/1     1            1           7m33s
-react-nginx   deployment.apps/react-nginx-deployment    2/2     2            2           2m36s
+NAMESPACE               NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system             deployment.apps/calico-kube-controllers   1/1     1            1           11m
+kube-system             deployment.apps/coredns                   1/1     1            1           11m
+react-nginx-namespace   deployment.apps/react-deployment          2/2     2            2           2m34s
 
-NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       7m29s
-kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       7m29s
-react-nginx   replicaset.apps/react-nginx-deployment-959dfb7cb    2         2         2       2m36s
-ubuntu@ip-172-31-40-15:~$ sudo vi react-ingress.yaml
-ubuntu@ip-172-31-40-15:~$ cat react-ingress.yaml
+NAMESPACE               NAME                                                DESIRED   CURRENT   READY   AGE
+kube-system             replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       11m
+kube-system             replicaset.apps/coredns-5986966c54                  1         1         1       11m
+react-nginx-namespace   replicaset.apps/react-deployment-959dfb7cb          2         2         2       2m34s
+ubuntu@ip-172-31-86-66:~$ sudo vi react-ingress.yaml
+ubuntu@ip-172-31-86-66:~$ cat react-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: react-ingress
-  namespace: react-nginx
+  namespace: react-nginx-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: hkhnet.xyz
@@ -188,20 +144,13 @@ spec:
             name: react-service
             port:
               number: 80
-ubuntu@ip-172-31-40-15:~$ kubectl apply -f react-ingress.yaml
+ubuntu@ip-172-31-86-66:~$ kubectl apply -f react-ingress.yaml
 ingress.networking.k8s.io/react-ingress created
-ubuntu@ip-172-31-40-15:~$ kubectl get ingress -n react-nginx
-NAME            CLASS    HOSTS        ADDRESS     PORTS   AGE
-react-ingress   public   hkhnet.xyz   127.0.0.1   80      46s
-ubuntu@ip-172-31-40-15:~$ curl http://hkhnet.xyz
-curl: (28) Failed to connect to hkhnet.xyz port 80 after 133737 ms: Couldn't connect to server
-ubuntu@ip-172-31-40-15:~$ curl http://hkhnet.xyz
-curl: (28) Failed to connect to hkhnet.xyz port 80 after 135374 ms: Couldn't connect to server
-ubuntu@ip-172-31-40-15:~$ curl http://hkhnet.xyz
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.ec03feae.js"></script><link href="/static/css/main.cd48fc57.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>ubuntu@ip-172-31-40-15:~$
-
-
-
+ubuntu@ip-172-31-86-66:~$ kubectl get ingress -n react-nginx-namespace
+NAME            CLASS    HOSTS        ADDRESS   PORTS   AGE
+react-ingress   public   hkhnet.xyz             80      12s
+ubuntu@ip-172-31-86-66:~$ curl http://hkhnet.xyz
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.1d9b5862.js"></script><link href="/static/cubuntu@ip-172-31-86-66:~$
 
 
 ===================================
