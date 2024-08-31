@@ -255,48 +255,87 @@ click on Console output , you can check logs even when pipeline is running.
 
 
 With this Our Build and Deploy Series has been completed
-
-We Will Discuss more on DevOps topics as part of DevOps mini concepts, since i will be using the same project everywhere 
-
+================
 
 
+Last login: Sat Aug 31 11:45:12 on ttys000
+akhilpagadapoola@Akhils-MacBook-Air Jenkins_keypair % ssh -i "Jenkins.pem" ubuntu@ec2-54-164-216-250.compute-1.amazonaws.com
+The authenticity of host 'ec2-54-164-216-250.compute-1.amazonaws.com (54.164.216.250)' can't be established.
+ED25519 key fingerprint is SHA256:bbFHfOgPC1mTEOeUbCWN9OO8QZDC3zrBBU1Ugm7YSSI.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-54-164-216-250.compute-1.amazonaws.com' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
 
-ubuntu@ip-172-31-86-238:~$ sudo apt update
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sat Aug 31 07:15:19 UTC 2024
+
+  System load:  0.89              Temperature:           -273.1 C
+  Usage of /:   22.8% of 6.71GB   Processes:             111
+  Memory usage: 5%                Users logged in:       0
+  Swap usage:   0%                IPv4 address for ens5: 172.31.94.156
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@ip-172-31-94-156:~$ sudo apt update
 sudo apt install fontconfig openjdk-17-jre
 java -version
 Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
 Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
-Get:4 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:4 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]    
 Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 Packages [15.0 MB]
 Get:6 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [323 kB]
 Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe Translation-en [5982 kB]
 Get:8 http://security.ubuntu.com/ubuntu noble-security/main Translation-en [73.1 kB]
-Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 Components [3871 kB]
-Get:10 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [4220 B]
-Get:11 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [252 kB]
-Get:12 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [109 kB]
-Get:13 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [8632 B]
-Get:14 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 c-n-f Metadata [301 kB]
-Get:15 http://security.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [9756 B]
-Get:16 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [280 kB]
-Get:17 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [269 kB]
-Get:18 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse Translation-en [118 kB]
-Get:19 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Components [35.0 kB]
-Get:20 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 c-n-f Metadata [8328 B]
-Get:21 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [469 kB]
-Get:22 http://security.ubuntu.com/ubuntu noble-security/restricted Translation-en [54.8 kB]
-Get:23 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [117 kB]
-Get:24 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [7764 B]
-Get:25 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [339 kB]
-Get:26 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [10.6 kB]
-Get:27 http://security.ubuntu.com/ubuntu noble-security/multiverse Translation-en [2808 B]
-Get:28 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
-Get:29 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [143 kB]
-Get:30 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [45.0 kB]
-Get:31 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [13.7 kB]
-Get:32 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [280 kB]
-Get:33 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 c-n-f Metadata [344 B]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [4220 B]
+Get:10 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [252 kB]
+Get:11 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [109 kB]
+Get:12 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [8632 B]
+Get:13 http://security.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [9756 B]
+Get:14 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [280 kB]
+Get:15 http://security.ubuntu.com/ubuntu noble-security/restricted Translation-en [54.8 kB]
+Get:16 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [10.6 kB]
+Get:17 http://security.ubuntu.com/ubuntu noble-security/multiverse Translation-en [2808 B]
+Get:18 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
+Get:19 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 Components [3871 kB]
+Get:20 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 c-n-f Metadata [344 B]
+Get:21 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 c-n-f Metadata [301 kB]
+Get:22 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [269 kB]
+Get:23 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse Translation-en [118 kB]
+Get:24 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Components [35.0 kB]
+Get:25 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 c-n-f Metadata [8328 B]
+Get:26 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [469 kB]
+Get:27 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [117 kB]
+Get:28 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [7768 B]
+Get:29 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [337 kB]
+Get:30 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [142 kB]
+Get:31 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [45.0 kB]
+Get:32 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [13.7 kB]
+Get:33 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [280 kB]
 Get:34 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [54.8 kB]
 Get:35 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [14.1 kB]
 Get:36 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [3608 B]
@@ -312,11 +351,11 @@ Get:45 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports/restricted
 Get:46 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 c-n-f Metadata [116 B]
 Get:47 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
 Get:48 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 c-n-f Metadata [116 B]
-Fetched 28.7 MB in 6s (4697 kB/s)                                                
+Fetched 28.7 MB in 8s (3612 kB/s)                                              
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
-102 packages can be upgraded. Run 'apt list --upgradable' to see them.
+105 packages can be upgraded. Run 'apt list --upgradable' to see them.
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
@@ -328,20 +367,21 @@ The following additional packages will be installed:
   humanity-icon-theme java-common libasound2-data libasound2t64
   libatk-bridge2.0-0t64 libatk-wrapper-java libatk-wrapper-java-jni
   libatk1.0-0t64 libatspi2.0-0t64 libavahi-client3 libavahi-common-data
-  libavahi-common3 libcairo-gobject2 libcairo2 libcups2t64 libdatrie1 libdconf1
-  libdeflate0 libdrm-amdgpu1 libdrm-intel1 libdrm-nouveau2 libdrm-radeon1
-  libfontconfig1 libgail-common libgail18t64 libgdk-pixbuf-2.0-0
-  libgdk-pixbuf2.0-bin libgdk-pixbuf2.0-common libgif7 libgl1 libgl1-amber-dri
-  libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libgraphite2-3
-  libgtk2.0-0t64 libgtk2.0-bin libgtk2.0-common libharfbuzz0b libice6 libjbig0
-  libjpeg-turbo8 libjpeg8 liblcms2-2 liblerc4 libllvm17t64 libpango-1.0-0
-  libpangocairo-1.0-0 libpangoft2-1.0-0 libpciaccess0 libpcsclite1 libpixman-1-0
-  librsvg2-2 librsvg2-common libsharpyuv0 libsm6 libthai-data libthai0 libtiff6
-  libvulkan1 libwayland-client0 libwebp7 libx11-xcb1 libxaw7 libxcb-dri2-0
-  libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0
-  libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcomposite1
-  libxcursor1 libxdamage1 libxfixes3 libxft2 libxi6 libxinerama1 libxkbfile1
-  libxmu6 libxpm4 libxrandr2 libxrender1 libxshmfence1 libxt6t64 libxtst6 libxv1
+  libavahi-common3 libcairo-gobject2 libcairo2 libcups2t64 libdatrie1
+  libdconf1 libdeflate0 libdrm-amdgpu1 libdrm-intel1 libdrm-nouveau2
+  libdrm-radeon1 libfontconfig1 libgail-common libgail18t64
+  libgdk-pixbuf-2.0-0 libgdk-pixbuf2.0-bin libgdk-pixbuf2.0-common libgif7
+  libgl1 libgl1-amber-dri libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0
+  libglx0 libgraphite2-3 libgtk2.0-0t64 libgtk2.0-bin libgtk2.0-common
+  libharfbuzz0b libice6 libjbig0 libjpeg-turbo8 libjpeg8 liblcms2-2 liblerc4
+  libllvm17t64 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0
+  libpciaccess0 libpcsclite1 libpixman-1-0 librsvg2-2 librsvg2-common
+  libsharpyuv0 libsm6 libthai-data libthai0 libtiff6 libvulkan1
+  libwayland-client0 libwebp7 libx11-xcb1 libxaw7 libxcb-dri2-0 libxcb-dri3-0
+  libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0 libxcb-shape0
+  libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcomposite1 libxcursor1
+  libxdamage1 libxfixes3 libxft2 libxi6 libxinerama1 libxkbfile1 libxmu6
+  libxpm4 libxrandr2 libxrender1 libxshmfence1 libxt6t64 libxtst6 libxv1
   libxxf86dga1 libxxf86vm1 mesa-vulkan-drivers openjdk-17-jre-headless
   session-migration ubuntu-mono x11-common x11-utils
 Suggested packages:
@@ -358,23 +398,24 @@ The following NEW packages will be installed:
   hicolor-icon-theme humanity-icon-theme java-common libasound2-data
   libasound2t64 libatk-bridge2.0-0t64 libatk-wrapper-java
   libatk-wrapper-java-jni libatk1.0-0t64 libatspi2.0-0t64 libavahi-client3
-  libavahi-common-data libavahi-common3 libcairo-gobject2 libcairo2 libcups2t64
-  libdatrie1 libdconf1 libdeflate0 libdrm-amdgpu1 libdrm-intel1 libdrm-nouveau2
-  libdrm-radeon1 libfontconfig1 libgail-common libgail18t64 libgdk-pixbuf-2.0-0
-  libgdk-pixbuf2.0-bin libgdk-pixbuf2.0-common libgif7 libgl1 libgl1-amber-dri
-  libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libgraphite2-3
-  libgtk2.0-0t64 libgtk2.0-bin libgtk2.0-common libharfbuzz0b libice6 libjbig0
-  libjpeg-turbo8 libjpeg8 liblcms2-2 liblerc4 libllvm17t64 libpango-1.0-0
-  libpangocairo-1.0-0 libpangoft2-1.0-0 libpciaccess0 libpcsclite1 libpixman-1-0
-  librsvg2-2 librsvg2-common libsharpyuv0 libsm6 libthai-data libthai0 libtiff6
-  libvulkan1 libwayland-client0 libwebp7 libx11-xcb1 libxaw7 libxcb-dri2-0
-  libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0
-  libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcomposite1
-  libxcursor1 libxdamage1 libxfixes3 libxft2 libxi6 libxinerama1 libxkbfile1
-  libxmu6 libxpm4 libxrandr2 libxrender1 libxshmfence1 libxt6t64 libxtst6 libxv1
+  libavahi-common-data libavahi-common3 libcairo-gobject2 libcairo2
+  libcups2t64 libdatrie1 libdconf1 libdeflate0 libdrm-amdgpu1 libdrm-intel1
+  libdrm-nouveau2 libdrm-radeon1 libfontconfig1 libgail-common libgail18t64
+  libgdk-pixbuf-2.0-0 libgdk-pixbuf2.0-bin libgdk-pixbuf2.0-common libgif7
+  libgl1 libgl1-amber-dri libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0
+  libglx0 libgraphite2-3 libgtk2.0-0t64 libgtk2.0-bin libgtk2.0-common
+  libharfbuzz0b libice6 libjbig0 libjpeg-turbo8 libjpeg8 liblcms2-2 liblerc4
+  libllvm17t64 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0
+  libpciaccess0 libpcsclite1 libpixman-1-0 librsvg2-2 librsvg2-common
+  libsharpyuv0 libsm6 libthai-data libthai0 libtiff6 libvulkan1
+  libwayland-client0 libwebp7 libx11-xcb1 libxaw7 libxcb-dri2-0 libxcb-dri3-0
+  libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-render0 libxcb-shape0
+  libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcomposite1 libxcursor1
+  libxdamage1 libxfixes3 libxft2 libxi6 libxinerama1 libxkbfile1 libxmu6
+  libxpm4 libxrandr2 libxrender1 libxshmfence1 libxt6t64 libxtst6 libxv1
   libxxf86dga1 libxxf86vm1 mesa-vulkan-drivers openjdk-17-jre
   openjdk-17-jre-headless session-migration ubuntu-mono x11-common x11-utils
-0 upgraded, 117 newly installed, 0 to remove and 102 not upgraded.
+0 upgraded, 117 newly installed, 0 to remove and 105 not upgraded.
 Need to get 115 MB of archives.
 After this operation, 508 MB of additional disk space will be used.
 Do you want to continue? [Y/n] y
@@ -495,7 +536,7 @@ Get:114 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 libwayla
 Get:115 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-vulkan-drivers amd64 24.0.9-0ubuntu0.1 [11.0 MB]
 Get:116 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 openjdk-17-jre-headless amd64 17.0.12+7-1ubuntu2~24.04 [47.9 MB]
 Get:117 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 openjdk-17-jre amd64 17.0.12+7-1ubuntu2~24.04 [198 kB]
-Fetched 115 MB in 3s (37.6 MB/s)           
+Fetched 115 MB in 4s (32.7 MB/s)           
 Extracting templates from packages: 100%
 Selecting previously unselected package libgdk-pixbuf2.0-common.
 (Reading database ... 67741 files and directories currently installed.)
@@ -1129,8 +1170,8 @@ done.
 Setting up openjdk-17-jre:amd64 (17.0.12+7-1ubuntu2~24.04) ...
 Processing triggers for libc-bin (2.39-0ubuntu8.2) ...
 Processing triggers for libgdk-pixbuf-2.0-0:amd64 (2.42.10+dfsg-3ubuntu3.1) ...
-Scanning processes...                                                             
-Scanning linux images...                                                          
+Scanning processes...                                                           
+Scanning linux images...                                                        
 
 Running kernel seems to be up-to-date.
 
@@ -1144,37 +1185,33 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.
 openjdk version "17.0.12" 2024-07-16
 OpenJDK Runtime Environment (build 17.0.12+7-Ubuntu-1ubuntu224.04)
 OpenJDK 64-Bit Server VM (build 17.0.12+7-Ubuntu-1ubuntu224.04, mixed mode, sharing)
-ubuntu@ip-172-31-86-238:~$ java --version
-openjdk 17.0.12 2024-07-16
-OpenJDK Runtime Environment (build 17.0.12+7-Ubuntu-1ubuntu224.04)
-OpenJDK 64-Bit Server VM (build 17.0.12+7-Ubuntu-1ubuntu224.04, mixed mode, sharing)
-ubuntu@ip-172-31-86-238:~$ sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+ubuntu@ip-172-31-94-156:~$ sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
   https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
 echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
   https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt-get update
 sudo apt-get install jenkins
---2024-08-29 05:06:52--  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-Resolving pkg.jenkins.io (pkg.jenkins.io)... 146.75.34.133, 2a04:4e42:77::645
+--2024-08-31 07:18:59--  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 146.75.34.133, 2a04:4e42:78::645
 Connecting to pkg.jenkins.io (pkg.jenkins.io)|146.75.34.133|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 3175 (3.1K) [application/pgp-keys]
 Saving to: ‘/usr/share/keyrings/jenkins-keyring.asc’
 
-/usr/share/keyrings/ 100%[====================>]   3.10K  --.-KB/s    in 0s      
+/usr/share/keyrings 100%[===================>]   3.10K  --.-KB/s    in 0s      
 
-2024-08-29 05:06:53 (33.2 MB/s) - ‘/usr/share/keyrings/jenkins-keyring.asc’ saved [3175/3175]
+2024-08-31 07:18:59 (32.4 MB/s) - ‘/usr/share/keyrings/jenkins-keyring.asc’ saved [3175/3175]
 
 Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
-Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease     
-Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease   
-Ign:4 https://pkg.jenkins.io/debian-stable binary/ InRelease                     
-Get:5 https://pkg.jenkins.io/debian-stable binary/ Release [2044 B]              
-Get:6 https://pkg.jenkins.io/debian-stable binary/ Release.gpg [833 B]
-Hit:7 http://security.ubuntu.com/ubuntu noble-security InRelease                 
+Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease   
+Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease 
+Ign:4 https://pkg.jenkins.io/debian-stable binary/ InRelease                   
+Get:5 https://pkg.jenkins.io/debian-stable binary/ Release [2044 B]            
+Get:6 https://pkg.jenkins.io/debian-stable binary/ Release.gpg [833 B]         
+Hit:7 http://security.ubuntu.com/ubuntu noble-security InRelease
 Get:8 https://pkg.jenkins.io/debian-stable binary/ Packages [27.6 kB]
-Fetched 30.4 kB in 1s (47.7 kB/s)  
+Fetched 30.4 kB in 1s (35.1 kB/s)
 Reading package lists... Done
 Reading package lists... Done
 Building dependency tree... Done
@@ -1183,13 +1220,13 @@ The following additional packages will be installed:
   net-tools
 The following NEW packages will be installed:
   jenkins net-tools
-0 upgraded, 2 newly installed, 0 to remove and 102 not upgraded.
+0 upgraded, 2 newly installed, 0 to remove and 105 not upgraded.
 Need to get 91.4 MB of archives.
 After this operation, 94.2 MB of additional disk space will be used.
 Do you want to continue? [Y/n] y
 Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 net-tools amd64 2.10-0.1ubuntu4 [204 kB]
-Get:2 https://pkg.jenkins.io/debian-stable binary/ jenkins 2.462.1 [91.2 MB]    
-Fetched 91.4 MB in 4s (23.6 MB/s)   
+Get:2 https://pkg.jenkins.io/debian-stable binary/ jenkins 2.462.1 [91.2 MB]   
+Fetched 91.4 MB in 3s (28.6 MB/s)   
 Selecting previously unselected package net-tools.
 (Reading database ... 82429 files and directories currently installed.)
 Preparing to unpack .../net-tools_2.10-0.1ubuntu4_amd64.deb ...
@@ -1201,8 +1238,8 @@ Setting up net-tools (2.10-0.1ubuntu4) ...
 Setting up jenkins (2.462.1) ...
 Created symlink /etc/systemd/system/multi-user.target.wants/jenkins.service → /usr/lib/systemd/system/jenkins.service.
 Processing triggers for man-db (2.12.0-4build2) ...
-Scanning processes...                                                             
-Scanning linux images...                                                          
+Scanning processes...                                                           
+Scanning linux images...                                                        
 
 Running kernel seems to be up-to-date.
 
@@ -1213,56 +1250,42 @@ No containers need to be restarted.
 No user sessions are running outdated binaries.
 
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
-ubuntu@ip-172-31-86-238:~$ jenkins --version
+ubuntu@ip-172-31-94-156:~$ jenkins --version
 2.462.1
-ubuntu@ip-172-31-86-238:~$ sudo systemctl enable jenkins
+ubuntu@ip-172-31-94-156:~$ sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
 Synchronizing state of jenkins.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
 Executing: /usr/lib/systemd/systemd-sysv-install enable jenkins
 ● jenkins.service - Jenkins Continuous Integration Server
-     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: en>
-     Active: active (running) since Thu 2024-08-29 05:07:32 UTC; 18s ago
-   Main PID: 3980 (java)
-      Tasks: 49 (limit: 4586)
-     Memory: 588.0M (peak: 605.1M)
-        CPU: 29.176s
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: >
+     Active: active (running) since Sat 2024-08-31 07:19:29 UTC; 23s ago
+   Main PID: 3957 (java)
+      Tasks: 51 (limit: 4586)
+     Memory: 589.5M (peak: 604.7M)
+        CPU: 30.090s
      CGroup: /system.slice/jenkins.service
-             └─3980 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java/j>
+             └─3957 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java>
 
-Aug 29 05:07:25 ip-172-31-86-238 jenkins[3980]: e1cc6b96858c49c3ac164d5cc139d29f
-Aug 29 05:07:25 ip-172-31-86-238 jenkins[3980]: This may also be found at: /var/l>
-Aug 29 05:07:25 ip-172-31-86-238 jenkins[3980]: *********************************>
-Aug 29 05:07:25 ip-172-31-86-238 jenkins[3980]: *********************************>
-Aug 29 05:07:25 ip-172-31-86-238 jenkins[3980]: *********************************>
-Aug 29 05:07:32 ip-172-31-86-238 jenkins[3980]: 2024-08-29 05:07:32.036+0000 [id=>
-Aug 29 05:07:32 ip-172-31-86-238 jenkins[3980]: 2024-08-29 05:07:32.077+0000 [id=>
-Aug 29 05:07:32 ip-172-31-86-238 systemd[1]: Started jenkins.service - Jenkins Co>
-Aug 29 05:07:32 ip-172-31-86-238 jenkins[3980]: 2024-08-29 05:07:32.403+0000 [id=>
-Aug 29 05:07:32 ip-172-31-86-238 jenkins[3980]: 2024-08-29 05:07:32.404+0000 [id=>
- ^X
+Aug 31 07:19:22 ip-172-31-94-156 jenkins[3957]: 9a15bd24297244308b3dfb63b3cf3b08
+Aug 31 07:19:22 ip-172-31-94-156 jenkins[3957]: This may also be found at: /var>
+Aug 31 07:19:22 ip-172-31-94-156 jenkins[3957]: *******************************>
+Aug 31 07:19:22 ip-172-31-94-156 jenkins[3957]: *******************************>
+Aug 31 07:19:22 ip-172-31-94-156 jenkins[3957]: *******************************>
+Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.210+0000 [i>
+Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.235+0000 [i>
+Aug 31 07:19:29 ip-172-31-94-156 systemd[1]: Started jenkins.service - Jenkins >
+Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.241+0000 [i>
+Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.242+0000 [i>
+lines 1-20/20 (END)
 [1]+  Stopped                 sudo systemctl status jenkins
-ubuntu@ip-172-31-86-238:~$ cat /var/lib/jenkins/secrets/initialAdminPassword
-cat: /var/lib/jenkins/secrets/initialAdminPassword: Permission denied
-ubuntu@ip-172-31-86-238:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-ad47d27e234542bf855862e1e5bba45a
-ubuntu@ip-172-31-86-238:~$ sudo systemctl restart jenkins
-ubuntu@ip-172-31-86-238:~$ sudo su -jenkins
-su: invalid option -- 'j'
-Try 'su --help' for more information.
-ubuntu@ip-172-31-86-238:~$ sudo su - jenkins
-jenkins@ip-172-31-86-238:~$ ls
-config.xml					nodeMonitors.xml
-hudson.model.UpdateCenter.xml			plugins
-hudson.plugins.git.GitTool.xml			queue.xml.bak
-identity.key.enc				secret.key
-jenkins.install.InstallUtil.lastExecVersion	secret.key.not-so-secret
-jenkins.install.UpgradeWizard.state		secrets
-jenkins.model.JenkinsLocationConfiguration.xml	updates
-jenkins.telemetry.Correlator.xml		userContent
-jobs						users
-logs
-jenkins@ip-172-31-86-238:~$ ssh-keygen
+ubuntu@ip-172-31-94-156:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+9a15bd24297244308b3dfb63b3cf3b08
+ubuntu@ip-172-31-94-156:~$ 
+ubuntu@ip-172-31-94-156:~$ 
+ubuntu@ip-172-31-94-156:~$ 
+ubuntu@ip-172-31-94-156:~$ sudo su - jenkins
+jenkins@ip-172-31-94-156:~$ ssh-keygen
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (/var/lib/jenkins/.ssh/id_ed25519): 
 Created directory '/var/lib/jenkins/.ssh'.
@@ -1271,101 +1294,80 @@ Enter same passphrase again:
 Your identification has been saved in /var/lib/jenkins/.ssh/id_ed25519
 Your public key has been saved in /var/lib/jenkins/.ssh/id_ed25519.pub
 The key fingerprint is:
-SHA256:KXgznQV+5soZMWS/WnDyqiFmBff8NIdCqD746yMnyzA jenkins@ip-172-31-86-238
+SHA256:8XPsnoFlV5AUpAFJeyK8j/Ll1F/cLGaQy93oxFxgm6A jenkins@ip-172-31-94-156
 The key's randomart image is:
 +--[ED25519 256]--+
-|        +        |
-|       = o       |
-|    . o B *      |
-|     = = # o     |
-|    o * S O .    |
-|   o o = @ o     |
-|E . * . * .      |
-| +o+oo o         |
-|  o*+o.          |
+|         .oo.o=o |
+|       .  .. o.. |
+|        + o + o .|
+|         = = + = |
+|        S E B + .|
+|         o X B *.|
+|      . . = * X *|
+|       o + . O o |
+|        . . o o  |
 +----[SHA256]-----+
-jenkins@ip-172-31-86-238:~$ ls -la
-total 104
-drwxr-xr-x 13 jenkins jenkins  4096 Aug 29 05:15 .
-drwxr-xr-x 47 root    root     4096 Aug 29 05:07 ..
-drwxr-xr-x  3 jenkins jenkins  4096 Aug 29 05:07 .cache
-drwxr-xr-x  3 jenkins jenkins  4096 Aug 29 05:09 .groovy
-drwxr-xr-x  3 jenkins jenkins  4096 Aug 29 05:07 .java
--rw-r--r--  1 jenkins jenkins     0 Aug 29 05:13 .lastStarted
-drwx------  2 jenkins jenkins  4096 Aug 29 05:15 .ssh
--rw-r--r--  1 jenkins jenkins  1660 Aug 29 05:13 config.xml
--rw-r--r--  1 jenkins jenkins   156 Aug 29 05:13 hudson.model.UpdateCenter.xml
--rw-r--r--  1 jenkins jenkins   370 Aug 29 05:09 hudson.plugins.git.GitTool.xml
--rw-------  1 jenkins jenkins  1680 Aug 29 05:09 identity.key.enc
--rw-r--r--  1 jenkins jenkins     7 Aug 29 05:13 jenkins.install.InstallUtil.lastExecVersion
--rw-r--r--  1 jenkins jenkins     7 Aug 29 05:10 jenkins.install.UpgradeWizard.state
--rw-r--r--  1 jenkins jenkins   183 Aug 29 05:10 jenkins.model.JenkinsLocationConfiguration.xml
--rw-r--r--  1 jenkins jenkins   171 Aug 29 05:07 jenkins.telemetry.Correlator.xml
-drwxr-xr-x  2 jenkins jenkins  4096 Aug 29 05:07 jobs
-drwxr-xr-x  2 jenkins jenkins  4096 Aug 29 05:10 logs
--rw-r--r--  1 jenkins jenkins  1037 Aug 29 05:13 nodeMonitors.xml
-drwxr-xr-x 90 jenkins jenkins 12288 Aug 29 05:09 plugins
--rw-r--r--  1 jenkins jenkins   258 Aug 29 05:13 queue.xml.bak
--rw-r--r--  1 jenkins jenkins    64 Aug 29 05:07 secret.key
--rw-r--r--  1 jenkins jenkins     0 Aug 29 05:07 secret.key.not-so-secret
-drwx------  2 jenkins jenkins  4096 Aug 29 05:09 secrets
-drwxr-xr-x  2 jenkins jenkins  4096 Aug 29 05:09 updates
-drwxr-xr-x  2 jenkins jenkins  4096 Aug 29 05:07 userContent
-drwxr-xr-x  3 jenkins jenkins  4096 Aug 29 05:07 users
-jenkins@ip-172-31-86-238:~$ cd ..sh
--bash: cd: ..sh: No such file or directory
-jenkins@ip-172-31-86-238:~$ cd .ssh
-jenkins@ip-172-31-86-238:~/.ssh$ ls
+jenkins@ip-172-31-94-156:~$ cd .ssh
+jenkins@ip-172-31-94-156:~/.ssh$ ls
 id_ed25519  id_ed25519.pub
-jenkins@ip-172-31-86-238:~/.ssh$ ls -la
-total 16
-drwx------  2 jenkins jenkins 4096 Aug 29 05:15 .
-drwxr-xr-x 13 jenkins jenkins 4096 Aug 29 05:15 ..
--rw-------  1 jenkins jenkins  419 Aug 29 05:15 id_ed25519
--rw-r--r--  1 jenkins jenkins  106 Aug 29 05:15 id_ed25519.pub
-jenkins@ip-172-31-86-238:~/.ssh$ cat id_ed25519.pub
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK2XJgAQxY6vHYeXypYr6JWXFhCXgQGfklq2IPUnnZey jenkins@ip-172-31-86-238
-
-ubuntu@ip-172-31-80-228:~$ sudo vi /home/ubuntu/.ssh/authorized_keys
-ubuntu@ip-172-31-80-228:~$ cat /home/ubuntu/.ssh/authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/F7sKNFvP+rApeVy0P/MPus5/MHr/TtfPIe1thfHol1LqoB5qa9CC/uWr8ekueppAnECnNLUGIzU4pIgxM9ov23doIR1DC9u/VbXv7EztTTn06pbhciCVGGb8A8KWQkNfmjn6txrcQ8ge7KPDc100VOXarxtW6ACgpA5lhUJpXU3PPkjpWfM+eoLPMBt4jE19Zph9johxsYyUuIwh29jkrlmZ1EAWThuj2HfmUKx4X11nVYHt2dyKOseOH6Chs0netfXsJx6o6BWL1T/oB6L0NQMpK5pyR0BFarKqDIoPpHSF8KMNmjPKmP2v6YhcfuCq2VPYntdrHMYmaagkfsAj docker-react-nginx-aws
-
-
-
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK2XJgAQxY6vHYeXypYr6JWXFhCXgQGfklq2IPUnnZey jenkins@ip-172-31-86-238
-ubuntu@ip-172-31-80-228:~$ 
-jenkins@ip-172-31-86-238:~$ ssh ubuntu@172.31.80.228
-The authenticity of host '172.31.80.228 (172.31.80.228)' can't be established.
-ED25519 key fingerprint is SHA256:J0K/Zi/KylIEeu0D9k5ryIhS5DE1OiUl/rJtZzbbbBU.
-This key is not known by any other names.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '172.31.80.228' (ED25519) to the list of known hosts.
-Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/pro
-
- System information as of Thu Aug 29 05:23:20 UTC 2024
-
-  System load:  0.0               Temperature:           -273.1 C
-  Usage of /:   79.9% of 6.71GB   Processes:             116
-  Memory usage: 6%                Users logged in:       1
-  Swap usage:   0%                IPv4 address for ens5: 172.31.80.228
-
-
-Expanded Security Maintenance for Applications is not enabled.
-
-103 updates can be applied immediately.
-27 of these updates are standard security updates.
-To see these additional updates run: apt list --upgradable
-
-Enable ESM Apps to receive additional future security updates.
-See https://ubuntu.com/esm or run: sudo pro status
-
+jenkins@ip-172-31-94-156:~/.ssh$ cat id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIEdxVny09IV/1oniFSKELxQkkFlfhGD+8jhF7pYGFlL jenkins@ip-172-31-94-156
 
 Last login: Thu Aug 29 05:18:39 2024 from 49.43.217.177
 ubuntu@ip-172-31-80-228:~$ exit
 logout
 Connection to 172.31.80.228 closed.
 jenkins@ip-172-31-86-238:~$ 
+
+
+
+Now connect to build server and add the pub key:
+
+ubuntu@ip-172-31-87-138:~$ sudo vi /home/ubuntu/.ssh/authorized_keys
+ubuntu@ip-172-31-87-138:~$ sudo su - root
+root@ip-172-31-87-138:~# sudo su - ubuntu
+ubuntu@ip-172-31-87-138:~$ 
+
+get back to jenkins server and check the connectiviity:
+
+jenkins@ip-172-31-94-156:~/.ssh$ ssh -i /var/lib/jenkins/.ssh/id_ed25519 ubuntu@172.31.87.138
+The authenticity of host '172.31.87.138 (172.31.87.138)' can't be established.
+ED25519 key fingerprint is SHA256:eScJIS7/VzgaX51UT9f4ptckYj2/nZtzKCivb140tm0.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '172.31.87.138' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sat Aug 31 07:30:03 UTC 2024
+
+  System load:  0.08              Temperature:           -273.1 C
+  Usage of /:   82.3% of 6.71GB   Processes:             135
+  Memory usage: 21%               Users logged in:       2
+  Swap usage:   0%                IPv4 address for ens5: 172.31.87.138
+
+ * Ubuntu Pro delivers the most comprehensive open source security and
+   compliance features.
+
+   https://ubuntu.com/aws/pro
+
+Expanded Security Maintenance for Applications is not enabled.
+
+78 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+*** System restart required ***
+Last login: Sat Aug 31 07:27:54 2024 from 49.43.217.48
+ubuntu@ip-172-31-87-138:~$ exit
+logout
+Connection to 172.31.87.138 closed.
+jenkins@ip-172-31-94-156:~/.ssh$ client_loop: send disconnect: Broken pipe
+akhilpagadapoola@Akhils-MacBook-Air Jenkins_keypair % 
+
