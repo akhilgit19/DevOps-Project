@@ -129,10 +129,10 @@ Go for AWS EC2, security groups and In inbound rules allow port 80, as our nginx
 
 
 ==============================================
-ubuntu@ip-172-31-80-228:~$ ls
+ubuntu@ip-172-31-87-138:~$ ls
 Gold_Site_Ecommerce-1
-ubuntu@ip-172-31-80-228:~$ sudo vi build.sh
-ubuntu@ip-172-31-80-228:~$ cat build.sh
+ubuntu@ip-172-31-87-138:~$ sudo vi build.sh
+ubuntu@ip-172-31-87-138:~$ cat build.sh
 #!/bin/bash
 sudo docker rmi -f $(sudo docker images -q) ##this is not recommned step, i am deleting existing images to save space
 sudo rm -r gold ## these steps are not recommened instead you can modify script as shown below
@@ -151,55 +151,50 @@ sudo docker push akhilpagadapoola/react-nginx:latest
 #sudo docker build -t react-nginx -f goldockerfile .
 #sudo docker tag react-nginx:latest reactdemo/react-nginx:latest ##make sure you did docker login
 #sudo docker push reactdemo/react-nginx:latest
-ubuntu@ip-172-31-80-228:~$ ./build.sh
--bash: ./build.sh: Permission denied
-ubuntu@ip-172-31-80-228:~$ sudo chown ubuntu build.sh
-ubuntu@ip-172-31-80-228:~$  sudo chmod 744 build.sh
-ubuntu@ip-172-31-80-228:~$ ls -lhtr
-total 8.0K
-drwxrwxr-x 5 ubuntu ubuntu 4.0K Aug 28 14:57 Gold_Site_Ecommerce-1
--rwxr--r-- 1 ubuntu root    848 Aug 28 17:17 build.sh
-ubuntu@ip-172-31-80-228:~$ ./buld.sh
--bash: ./buld.sh: No such file or directory
-ubuntu@ip-172-31-80-228:~$ ./build.sh
-Untagged: akhilpagadapoola/react-nginx:latest
-Untagged: akhilpagadapoola/react-nginx@sha256:a4557dca9dd440e064ef77f84cce2e2049906efcbc062c11b329b40deab41d35
-Untagged: react-nginx:latest
-Deleted: sha256:e317f46a495b7155ebb0c24d9ddd5c3871ed7f7d7857ad0a95bcaeb2b4e9eb0e
-Error response from daemon: No such image: e317f46a495b:latest
+ubuntu@ip-172-31-87-138:~$ sudo chown ubuntu build.sh
+ubuntu@ip-172-31-87-138:~$  sudo chmod 744 build.sh
+ubuntu@ip-172-31-87-138:~$ ls
+Gold_Site_Ecommerce-1  build.sh
+ubuntu@ip-172-31-87-138:~$ ./build.sh
+Error response from daemon: conflict: unable to delete 4126ae0b083e (cannot be forced) - image is being used by running container c6e6960df872
+Error response from daemon: conflict: unable to delete 4126ae0b083e (cannot be forced) - image is being used by running container c6e6960df872
 rm: cannot remove 'gold': No such file or directory
 Cloning into 'Gold_Site_Ecommerce-1'...
-remote: Enumerating objects: 108, done.
-remote: Counting objects: 100% (108/108), done.
-remote: Compressing objects: 100% (105/105), done.
-remote: Total 108 (delta 35), reused 57 (delta 2), pack-reused 0 (from 0)
-Receiving objects: 100% (108/108), 1.08 MiB | 27.06 MiB/s, done.
-Resolving deltas: 100% (35/35), done.
-[+] Building 47.5s (16/16) FINISHED                                                                                                                                docker:default
- => [internal] load build definition from golddockerfile                                                                                                                     0.0s
- => => transferring dockerfile: 570B                                                                                                                                         0.0s
- => [internal] load metadata for docker.io/library/node:18                                                                                                                   0.1s
- => [internal] load metadata for docker.io/library/nginx:alpine                                                                                                              0.2s
- => [auth] library/node:pull token for registry-1.docker.io                                                                                                                  0.0s
- => [auth] library/nginx:pull token for registry-1.docker.io                                                                                                                 0.0s
- => [internal] load .dockerignore                                                                                                                                            0.0s
- => => transferring context: 2B                                                                                                                                              0.0s
- => [stage-1 1/2] FROM docker.io/library/nginx:alpine@sha256:c04c18adc2a407740a397c8407c011fc6c90026a9b65cceddef7ae5484360158                                                0.0s
- => [buildmachine 1/6] FROM docker.io/library/node:18@sha256:a7ff16657263663c1e92ba3060cdbba0e77329a0a4cb3c27bbbbe90c6e20bd87                                                0.0s
- => [internal] load build context                                                                                                                                            0.1s
- => => transferring context: 3.24MB                                                                                                                                          0.1s
- => CACHED [buildmachine 2/6] WORKDIR /app                                                                                                                                   0.0s
- => CACHED [buildmachine 3/6] COPY package*.json ./                                                                                                                          0.0s
- => CACHED [buildmachine 4/6] RUN npm install                                                                                                                                0.0s
- => [buildmachine 5/6] COPY . .                                                                                                                                              0.1s
- => [buildmachine 6/6] RUN npm run build                                                                                                                                    45.3s
- => CACHED [stage-1 2/2] COPY --from=buildmachine /app/build /usr/share/nginx/html                                                                                           0.0s 
- => exporting to image                                                                                                                                                       0.0s 
- => => exporting layers                                                                                                                                                      0.0s 
- => => writing image sha256:e317f46a495b7155ebb0c24d9ddd5c3871ed7f7d7857ad0a95bcaeb2b4e9eb0e                                                                                 0.0s 
- => => naming to docker.io/library/react-nginx-image                                                                                                                         0.0s 
-The push refers to repository [docker.io/akhilpagadapoola/react-nginx]                                                                                                            
-2ecdf87182a7: Layer already exists 
+remote: Enumerating objects: 172, done.
+remote: Counting objects: 100% (172/172), done.
+remote: Compressing objects: 100% (169/169), done.
+remote: Total 172 (delta 78), reused 57 (delta 2), pack-reused 0 (from 0)
+Receiving objects: 100% (172/172), 1.10 MiB | 33.16 MiB/s, done.
+Resolving deltas: 100% (78/78), done.
+[+] Building 85.4s (16/16) FINISHED                                                                                        docker:default
+ => [internal] load build definition from golddockerfile                                                                             0.0s
+ => => transferring dockerfile: 617B                                                                                                 0.0s
+ => WARN: FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)                                                       0.0s
+ => [internal] load metadata for docker.io/library/nginx:alpine                                                                      0.1s
+ => [internal] load metadata for docker.io/library/node:18                                                                           0.1s
+ => [auth] library/nginx:pull token for registry-1.docker.io                                                                         0.0s
+ => [auth] library/node:pull token for registry-1.docker.io                                                                          0.0s
+ => [internal] load .dockerignore                                                                                                    0.0s
+ => => transferring context: 2B                                                                                                      0.0s
+ => [build 1/6] FROM docker.io/library/node:18@sha256:a7ff16657263663c1e92ba3060cdbba0e77329a0a4cb3c27bbbbe90c6e20bd87               0.0s
+ => CACHED [stage-1 1/2] FROM docker.io/library/nginx:alpine@sha256:c04c18adc2a407740a397c8407c011fc6c90026a9b65cceddef7ae548436015  0.0s
+ => [internal] load build context                                                                                                    0.1s
+ => => transferring context: 3.26MB                                                                                                  0.1s
+ => CACHED [build 2/6] WORKDIR /app                                                                                                  0.0s
+ => [build 3/6] COPY package*.json ./                                                                                                0.0s
+ => [build 4/6] RUN npm install                                                                                                     42.9s
+ => [build 5/6] COPY . .                                                                                                             0.1s 
+ => [build 6/6] RUN npm run build                                                                                                   39.9s 
+ => [stage-1 2/2] COPY --from=build /app/build /usr/share/nginx/html                                                                 0.0s 
+ => exporting to image                                                                                                               0.0s 
+ => => exporting layers                                                                                                              0.0s 
+ => => writing image sha256:d7fa07b06b0a617ed90a16a349070d2dae31b2e8228b4fb76fbe349ebf2c191c                                         0.0s 
+ => => naming to docker.io/library/react-nginx-image                                                                                 0.0s
+
+ 1 warning found (use docker --debug to expand):
+ - FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)
+The push refers to repository [docker.io/akhilpagadapoola/react-nginx]
+44c86680c664: Pushed 
 26d9c9583797: Layer already exists 
 2cdd4bacf827: Layer already exists 
 f3719eb0da5e: Layer already exists 
@@ -208,41 +203,62 @@ f3719eb0da5e: Layer already exists
 b65aff7ee426: Layer already exists 
 c028c01f43bc: Layer already exists 
 78561cef0761: Layer already exists 
-latest: digest: sha256:a455
-ubuntu@ip-172-31-94-133:~$ microk8s kubectl get ns
-NAME                    STATUS   AGE
-default                 Active   69m
-ingress                 Active   55m
-kube-node-lease         Active   69m
-kube-public             Active   69m
-kube-system             Active   69m
-react-nginx-namespace   Active   60m
-ubuntu@ip-172-31-94-133:~$ cat deploy.sh
+latest: digest: sha256:6fec2151ba9e13ed891175dcf10464011903b67bf430c6aaba76f757ad09e892 size: 2200
+ubuntu@ip-172-31-87-138:~$ client_loop: send disconnect: Broken pipe
+akhilpagadapoola@Akhils-MacBook-Air Docker_react_nginx_aws_keypair % ssh -i "docker-react-nginx-aws.pem" ubuntu@ec2-34-207-157-230.compute-1.amazonaws.com
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sat Aug 31 01:48:42 UTC 2024
+
+  System load:  0.0               Temperature:           -273.1 C
+  Usage of /:   70.7% of 6.71GB   Processes:             124
+  Memory usage: 26%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.87.138
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+105 updates can be applied immediately.
+27 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Sat Aug 31 01:35:49 2024 from 49.43.217.48
+ubuntu@ip-172-31-87-138:~$ sudo docker images
+REPOSITORY                     TAG       IMAGE ID       CREATED             SIZE
+react-nginx-image              latest    d7fa07b06b0a   7 minutes ago       46MB
+akhilpagadapoola/react-nginx   latest    d7fa07b06b0a   7 minutes ago       46MB
+react-docker                   latest    4126ae0b083e   About an hour ago   46MB
+akhilpagadapoola/react-nginx   <none>    4126ae0b083e   About an hour ago   46MB
+ubuntu@ip-172-31-87-138:~$ 
+
+
+In Deploy server:
+
+ubuntu@ip-172-31-86-66:~$ ls
+deployment.yaml  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-86-66:~$ sudo vi deploy.sh
+ubuntu@ip-172-31-86-66:~$ cat deploy.sh
 #!/bin/bash
 pods_id=$(microk8s kubectl get pods -n react-nginx-namespace |grep react |awk {'print $1'})
-microk8s kubectl delete pod $pods_id -n react-nginx-namespace
-ubuntu@ip-172-31-94-133:~$ ls -lhtr
-total 20K
-drwx------ 3 ubuntu ubuntu 4.0K Aug 28 16:15 snap
--rw-r--r-- 1 root   root    398 Aug 28 16:23 react-deployment.yaml
--rw-r--r-- 1 root   root    195 Aug 28 16:27 react-service.yaml
--rw-r--r-- 1 root   root    325 Aug 28 16:33 react-ingress.yaml
--rw-r--r-- 1 ubuntu root    166 Aug 28 17:22 deploy.sh
-ubuntu@ip-172-31-94-133:~$    sudo chmod 744 deploy.sh
-ubuntu@ip-172-31-94-133:~$ ./deploy.sh
-pod "react-deployment-59597c6899-mtkwh" deleted
-pod "react-deployment-59597c6899-xgl5f" deleted
-ubuntu@ip-172-31-94-133:~$ kubectl get pods -n react-nginx-namespace
-Command 'kubectl' not found, but can be installed with:
-sudo snap install kubectl
-ubuntu@ip-172-31-94-133:~$ microk8s kubectl get pods -n react-nginx-namespace
-NAME                                READY   STATUS    RESTARTS   AGE
-react-deployment-59597c6899-hzqfp   1/1     Running   0          54s
-react-deployment-59597c6899-p2g2w   1/1     Running   0          54s
-ubuntu@ip-172-31-94-133:~$ ./deploy.sh
-pod "react-deployment-59597c6899-hzqfp" deleted
-pod "react-deployment-59597c6899-p2g2w" deleted
-^[[A^[[Aubuntu@ip-172-31-94microk8s kubectl get pods -n react-nginx-namespace
-NAME                                READY   STATUS    RESTARTS   AGE
-react-deployment-59597c6899-7xjh6   1/1     Running   0          11s
-react-deployment-59597c6899-msh8h   1/1     Running   0          12s
+microk8s kubectl delete pod $pods_id -n react-nginx-namespace 
+ubuntu@ip-172-31-86-66:~$ sudo chown ubuntu deploy.sh
+ubuntu@ip-172-31-86-66:~$ sudo chmod 744 deploy.sh
+ubuntu@ip-172-31-86-66:~$ ./deploy.sh
+pod "react-deployment-959dfb7cb-4hdb8" deleted
+pod "react-deployment-959dfb7cb-bg7v5" deleted
+
+ubuntu@ip-172-31-86-66:~$ microk8s kubectl get pods -n react-nginx--namespace
+No resources found in react-nginx--namespace namespace.
+ubuntu@ip-172-31-86-66:~$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-deployment-959dfb7cb-t5knx   1/1     Running   0          56s
+react-deployment-959dfb7cb-t7txr   1/1     Running   0          56s
+ubuntu@ip-172-31-86-66:~$ 
