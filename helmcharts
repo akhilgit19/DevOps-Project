@@ -80,3 +80,26 @@ To https://github.com/akhilgit19/helm.git
  * [new branch]      main -> main
 branch 'main' set up to track 'origin/main'.
 ubuntu@ip-172-31-86-66:~/react-chart$ 
+
+
+
+
+
+
+
+akhilpagadapoola@Akhils-MacBook-Air ~ % ls 
+Applications                    Gold_Site_Ecommerce-1           Music                           eclipse
+Desktop                         HTML,CSS                        Pictures                        eclipse-workspace
+Documents                       Library                         Public                          iCloud Drive (Archive)
+Downloads                       Mainframe                       Virtual Machines.localized      shell
+Gold_Site_Ecommerce             Movies                          aws                             trail
+akhilpagadapoola@Akhils-MacBook-Air ~ % cd Documents
+akhilpagadapoola@Akhils-MacBook-Air Documents % git clone https://github.com/akhilgit19/helm.git
+Cloning into 'helm'...
+remote: Enumerating objects: 16, done.
+remote: Counting objects: 100% (16/16), done.
+remote: Compressing objects: 100% (13/13), done.
+remote: Total 16 (delta 1), reused 16 (delta 1), pack-reused 0 (from 0)
+Receiving objects: 100% (16/16), 5.70 KiB | 1.90 MiB/s, done.
+Resolving deltas: 100% (1/1), done.
+akhilpagadapoola@Akhils-MacBook-Air Documents % 
