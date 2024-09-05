@@ -1,10 +1,9 @@
 ubuntu@ip-172-31-86-66:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
-Downloading https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
-Verifying checksum... Done.
-Preparing to install helm into /usr/local/bin
-helm installed into /usr/local/bin/helm
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+Helm v3.15.4 is already latest
 ubuntu@ip-172-31-86-66:~$ helm version
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
@@ -17,19 +16,8 @@ WARNING: Kubernetes configuration file is world-readable. This is insecure. Loca
 Creating react-chart
 ubuntu@ip-172-31-86-66:~$ ls
 bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
-ubuntu@ip-172-31-86-66:~$ cd react-chart
-ubuntu@ip-172-31-86-66:~/react-chart$ ls
-Chart.yaml  charts  templates  values.yaml
-ubuntu@ip-172-31-86-66:~/react-chart$ cd templates
-ubuntu@ip-172-31-86-66:~/react-chart/templates$ ls
-NOTES.txt  _helpers.tpl  deployment.yaml  hpa.yaml  ingress.yaml  service.yaml  serviceaccount.yaml  tests
-ubuntu@ip-172-31-86-66:~/react-chart/templates$ cd ..
-ubuntu@ip-172-31-86-66:~/react-chart$ 
-ubuntu@ip-172-31-86-66:~/react-chart$ 
-ubuntu@ip-172-31-86-66:~/react-chart$ ls
-Chart.yaml  charts  templates  values.yaml
-ubuntu@ip-172-31-86-66:~/react-chart$ echo "# helmcharts" >> README.md
-ubuntu@ip-172-31-86-66:~/react-chart$ git init
+ubuntu@ip-172-31-86-66:~$ echo "# helm" >> README.md
+ubuntu@ip-172-31-86-66:~$ git init
 hint: Using 'master' as the name for the initial branch. This default branch name
 hint: is subject to change. To configure the initial branch name to use in all
 hint: of your new repositories, which will suppress this warning, call:
@@ -40,10 +28,24 @@ hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
 hint: 'development'. The just-created branch can be renamed via this command:
 hint: 
 hint: 	git branch -m <name>
-Initialized empty Git repository in /home/ubuntu/react-chart/.git/
-ubuntu@ip-172-31-86-66:~/react-chart$ git add .
-ubuntu@ip-172-31-86-66:~/react-chart$ git commit -m "first commit"
-[master (root-commit) 1e1ac74] first commit
+Initialized empty Git repository in /home/ubuntu/.git/
+ubuntu@ip-172-31-86-66:~$ git add .
+warning: adding embedded git repository: bashscripts/react-nginx_bashscripts
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint: 
+hint: 	git submodule add <url> bashscripts/react-nginx_bashscripts
+hint: 
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint: 
+hint: 	git rm --cached bashscripts/react-nginx_bashscripts
+hint: 
+hint: See "git help submodule" for more information.
+ubuntu@ip-172-31-86-66:~$ git commit -m "first commit"
+[master (root-commit) 696bae4] first commit
  Committer: Ubuntu <ubuntu@ip-172-31-86-66.ec2.internal>
 Your name and email address were configured automatically based
 on your username and hostname. Please check that they are accurate.
@@ -57,34 +59,106 @@ After doing this, you may fix the identity used for this commit with:
 
     git commit --amend --reset-author
 
- 12 files changed, 443 insertions(+)
- create mode 100644 .helmignore
- create mode 100644 Chart.yaml
+ 60 files changed, 1223 insertions(+)
+ create mode 100644 .bash_history
+ create mode 100644 .bash_logout
+ create mode 100644 .bashrc
+ create mode 100644 .cache/motd.legal-displayed
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/admissionregistration.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/apiextensions.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/apiregistration.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/apps/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/authentication.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/authorization.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/autoscaling/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/autoscaling/v2/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/batch/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/certificates.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/coordination.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/crd.projectcalico.org/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/discovery.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/events.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/flowcontrol.apiserver.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/flowcontrol.apiserver.k8s.io/v1beta3/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/networking.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/node.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/policy/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/rbac.authorization.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/scheduling.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/servergroups.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/storage.k8s.io/v1/serverresources.json
+ create mode 100644 .kube/cache/discovery/127.0.0.1_16443/v1/serverresources.json
+ create mode 100644 .kube/cache/http/05f1bfd05243f42e8115f21715d5c4c73ec916a8fec2d2f254ed42897f55124b
+ create mode 100644 .kube/cache/http/22b32ab3977824c6563ad46b17e917e3025793b26923b45003b10ffe4bd395c3
+ create mode 100644 .kube/cache/http/43e4061337d3a3f8ce97b219e0c8f5d2bf2dfcfe58e1fa87af96e8c33d685c43
+ create mode 100644 .kube/cache/http/46071f35f13937aef35b999d01a9cc6a33e362c94414198b75aff480a8f3cf74
+ create mode 100644 .kube/cache/http/8cb8f17096685259fea6ec659541b905fe5641e4b36e68ef3b56a66b58cea04e
+ create mode 100644 .kube/cache/http/a6c2c323bbb23b12731adfbd938e90c26749ffe0e726fba2f6473def522d0864
+ create mode 100644 .kube/cache/http/a72af1f971340df96f2ddf99ce1936400ed140a4a30924e0c02506fae585c98a
+ create mode 100644 .kube/cache/http/d0fd1292b06285945976ec352089fc14f605e5d309050163f55e18af8322b332
+ create mode 100644 .kube/config
+ create mode 100644 .lesshst
+ create mode 100644 .profile
+ create mode 100644 .ssh/authorized_keys
+ create mode 100644 .sudo_as_admin_successful
  create mode 100644 README.md
- create mode 100644 templates/NOTES.txt
- create mode 100644 templates/_helpers.tpl
- create mode 100644 templates/deployment.yaml
- create mode 100644 templates/hpa.yaml
- create mode 100644 templates/ingress.yaml
- create mode 100644 templates/service.yaml
- create mode 100644 templates/serviceaccount.yaml
- create mode 100644 templates/tests/test-connection.yaml
- create mode 100644 values.yaml
-ubuntu@ip-172-31-86-66:~/react-chart$ git branch -M main
-ubuntu@ip-172-31-86-66:~/react-chart$ it remote add origin https://github.com/akhilgit19/helmcharts.git
-it: command not found
-ubuntu@ip-172-31-86-66:~/react-chart$ git remote add origin https://github.com/akhilgit19/helmcharts.git
-ubuntu@ip-172-31-86-66:~/react-chart$ git push -u origin main
+ create mode 160000 bashscripts/react-nginx_bashscripts
+ create mode 100755 deploy.sh
+ create mode 100644 deployment.yaml
+ create mode 100755 get_helm.sh
+ create mode 100644 react-chart/.helmignore
+ create mode 100644 react-chart/Chart.yaml
+ create mode 100644 react-chart/templates/NOTES.txt
+ create mode 100644 react-chart/templates/_helpers.tpl
+ create mode 100644 react-chart/templates/deployment.yaml
+ create mode 100644 react-chart/templates/hpa.yaml
+ create mode 100644 react-chart/templates/ingress.yaml
+ create mode 100644 react-chart/templates/service.yaml
+ create mode 100644 react-chart/templates/serviceaccount.yaml
+ create mode 100644 react-chart/templates/tests/test-connection.yaml
+ create mode 100644 react-chart/values.yaml
+ create mode 100644 react-ingress.yaml
+ create mode 100644 react-service.yaml
+ create mode 120000 snap/microk8s/current
+ubuntu@ip-172-31-86-66:~$ git branch -M main
+ubuntu@ip-172-31-86-66:~$ git remote add origin https://github.com/akhilgit19/helm.git
+ubuntu@ip-172-31-86-66:~$ git push -u origin main
 Username for 'https://github.com': akhilgit19
 Password for 'https://akhilgit19@github.com': 
-Enumerating objects: 16, done.
-Counting objects: 100% (16/16), done.
+Enumerating objects: 116, done.
+Counting objects: 100% (116/116), done.
 Delta compression using up to 2 threads
-Compressing objects: 100% (14/14), done.
-Writing objects: 100% (16/16), 5.71 KiB | 2.85 MiB/s, done.
-Total 16 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), done.
-To https://github.com/akhilgit19/helmcharts.git
+Compressing objects: 100% (65/65), done.
+Writing objects: 100% (116/116), 174.89 KiB | 1017.00 KiB/s, done.
+Total 116 (delta 23), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (23/23), done.
+To https://github.com/akhilgit19/helm.git
  * [new branch]      main -> main
 branch 'main' set up to track 'origin/main'.
-ubuntu@ip-172-31-86-66:~/react-chart$ 
+ubuntu@ip-172-31-86-66:~$ 
+
+git:
+
+akhilpagadapoola@Akhils-MacBook-Air ~ % ls
+Applications                    Gold_Site_Ecommerce-1           Music                           eclipse
+Desktop                         HTML,CSS                        Pictures                        eclipse-workspace
+Documents                       Library                         Public                          iCloud Drive (Archive)
+Downloads                       Mainframe                       Virtual Machines.localized      shell
+Gold_Site_Ecommerce             Movies                          aws                             trail
+akhilpagadapoola@Akhils-MacBook-Air ~ % cd Documents                                    
+akhilpagadapoola@Akhils-MacBook-Air Documents % ls
+Aws_EC2_Instance                Hibernate error doc.txt         Pay Slips                       itadmin_credentials.numbers
+Cobol                           Hibernate new error doc.txt     React_nginx_keypair             token.txt
+Devops notes                    Jenkins_keypair                 Web Development Projects        vmwarefusion
+Docker_react_nginx_aws_keypair  Keys                            coorg.txt
+HelloWorld.class                Kubernetes_keypair              git.txt
+HelloWorld.java                 Mainframe                       ias.txt
+akhilpagadapoola@Akhils-MacBook-Air Documents % git clone https://github.com/akhilgit19/helm.git
+Cloning into 'helm'...
+remote: Enumerating objects: 116, done.
+remote: Counting objects: 100% (116/116), done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 116 (delta 23), reused 116 (delta 23), pack-reused 0 (from 0)
+Receiving objects: 100% (116/116), 174.89 KiB | 2.24 MiB/s, done.
+Resolving deltas: 100% (23/23), done.
+akhilpagadapoola@Akhils-MacBook-Air Documents % 
