@@ -103,3 +103,53 @@ remote: Total 16 (delta 1), reused 16 (delta 1), pack-reused 0 (from 0)
 Receiving objects: 100% (16/16), 5.70 KiB | 1.90 MiB/s, done.
 Resolving deltas: 100% (1/1), done.
 akhilpagadapoola@Akhils-MacBook-Air Documents % 
+
+
+
+
+
+akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+akhilpagadapoola@Akhils-MacBook-Air helm % git checkout -b feature/kan-2
+Switched to a new branch 'feature/kan-2'
+akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a                
+* feature/kan-2
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a                
+* feature/kan-2
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+akhilpagadapoola@Akhils-MacBook-Air helm % git add .
+akhilpagadapoola@Akhils-MacBook-Air helm % git commit -m "first"
+[feature/kan-2 5bd4519] first
+ 4 files changed, 11 insertions(+), 7 deletions(-)
+akhilpagadapoola@Akhils-MacBook-Air helm % git push
+fatal: The current branch feature/kan-2 has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin feature/kan-2
+
+To have this happen automatically for branches without a tracking
+upstream, see 'push.autoSetupRemote' in 'git help config'.
+
+akhilpagadapoola@Akhils-MacBook-Air helm % git push --set-upstream origin feature/kan-2
+Enumerating objects: 13, done.
+Counting objects: 100% (13/13), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (7/7), 768 bytes | 768.00 KiB/s, done.
+Total 7 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
+remote: 
+remote: Create a pull request for 'feature/kan-2' on GitHub by visiting:
+remote:      https://github.com/akhilgit19/helm/pull/new/feature/kan-2
+remote: 
+To https://github.com/akhilgit19/helm.git
+ * [new branch]      feature/kan-2 -> feature/kan-2
+branch 'feature/kan-2' set up to track 'origin/feature/kan-2'.
+akhilpagadapoola@Akhils-MacBook-Air helm % 
