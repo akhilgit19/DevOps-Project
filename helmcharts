@@ -1,0 +1,90 @@
+ubuntu@ip-172-31-86-66:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+Downloading https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
+Verifying checksum... Done.
+Preparing to install helm into /usr/local/bin
+helm installed into /usr/local/bin/helm
+ubuntu@ip-172-31-86-66:~$ helm version
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
+ubuntu@ip-172-31-86-66:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-86-66:~$ helm create react-chart
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+Creating react-chart
+ubuntu@ip-172-31-86-66:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-86-66:~$ cd react-chart
+ubuntu@ip-172-31-86-66:~/react-chart$ ls
+Chart.yaml  charts  templates  values.yaml
+ubuntu@ip-172-31-86-66:~/react-chart$ cd templates
+ubuntu@ip-172-31-86-66:~/react-chart/templates$ ls
+NOTES.txt  _helpers.tpl  deployment.yaml  hpa.yaml  ingress.yaml  service.yaml  serviceaccount.yaml  tests
+ubuntu@ip-172-31-86-66:~/react-chart/templates$ cd ..
+ubuntu@ip-172-31-86-66:~/react-chart$ 
+ubuntu@ip-172-31-86-66:~/react-chart$ 
+ubuntu@ip-172-31-86-66:~/react-chart$ ls
+Chart.yaml  charts  templates  values.yaml
+ubuntu@ip-172-31-86-66:~/react-chart$ echo "# helmcharts" >> README.md
+ubuntu@ip-172-31-86-66:~/react-chart$ git init
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /home/ubuntu/react-chart/.git/
+ubuntu@ip-172-31-86-66:~/react-chart$ git add .
+ubuntu@ip-172-31-86-66:~/react-chart$ git commit -m "first commit"
+[master (root-commit) 1e1ac74] first commit
+ Committer: Ubuntu <ubuntu@ip-172-31-86-66.ec2.internal>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 12 files changed, 443 insertions(+)
+ create mode 100644 .helmignore
+ create mode 100644 Chart.yaml
+ create mode 100644 README.md
+ create mode 100644 templates/NOTES.txt
+ create mode 100644 templates/_helpers.tpl
+ create mode 100644 templates/deployment.yaml
+ create mode 100644 templates/hpa.yaml
+ create mode 100644 templates/ingress.yaml
+ create mode 100644 templates/service.yaml
+ create mode 100644 templates/serviceaccount.yaml
+ create mode 100644 templates/tests/test-connection.yaml
+ create mode 100644 values.yaml
+ubuntu@ip-172-31-86-66:~/react-chart$ git branch -M main
+ubuntu@ip-172-31-86-66:~/react-chart$ it remote add origin https://github.com/akhilgit19/helmcharts.git
+it: command not found
+ubuntu@ip-172-31-86-66:~/react-chart$ git remote add origin https://github.com/akhilgit19/helmcharts.git
+ubuntu@ip-172-31-86-66:~/react-chart$ git push -u origin main
+Username for 'https://github.com': akhilgit19
+Password for 'https://akhilgit19@github.com': 
+Enumerating objects: 16, done.
+Counting objects: 100% (16/16), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (16/16), 5.71 KiB | 2.85 MiB/s, done.
+Total 16 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), done.
+To https://github.com/akhilgit19/helmcharts.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+ubuntu@ip-172-31-86-66:~/react-chart$ 
