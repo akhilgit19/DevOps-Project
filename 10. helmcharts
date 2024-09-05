@@ -1,24 +1,75 @@
-ubuntu@ip-172-31-86-66:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+ubuntu@ip-172-31-41-209:~$ sudo snap install microk8s --classic
+microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
+ubuntu@ip-172-31-41-209:~$ sudo usermod -a -G microk8s ubuntu
+mkdir ~/.kube
+sudo microk8s kubectl config view --raw > ~/.kube/config
+ubuntu@ip-172-31-41-209:~$ sudo su - root
+root@ip-172-31-41-209:~# sudo su - ubuntu
+ubuntu@ip-172-31-41-209:~$ microk8s kubectl get all --all-namespaces
+NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
+kube-system   pod/calico-kube-controllers-796fb75cc-k5l6l   1/1     Running   0          55s
+kube-system   pod/calico-node-f7cj2                         1/1     Running   0          55s
+kube-system   pod/coredns-5986966c54-kfvqd                  1/1     Running   0          56s
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
+default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  63s
+kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   60s
+
+NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   56s
+
+NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           55s
+kube-system   deployment.apps/coredns                   1/1     1            1           60s
+
+NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
+kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       55s
+kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       57s
+ubuntu@ip-172-31-41-209:~$ alias kubectl="microk8s kubectl"
+ubuntu@ip-172-31-41-209:~$ kubectl create ns react-nginx-namespace
+namespace/react-nginx-namespace created
+ubuntu@ip-172-31-41-209:~$ sudo vi deployment.yaml
+ubuntu@ip-172-31-41-209:~$ kubectl apply -f deployment.yaml
+deployment.apps/react-deployment created
+ubuntu@ip-172-31-41-209:~$ kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-deployment-959dfb7cb-hjccm   1/1     Running   0          28s
+react-deployment-959dfb7cb-mf8bb   1/1     Running   0          28s
+ubuntu@ip-172-31-41-209:~$ sudo vi react-service.yaml
+ubuntu@ip-172-31-41-209:~$ rm -rf react-service.yaml
+ubuntu@ip-172-31-41-209:~$ ls
+deployment.yaml  snap
+ubuntu@ip-172-31-41-209:~$ rm -rf deployment.yaml
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ ls
+snap
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
-Helm v3.15.4 is already latest
-ubuntu@ip-172-31-86-66:~$ helm version
+Downloading https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
+Verifying checksum... Done.
+Preparing to install helm into /usr/local/bin
+helm installed into /usr/local/bin/helm
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ 
+ubuntu@ip-172-31-41-209:~$ helm version
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
 version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
-ubuntu@ip-172-31-86-66:~$ helm create react-chart
+ubuntu@ip-172-31-41-209:~$ helm create react-chart
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
 Creating react-chart
-ubuntu@ip-172-31-86-66:~$ ls
-README.md  bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
-ubuntu@ip-172-31-86-66:~$ cd react-chart
-ubuntu@ip-172-31-86-66:~/react-chart$ ls
+ubuntu@ip-172-31-41-209:~$ ls
+get_helm.sh  react-chart  snap
+ubuntu@ip-172-31-41-209:~$ cd react-chart
+ubuntu@ip-172-31-41-209:~/react-chart$ ls
 Chart.yaml  charts  templates  values.yaml
-ubuntu@ip-172-31-86-66:~/react-chart$ echo "# helm" >> README.md
-ubuntu@ip-172-31-86-66:~/react-chart$ git init
+ubuntu@ip-172-31-41-209:~/react-chart$ echo "# helm" >> README.md
+ubuntu@ip-172-31-41-209:~/react-chart$ git init
 hint: Using 'master' as the name for the initial branch. This default branch name
 hint: is subject to change. To configure the initial branch name to use in all
 hint: of your new repositories, which will suppress this warning, call:
@@ -30,15 +81,10 @@ hint: 'development'. The just-created branch can be renamed via this command:
 hint: 
 hint: 	git branch -m <name>
 Initialized empty Git repository in /home/ubuntu/react-chart/.git/
-ubuntu@ip-172-31-86-66:~/react-chart$ git add.
-git: 'add.' is not a git command. See 'git --help'.
-
-The most similar command is
-	add
-ubuntu@ip-172-31-86-66:~/react-chart$ git add .
-ubuntu@ip-172-31-86-66:~/react-chart$ git commit -m "first commit"
-[master (root-commit) a62a66e] first commit
- Committer: Ubuntu <ubuntu@ip-172-31-86-66.ec2.internal>
+ubuntu@ip-172-31-41-209:~/react-chart$ git add .
+ubuntu@ip-172-31-41-209:~/react-chart$ git commit -m "first commit"
+[master (root-commit) fcbfadb] first commit
+ Committer: Ubuntu <ubuntu@ip-172-31-41-209.ec2.internal>
 Your name and email address were configured automatically based
 on your username and hostname. Please check that they are accurate.
 You can suppress this message by setting them explicitly. Run the
@@ -64,9 +110,9 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 templates/serviceaccount.yaml
  create mode 100644 templates/tests/test-connection.yaml
  create mode 100644 values.yaml
-ubuntu@ip-172-31-86-66:~/react-chart$ git branch -M main
-ubuntu@ip-172-31-86-66:~/react-chart$ git remote add origin https://github.com/akhilgit19/helm.git
-ubuntu@ip-172-31-86-66:~/react-chart$ git push -u origin main
+ubuntu@ip-172-31-41-209:~/react-chart$ git branch -M main
+ubuntu@ip-172-31-41-209:~/react-chart$ git remote add origin https://github.com/akhilgit19/helm.git
+git push -u origin main
 Username for 'https://github.com': akhilgit19
 Password for 'https://akhilgit19@github.com': 
 Enumerating objects: 16, done.
@@ -79,55 +125,29 @@ remote: Resolving deltas: 100% (1/1), done.
 To https://github.com/akhilgit19/helm.git
  * [new branch]      main -> main
 branch 'main' set up to track 'origin/main'.
-ubuntu@ip-172-31-86-66:~/react-chart$ 
+ubuntu@ip-172-31-41-209:~/react-chart$ 
 
 
 
+Now open visual studio code  and clone the git 
 
-
-
-
-akhilpagadapoola@Akhils-MacBook-Air ~ % ls 
-Applications                    Gold_Site_Ecommerce-1           Music                           eclipse
-Desktop                         HTML,CSS                        Pictures                        eclipse-workspace
-Documents                       Library                         Public                          iCloud Drive (Archive)
-Downloads                       Mainframe                       Virtual Machines.localized      shell
-Gold_Site_Ecommerce             Movies                          aws                             trail
-akhilpagadapoola@Akhils-MacBook-Air ~ % cd Documents
-akhilpagadapoola@Akhils-MacBook-Air Documents % git clone https://github.com/akhilgit19/helm.git
-Cloning into 'helm'...
-remote: Enumerating objects: 16, done.
-remote: Counting objects: 100% (16/16), done.
-remote: Compressing objects: 100% (13/13), done.
-remote: Total 16 (delta 1), reused 16 (delta 1), pack-reused 0 (from 0)
-Receiving objects: 100% (16/16), 5.70 KiB | 1.90 MiB/s, done.
-Resolving deltas: 100% (1/1), done.
-akhilpagadapoola@Akhils-MacBook-Air Documents % 
-
-
-
-
-
+akhilpagadapoola@Akhils-MacBook-Air helm % ls
+Chart.yaml      README.md       templates       values.yaml
 akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a
 * main
   remotes/origin/HEAD -> origin/main
   remotes/origin/main
 akhilpagadapoola@Akhils-MacBook-Air helm % git checkout -b feature/kan-2
 Switched to a new branch 'feature/kan-2'
-akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a                
-* feature/kan-2
-  main
-  remotes/origin/HEAD -> origin/main
-  remotes/origin/main
-akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a                
+akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a   
 * feature/kan-2
   main
   remotes/origin/HEAD -> origin/main
   remotes/origin/main
 akhilpagadapoola@Akhils-MacBook-Air helm % git add .
 akhilpagadapoola@Akhils-MacBook-Air helm % git commit -m "first"
-[feature/kan-2 5bd4519] first
- 4 files changed, 11 insertions(+), 7 deletions(-)
+[feature/kan-2 fbd6ef3] first
+ 4 files changed, 10 insertions(+), 6 deletions(-)
 akhilpagadapoola@Akhils-MacBook-Air helm % git push
 fatal: The current branch feature/kan-2 has no upstream branch.
 To push the current branch and set the remote as upstream, use
@@ -142,7 +162,7 @@ Enumerating objects: 13, done.
 Counting objects: 100% (13/13), done.
 Delta compression using up to 8 threads
 Compressing objects: 100% (7/7), done.
-Writing objects: 100% (7/7), 768 bytes | 768.00 KiB/s, done.
+Writing objects: 100% (7/7), 727 bytes | 727.00 KiB/s, done.
 Total 7 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
 remote: 
