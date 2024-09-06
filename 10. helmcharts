@@ -209,7 +209,8 @@ Fast-forward
  templates/service.yaml    |  1 +
  values.yaml               | 17 +++++++++--------
  4 files changed, 12 insertions(+), 8 deletions(-)
-ubuntu@ip-172-31-37-74:~/react-chart$ kubectl config view --raw > ~/.kube/configubuntu@ip-172-31-37-74:~/react-chart$ chmod 600 ~/.kube/config
+ubuntu@ip-172-31-37-74:~/react-chart$ kubectl config view --raw > ~/.kube/config
+ubuntu@ip-172-31-37-74:~/react-chart$ chmod 600 ~/.kube/config
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl config view
 apiVersion: v1
 clusters:
