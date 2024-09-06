@@ -1,3 +1,615 @@
+
+=================================================
+ubuntu@ip-172-31-36-29:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+Helm v3.15.4 is already latest
+ubuntu@ip-172-31-36-29:~$ helm version
+version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
+ubuntu@ip-172-31-36-29:~$ helm create react-chart
+Creating react-chart
+WARNING: File "/home/ubuntu/react-chart/Chart.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/values.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/.helmignore" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/ingress.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/deployment.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/service.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/serviceaccount.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/hpa.yaml" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/NOTES.txt" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/_helpers.tpl" already exists. Overwriting.
+WARNING: File "/home/ubuntu/react-chart/templates/tests/test-connection.yaml" already exists. Overwriting.
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deployment.yaml  react-chart         react-service.yaml
+deploy.sh    get_helm.sh      react-ingress.yaml  snap
+ubuntu@ip-172-31-36-29:~$ cd react-chart
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$  cd templates
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls
+NOTES.txt     deployment.yaml  ingress.yaml  serviceaccount.yaml
+_helpers.tpl  hpa.yaml         service.yaml  tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cat service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "react-chart.fullname" . }}
+  labels:
+    {{- include "react-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "react-chart.selectorLabels" . | nindent 4 }}
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ sudo vi service.yaml
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cat service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "react-chart.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "react-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "react-chart.selectorLabels" . | nindent 4 }}
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls
+NOTES.txt     deployment.yaml  ingress.yaml  serviceaccount.yaml
+_helpers.tpl  hpa.yaml         service.yaml  tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls - la
+ls: cannot access '-': No such file or directory
+ls: cannot access 'la': No such file or directory
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls -la
+total 40
+drwxr-xr-x 3 ubuntu ubuntu 4096 Sep  6 17:31 .
+drwxr-xr-x 5 ubuntu ubuntu 4096 Sep  6 09:17 ..
+-rw-r--r-- 1 ubuntu ubuntu 1760 Sep  6 17:18 NOTES.txt
+-rw-r--r-- 1 ubuntu ubuntu 1822 Sep  6 17:18 _helpers.tpl
+-rw-rw-r-- 1 ubuntu ubuntu 2183 Sep  6 17:18 deployment.yaml
+-rw-r--r-- 1 ubuntu ubuntu 1003 Sep  6 17:18 hpa.yaml
+-rw-rw-r-- 1 ubuntu ubuntu 2087 Sep  6 17:18 ingress.yaml
+-rw-rw-r-- 1 ubuntu ubuntu  410 Sep  6 17:31 service.yaml
+-rw-r--r-- 1 ubuntu ubuntu  397 Sep  6 17:18 serviceaccount.yaml
+drwxr-xr-x 2 ubuntu ubuntu 4096 Sep  6 09:12 tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cd tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates/tests$ ls
+test-connection.yaml
+ubuntu@ip-172-31-36-29:~/react-chart/templates/tests$ cd ..
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls
+NOTES.txt     deployment.yaml  ingress.yaml  serviceaccount.yaml
+_helpers.tpl  hpa.yaml         service.yaml  tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cd ..
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ sudo vi values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ cat values.yaml
+# Default values for react-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+namespace: react-nginx-namespace
+
+image:
+  repository: akhilpagadapoola/react-nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: hkhnet.xyz
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ cd templates
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ ls
+NOTES.txt     deployment.yaml  ingress.yaml  serviceaccount.yaml
+_helpers.tpl  hpa.yaml         service.yaml  tests
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ sudo vi deployment.yaml
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cat deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "react-chart.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "react-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "react-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "react-chart.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "react-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ sudo vi service.yaml
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cat service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "react-chart.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "react-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "react-chart.selectorLabels" . | nindent 4 }}
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ sudo vi ingress.yaml
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cat ingress.yaml
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "react-chart.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
+  {{- end }}
+{{- end }}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "react-chart.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
+{{- end }}
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ kubectl config view
+Command 'kubectl' not found, but can be installed with:
+sudo snap install kubectl
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ microk8s kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://127.0.0.1:16443
+  name: microk8s-cluster
+contexts:
+- context:
+    cluster: microk8s-cluster
+    user: admin
+  name: microk8s
+current-context: microk8s
+kind: Config
+preferences: {}
+users:
+- name: admin
+  user:
+    client-certificate-data: DATA+OMITTED
+    client-key-data: DATA+OMITTED
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ microk8s kubectl config view --raw > ~/.kube/config
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ chmod 600 ~/.kube/config
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ helm install react-chart .
+Error: INSTALLATION FAILED: Chart.yaml file is missing
+ubuntu@ip-172-31-36-29:~/react-chart/templates$ cd ..
+ubuntu@ip-172-31-36-29:~/react-chart$ helm install react-chart .
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 17:47:10 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  http://hkhnet.xyz/
+ubuntu@ip-172-31-36-29:~/react-chart$ kubectl get pods -n react-nginx-namespace
+Command 'kubectl' not found, but can be installed with:
+sudo snap install kubectl
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-chart-64c79b4d84-84kr6       1/1     Running   0          62s
+react-chart-64c79b4d84-msxl2       1/1     Running   0          62s
+react-deployment-959dfb7cb-nlgmx   1/1     Running   0          41m
+react-deployment-959dfb7cb-tzc4w   1/1     Running   0          41m
+ubuntu@ip-172-31-36-29:~/react-chart$ helm list
+NAME       	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART            	APP VERSION
+react-chart	default  	1       	2024-09-06 17:47:10.405352842 +0000 UTC	deployed	react-chart-0.1.0	1.16.0     
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Release "react-chart" has been upgraded. Happy Helming!
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 17:48:50 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 2
+NOTES:
+1. Get the application URL by running these commands:
+  http://hkhnet.xyz/
+ubuntu@ip-172-31-36-29:~/react-chart$ helm list
+NAME       	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART            	APP VERSION
+react-chart	default  	2       	2024-09-06 17:48:50.629659832 +0000 UTC	deployed	react-chart-0.1.0	1.16.0     
+ubuntu@ip-172-31-36-29:~/react-chart$ helm history react-chart
+REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION     
+1       	Fri Sep  6 17:47:10 2024	superseded	react-chart-0.1.0	1.16.0     	Install complete
+2       	Fri Sep  6 17:48:50 2024	deployed  	react-chart-0.1.0	1.16.0     	Upgrade complete
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-chart-64c79b4d84-84kr6       1/1     Running   0          4m7s
+react-chart-64c79b4d84-msxl2       1/1     Running   0          4m7s
+react-deployment-959dfb7cb-nlgmx   1/1     Running   0          44m
+react-deployment-959dfb7cb-tzc4w   1/1     Running   0          44m
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ sudo vi values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Release "react-chart" has been upgraded. Happy Helming!
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 17:55:39 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 3
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS             RESTARTS   AGE
+react-chart-64c79b4d84-j26ks       1/1     Running            0          116s
+react-chart-64c79b4d84-l2xs7       1/1     Running            0          116s
+react-chart-7c5f97fc98-4vw5x       0/1     ImagePullBackOff   0          5s
+react-deployment-959dfb7cb-2h2km   1/1     Running            0          116s
+react-deployment-959dfb7cb-4jjbp   1/1     Running            0          116s
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl delete pod react-chart-64c79b4d84-j26ks react-chart-64c79b4d84-l2xs7  react-deployment-959dfb7cb-2h2km react-deployment-959dfb7cb-4jjbp
+Error from server (NotFound): pods "react-chart-64c79b4d84-j26ks" not found
+Error from server (NotFound): pods "react-chart-64c79b4d84-l2xs7" not found
+Error from server (NotFound): pods "react-deployment-959dfb7cb-2h2km" not found
+Error from server (NotFound): pods "react-deployment-959dfb7cb-4jjbp" not found
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl delete pod react-chart-64c79b4d84-j26ks react-chart-64c79b4d84-l2xs7  react-deployment-959dfb7cb-2h2km react-deployment-959dfb7cb-4jjbp -n react-nginx-namespace
+pod "react-chart-64c79b4d84-j26ks" deleted
+pod "react-chart-64c79b4d84-l2xs7" deleted
+pod "react-deployment-959dfb7cb-2h2km" deleted
+pod "react-deployment-959dfb7cb-4jjbp" deleted
+ubuntu@ip-172-31-36-29:~/react-chart$ cd ..
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ sudo vi react-ingress.yaml
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ cd react-chart
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Release "react-chart" has been upgraded. Happy Helming!
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 17:58:53 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 4
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS             RESTARTS   AGE
+react-chart-64c79b4d84-g7sk7       1/1     Running            0          101s
+react-chart-64c79b4d84-sb5hq       1/1     Running            0          101s
+react-chart-7c5f97fc98-4vw5x       0/1     ImagePullBackOff   0          3m25s
+react-deployment-959dfb7cb-467cw   1/1     Running            0          101s
+react-deployment-959dfb7cb-nl6hv   1/1     Running            0          101s
+ubuntu@ip-172-31-36-29:~/react-chart$ cd ..
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ sudo vi react-ingress.yaml
+ubuntu@ip-172-31-36-29:~$ cd react-chart
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ sudo vi values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Release "react-chart" has been upgraded. Happy Helming!
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 18:00:52 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 5
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS             RESTARTS   AGE
+react-chart-64c79b4d84-g7sk7       1/1     Running            0          3m39s
+react-chart-64c79b4d84-sb5hq       1/1     Running            0          3m39s
+react-chart-7c5f97fc98-4vw5x       0/1     ImagePullBackOff   0          5m23s
+react-deployment-959dfb7cb-467cw   1/1     Running            0          3m39s
+react-deployment-959dfb7cb-nl6hv   1/1     Running            0          3m39s
+ubuntu@ip-172-31-36-29:~/react-chart$ helm history react-chart
+REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION     
+1       	Fri Sep  6 17:47:10 2024	superseded	react-chart-0.1.0	1.16.0     	Install complete
+2       	Fri Sep  6 17:48:50 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete
+3       	Fri Sep  6 17:55:39 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete
+4       	Fri Sep  6 17:58:53 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete
+5       	Fri Sep  6 18:00:52 2024	deployed  	react-chart-0.1.0	1.16.0     	Upgrade complete
+ubuntu@ip-172-31-36-29:~/react-chart$ cd ..
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ sudo vi react-ingress.yaml
+ubuntu@ip-172-31-36-29:~$ cd bashcripts
+-bash: cd: bashcripts: No such file or directory
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ cd bashscripts
+ubuntu@ip-172-31-36-29:~/bashscripts$ ls
+react-nginx_bashscripts
+ubuntu@ip-172-31-36-29:~/bashscripts$ cd react-nginx_bashscripts
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ ls
+build.sh  deploy.sh
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ cd deploy.sh
+-bash: cd: deploy.sh: Not a directory
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ sudo vi deploy.sh
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ sudo vi build.sh
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ sudo vi build.sh
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ sudo vi build.sh
+ubuntu@ip-172-31-36-29:~/bashscripts/react-nginx_bashscripts$ cd ..
+ubuntu@ip-172-31-36-29:~/bashscripts$ cd ..
+ubuntu@ip-172-31-36-29:~$ ls
+bashscripts  deploy.sh  deployment.yaml  get_helm.sh  react-chart  react-ingress.yaml  react-service.yaml  snap
+ubuntu@ip-172-31-36-29:~$ cd react-chart
+ubuntu@ip-172-31-36-29:~/react-chart$ ls
+Chart.yaml  README.md  charts  templates  values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ sudo vi values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Error: UPGRADE FAILED: cannot patch "react-chart" with kind Service: Service "react-chart" is invalid: spec.ports[0].port: Invalid value: -1524072448: must be between 1 and 65535, inclusive && cannot patch "react-chart" with kind Deployment: Deployment.apps "react-chart" is invalid: spec.template.spec.containers[0].ports[0].containerPort: Invalid value: -1524072448: must be between 1 and 65535, inclusive
+ubuntu@ip-172-31-36-29:~/react-chart$ sudo vi values.yaml
+ubuntu@ip-172-31-36-29:~/react-chart$ helm upgrade react-chart .
+Release "react-chart" has been upgraded. Happy Helming!
+NAME: react-chart
+LAST DEPLOYED: Fri Sep  6 18:07:42 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 7
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+ubuntu@ip-172-31-36-29:~/react-chart$ helm history react-chart
+REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                                                                   
+1       	Fri Sep  6 17:47:10 2024	superseded	react-chart-0.1.0	1.16.0     	Install complete                                                                                                                                                                                                                                                                                                                                                                                                              
+2       	Fri Sep  6 17:48:50 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+3       	Fri Sep  6 17:55:39 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+4       	Fri Sep  6 17:58:53 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+5       	Fri Sep  6 18:00:52 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+6       	Fri Sep  6 18:06:56 2024	failed    	react-chart-0.1.0	1.16.0     	Upgrade "react-chart" failed: cannot patch "react-chart" with kind Service: Service "react-chart" is invalid: spec.ports[0].port: Invalid value: -1524072448: must be between 1 and 65535, inclusive && cannot patch "react-chart" with kind Deployment: Deployment.apps "react-chart" is invalid: spec.template.spec.containers[0].ports[0].containerPort: Invalid value: -1524072448: must be between 1 and 65535, inclusive
+7       	Fri Sep  6 18:07:42 2024	deployed  	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS             RESTARTS   AGE
+react-chart-5dd5c8cbb5-t2vq7       0/1     ImagePullBackOff   0          50s
+react-chart-64c79b4d84-g7sk7       1/1     Running            0          11m
+react-chart-64c79b4d84-sb5hq       1/1     Running            0          11m
+react-deployment-959dfb7cb-467cw   1/1     Running            0          11m
+react-deployment-959dfb7cb-nl6hv   1/1     Running            0          11m
+ubuntu@ip-172-31-36-29:~/react-chart$ helm rollback react-chart 2 .
+Rollback was a success! Happy Helming!
+ubuntu@ip-172-31-36-29:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-chart-64c79b4d84-g7sk7       1/1     Running   0          11m
+react-chart-64c79b4d84-sb5hq       1/1     Running   0          11m
+react-deployment-959dfb7cb-467cw   1/1     Running   0          11m
+react-deployment-959dfb7cb-nl6hv   1/1     Running   0          11m
+ubuntu@ip-172-31-36-29:~/react-chart$ helm history react-chart
+REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                                                                   
+1       	Fri Sep  6 17:47:10 2024	superseded	react-chart-0.1.0	1.16.0     	Install complete                                                                                                                                                                                                                                                                                                                                                                                                              
+2       	Fri Sep  6 17:48:50 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+3       	Fri Sep  6 17:55:39 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+4       	Fri Sep  6 17:58:53 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+5       	Fri Sep  6 18:00:52 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+6       	Fri Sep  6 18:06:56 2024	failed    	react-chart-0.1.0	1.16.0     	Upgrade "react-chart" failed: cannot patch "react-chart" with kind Service: Service "react-chart" is invalid: spec.ports[0].port: Invalid value: -1524072448: must be between 1 and 65535, inclusive && cannot patch "react-chart" with kind Deployment: Deployment.apps "react-chart" is invalid: spec.template.spec.containers[0].ports[0].containerPort: Invalid value: -1524072448: must be between 1 and 65535, inclusive
+7       	Fri Sep  6 18:07:42 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete                                                                                                                                                                                                                                                                                                                                                                                                              
+8       	Fri Sep  6 18:09:17 2024	deployed  	react-chart-0.1.0	1.16.0     	Rollback to 2                                                                                                                                                                                                                                                                                                                                                                                                                 
+ubuntu@ip-172-31-36-29:~/react-chart$ 
+
+=================================================
+
+
 ubuntu@ip-172-31-37-74:~$ sudo snap install microk8s --classic
 microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
 ubuntu@ip-172-31-37-74:~$ microk8s status --wait-ready
