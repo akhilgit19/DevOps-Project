@@ -41,6 +41,7 @@ NAME                               READY   STATUS    RESTARTS   AGE
 react-deployment-959dfb7cb-jsmd7   1/1     Running   0          28s
 react-deployment-959dfb7cb-rmdjm   1/1     Running   0          28s
 
+=========================================================================================================
 Build of React Application
 ##Note: Bash scripts must be saved with .sh and first line to be #!/bin/bash except first line "#" is considered to be a comment###
  Now our goal here is to Build docker image in AWS EC2 server and push it to Docker hub
@@ -170,7 +171,7 @@ Go for AWS EC2, security groups and In inbound rules allow port 80, as our nginx
 
 
 
-==============================================
+======================================================================================
 ubuntu@ip-172-31-87-138:~$ ls
 Gold_Site_Ecommerce-1
 ubuntu@ip-172-31-87-138:~$ sudo vi build.sh
