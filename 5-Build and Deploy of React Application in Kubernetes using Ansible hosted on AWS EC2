@@ -489,13 +489,16 @@ In deploy server
 -----------------
 ubuntu@ip-172-31-36-29:~$ sudo vi /home/ubuntu/.ssh/authorized_keys
 ubuntu@ip-172-31-36-29:~$ 
+ubuntu@ip-172-31-89-173:~$ sudo su - root
+root@ip-172-31-89-173:~# sudo su - ubuntu
+ubuntu@ip-172-31-89-173:~$
 In build server
 -----------------
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
 root@ip-172-31-87-138:~# sudo su - ubuntu
 ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/hosts
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
-root@ip-172-31-87-138:~# sudo su - ubuntu
+root@ip-172-31-87-138:~# 
 ubuntu@ip-172-31-87-138:~$ ansible all -m ping
 The authenticity of host '172.31.86.66 (172.31.86.66)' can't be established.
 ED25519 key fingerprint is SHA256:yoEGQdZMB617J5l4HWeA+Yc18RaOdqltG52tuEXkj1Q.
@@ -508,6 +511,8 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
     "changed": false,
     "ping": "pong"
 }
+
+
 ubuntu@ip-172-31-87-138:~$ sudo vi build.yaml
 ubuntu@ip-172-31-87-138:~$ cat build.yaml
 ---
