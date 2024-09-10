@@ -1,3 +1,20 @@
+1.cat /etc/os-release
+2.for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+3.# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+4.sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 Last login: Fri Aug 30 20:22:46 on ttys002
 akhilpagadapoola@Akhils-MacBook-Air Docker_react_nginx_aws_keypair % ssh -i "docker-react-nginx-aws.pem" ubuntu@ec2-34-207-157-230.compute-1.amazonaws.com
 The authenticity of host 'ec2-34-207-157-230.compute-1.amazonaws.com (34.207.157.230)' can't be established.
