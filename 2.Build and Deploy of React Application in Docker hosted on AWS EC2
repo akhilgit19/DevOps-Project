@@ -39,17 +39,16 @@ EXPOSE 80
 #Start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
 
-9.sudo docker build -t react-docker -f golddockerfile .
-10.
-   21  sudo docker images
-   22  sudo docker run --name react-docker-container -p 80:80 -d react-docker
-   23  sudo docker ps
-   24  sudo docker stop 3d6
-   25  sudo docker start 3d6
-   26  sudo docker images
-   27  sudo docker login
-   28  sudo docker tag react-docker:latest akhilpagadapoola/react-nginx:latest
-   29  sudo docker push akhilpagadapoola/react-nginx:latest
+9.  sudo docker build -t react-docker -f golddockerfile .
+10. sudo docker images
+11  sudo docker run --name react-docker-container -p 80:80 -d react-docker
+12  sudo docker ps
+13  sudo docker stop 3d6
+14  sudo docker start 3d6
+15  sudo docker images
+16  sudo docker login
+17  sudo docker tag react-docker:latest akhilpagadapoola/react-nginx:latest
+18  sudo docker push akhilpagadapoola/react-nginx:latest
 
 Last login: Fri Aug 30 20:22:46 on ttys002
 akhilpagadapoola@Akhils-MacBook-Air Docker_react_nginx_aws_keypair % ssh -i "docker-react-nginx-aws.pem" ubuntu@ec2-34-207-157-230.compute-1.amazonaws.com
