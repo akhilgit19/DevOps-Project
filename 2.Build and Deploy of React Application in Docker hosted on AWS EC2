@@ -14,6 +14,33 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 4.sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+5.docker --version
+6.git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
+7.cd Gold_Site_Ecommerce-1
+8. cat golddockerfile
+FROM node:18 as build
+# Set the working directory in the container
+WORKDIR /app
+# Copy package.json and package-lock.json from GitHub repository
+COPY package*.json ./
+# Install dependencies
+RUN npm install
+#Copy git code to /app directory
+COPY . .
+# Build the React app
+RUN npm run build
+#Use Nginx as the Application server
+
+FROM nginx:alpine
+# Copy the built React app to Nginx's web server directory
+COPY --from=build /app/build /usr/share/nginx/html
+# Expose port 80 for the Nginx server
+EXPOSE 80
+#Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+
+9.sudo docker build -t react-docker -f golddockerfile .
+10.
 
 Last login: Fri Aug 30 20:22:46 on ttys002
 akhilpagadapoola@Akhils-MacBook-Air Docker_react_nginx_aws_keypair % ssh -i "docker-react-nginx-aws.pem" ubuntu@ec2-34-207-157-230.compute-1.amazonaws.com
