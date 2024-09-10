@@ -1,3 +1,79 @@
+    1  microk8s kubectl get all --all-namespaces
+    2  alias kubectl="microk8s kubectl"
+    3  kubectl create ns react-nginx-namespace
+    4  sudo vi deployment.yaml
+    5  cat deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-deployment
+  namespace: react-nginx-namespace
+  labels:
+    app: react
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: akhilpagadapoola/react-nginx
+        ports:
+        - containerPort: 80
+    6  kubectl apply -f deployment.yaml
+    7  kubectl get pods -n react-nginx-namespace
+    8  sudo vi react-service.yaml
+    9  cat react-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+  namespace: react-nginx-namespace
+spec:
+  selector:
+    app: react
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+   10  kubectl apply -f react-service.yaml
+   11  kubectl get svc -n react-nginx-namespace
+   12  curl http://10.152.183.53
+   13  microk8s enable ingress
+   14  kubectl get all --all-namespaces
+   15  sudo vi react-ingress.yaml
+   16  cat react-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-ingress
+  namespace: react-nginx-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: hkhnet.xyz
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: react-service
+            port:
+              number: 80
+   17  kubectl apply -f react-ingress.yaml
+   18  kubectl get ingress -n react-nginx-namespace
+   19  curl http://hkhnet.xyz
+
+
+
+
 ubuntu@ip-172-31-86-66:~$ sudo snap install microk8s --classic
 microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
 ubuntu@ip-172-31-86-66:~$ sudo usermod -a -G microk8s ubuntu
