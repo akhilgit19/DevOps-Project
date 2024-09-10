@@ -1,38 +1,30 @@
 # DevOps-Project
 
 
-    1  clear
-    2  sudo apt install git
-    3  git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
-    4  ls
-    5  sudo apt update
-    6  sudo apt install nodejs
-    7  node --version
-    8  sudo apt install npm
-    9  npm --version
-   10  ls
-   11  cd Gold_Site_Ecommerce-1
-   12  ls
-   13  npm install react-scripts
-   14  ls
+    
+    1  sudo apt install git
+    2  git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
+    3  ls
+    4  sudo apt update
+    5  sudo apt install nodejs
+    6  node --version
+    7  sudo apt install npm
+    8  npm --version
+    9  ls
+   10  cd Gold_Site_Ecommerce-1
+   11  ls
+   12  npm install react-scripts
+   13  ls -lhtr
+   14  npm run build
    15  ls -lhtr
-   16  npm run build
-   17  ls -lhtr
-   18  sudo apt install nginx
-   19  nginx -version
-   20  ls
-   21  cd build
-   22  ls
-   23  cd ..
-   24  cd /var/www/
-   25  ls
-   26  cd html
-   27  ls
-   28  cd /home/ubuntu/Gold_Site_Ecommerce-1
-   29  sudo vi /etc/nginx/sites-available/default
-   30  sudo cp -R build/ /var/www/html/
-   31  sudo systemctl restart nginx
-   32  sudo systemctl status nginx
+   16  sudo apt install nginx
+   17  nginx -version
+   18  ls
+   19  cd /home/ubuntu/Gold_Site_Ecommerce-1
+   20  sudo vi /etc/nginx/sites-available/default
+   21  sudo cp -R build/ /var/www/html/
+   22  sudo systemctl restart nginx
+   23  sudo systemctl status nginx
 
 
 ===============================
