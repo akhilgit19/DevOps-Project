@@ -25,6 +25,22 @@ sudo docker push akhilpagadapoola/react-nginx:latest
    6  ./build.sh
    7  sudo docker images
 
+In deploy server
+1. sudo vi deploy.sh
+2. cat deploy.sh
+#!/bin/bash
+pods_id=$(microk8s kubectl get pods -n react-nginx-namespace |grep react |awk {'print $1'})
+microk8s kubectl delete pod $pods_id -n react-nginx-namespace 
+3. sudo chown ubuntu deploy.sh
+4. sudo chmod 744 deploy.sh
+5. ./deploy.sh
+pod "react-deployment-959dfb7cb-wvdzf" deleted
+pod "react-deployment-959dfb7cb-ztdrc" deleted
+6. microk8s kubectl get pods -n react-nginx-namespace
+NAME                               READY   STATUS    RESTARTS   AGE
+react-deployment-959dfb7cb-jsmd7   1/1     Running   0          28s
+react-deployment-959dfb7cb-rmdjm   1/1     Running   0          28s
+
 Build of React Application
 ##Note: Bash scripts must be saved with .sh and first line to be #!/bin/bash except first line "#" is considered to be a comment###
  Now our goal here is to Build docker image in AWS EC2 server and push it to Docker hub
