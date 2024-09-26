@@ -1,0 +1,188 @@
+
+What are Build Artifacts?
+
+Artifacts are nothing but storage, we called it Build Artifacts as we are going to store build files in it, There are Artifacts widely used like Jfrog, Nexus, S3 Bucket and lot tools, for this project we are constraining only to S3 Bucket
+
+Why do you need Build Artifacts?
+We are storing build files, build files are nothing but packaged code. this helps us in being prepared for negative scenarios, let us say, we have our docker image running these build files and pushed to docker hub, our kubernetes pods runs with same image, and kubernetes hosted on ec2, also our BuildServer is EC2, now lets say we had some server crash situations or someone deleted the ec2 instances which we run jenkins, ansible, docker, ... as a result , the website is down and your in loss of lot of business, Now re building setup from scratch can take time, even if your instracture is provisioned by Terraform and configured by ansible, initial setup, even if automated may take much time than expected resulting you in lots of loss in your business
+
+In case, you have build artifacts, packaged code, you can turn up an EC2 instance, install nginx and keep your build file in nginx path for users to access your website and continue the business
+
+Meanwhile you will have sufficient time to make the setup and not worrying about your business going down
+
+
+How did we implement this Artifacts in our repo?
+I request you to revise architecture setup till now for our Project from -- Docker tag using Git commit,
+
+As you can see from previous project preference, we have created AWS IAM role with S3full bucket access and also gave installed AWS CLI2 in both the systems
+
+you can check this blog on how to attach AWS IAM roles and install AWS CLI2 - upload files to AWS EC2
+
+We made it very simple, we have created an s3 bucket named buildartifactorydemo (this name will not work for you as i am using it), and had written in script to create folder with date in DDMMYYY format and send build files to it
+
+In date format for ease of access, so our build.sh script now updated as shown in the below
+
+new git repo- react-nginx-bash scripts
+
+#!/bin/bash
+sudo docker container prune -f && sudo docker image prune -a -f && sudo docker volume prune -f && sudo docker network prune -f && sudo docker system prune -a -f
+##this above step is not recommned step, i am deleting existing images to save space
+sudo rm -r gold ## these steps are not recommened instead you can modify script as shown below
+sudo mkdir gold
+cd gold/
+sudo git clone https://github.com/Hari0o/Gold_Site_Ecommerce.git
+cd Gold_Site_Ecommerce/git_commit=$(sudo git rev-parse HEAD)
+sudo npm install react-scripts
+sudo npm run build
+sudo chmod 777 build
+current_date=$(date +%d%m%Y)
+aws s3api put-object --bucket buildartifactorydemo --key "${current_date}/"aws s3 cp --recursive build "s3://buildartifactorydemo/${current_date}/$(basename build)"
+sudo docker build -t react-nginx:$git_commit -f golddockerfile .
+sudo docker tag react-nginx:$git_commit sagarkakkala385/react-nginx:$git_commit ##make sure you did docker login
+sudo docker push sagarkakkala385/react-nginx:$git_commit
+aws s3 rm s3://gitcommitids/new_value.txtsudo touch new_value.txt
+sudo chmod 777 new_value.txt
+sudo echo $git_commit > new_value.txt
+aws s3 cp new_value.txt s3://gitcommitids/
+sudo rm new_value.txt
+Copy
+
+
+
+Now as you see below, these are the new steps that are added compared to previous session
+
+sudo npm install react-scripts
+sudo npm run build
+sudo chmod 777 build
+current_date=$(date +%d%m%Y)
+aws s3api put-object --bucket buildartifactorydemo --key "${current_date}/"aws s3 cp --recursive build "s3://buildartifactorydemo/${current_date}/$(basename build)"
+Copy
+
+
+Now you may have query like, why we dint add these steps like npm install react-scripts, npm run build, and chmod 777 build in previous steps, and why here.
+
+I request you to revise once our Part-1 and Part-2 of Build and Deploy series
+
+Understanding MultiStage Docker Build
+Now also before understanding why the commands are given here, let us understand multistage build docker file that we were using till now
+
+ the dockerfile we were using till now as follows below
+
+FROM node:18 as buildmachine
+# Set the working directory in the container
+WORKDIR /app
+# Copy package.json and package-lock.json from GitHub repository
+COPY package*.json ./
+# Install dependencies
+RUN npm install
+#Copy git code to /app directory
+COPY . .# Build the React appRUN npm run build# Use Nginx as the Application server
+
+FROM nginx:alpine
+# Copy the built React app to Nginx's web server directory
+COPY --from=buildmachine /app/build /usr/share/nginx/html
+# Expose port 80 for the Nginx server
+EXPOSE 80
+#Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+Copy
+
+The above docker file consists of two images, one is node:18 and other is nginx:alpine, now what happens here is when we give docker build command, docker forms two containers inside it, first container with node,(which has npm and all installed), it packages our code into "build" folder and it now gives this "build" folder formed to nginx image as you can see the below line, we called it buildmachine because we named it as buildmachine in the first line of dockerfile using "FROM and AS"
+
+COPY --from=buildmachine /app/build /usr/share/nginx/html
+
+once the work of buildmachine (node:18 image) is done, it gets deleted.
+
+since we want to save this build folder in our local as we need to save artifacts, we will be installing node and npm inside our BuildServer using commands
+
+sudo apt install nodejs
+Copy
+
+sudo apt install npm
+Copy
+
+now once we installed npm, we need to update our dockerfile as node:18 machine is no more needed, so updated docker file looks like below
+
+# Use Nginx as the production server
+FROM nginx:alpine
+
+COPY build /usr/share/nginx/html
+
+# Expose port 80 for the Nginx server
+EXPOSE 80
+
+# Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+Copy
+
+ Understanding our inputs that are newly added
+sudo npm install react-scripts
+sudo npm run build
+sudo chmod 777 build
+current_date=$(date +%d%m%Y)
+aws s3api put-object --bucket buildartifactorydemo --key "${current_date}/"aws s3 cp --recursive build "s3://buildartifactorydemo/${current_date}/$(basename build)"
+Copy
+The above are newly added commands for our build.sh, since we have removed our node container from multi stage build
+
+we are asking it to install react-scripts, and npm run build (gives us build folder), if you observe updated docker file, we are asking it to take build folder from EC2 directly, so docker image builds from this "build" folder
+
+now we want to use specific date to track so we used  current_date=$(date +%d%m%Y), this commands update the date in format of ddmmyyy format , if it is 30th july 2024, the value of it is 30072024
+
+next command,
+aws s3api put-object --bucket buildartifactorydemo --key "${current_date}/"
+
+
+
+since it is integrated in our build.sh , it created artifacts on dates whenever pipelines run or you can say whenever deployment happens
+
+the above command we are asking aws cli to create folder with 30072024 inside bucket named buildartifactorydemo
+
+aws s3 cp --recursive build "s3://buildartifactorydemo/${current_date}/$(basename build)"
+
+the above command copies all the files inside build folder and name it as build
+
+
+
+
+
+
+
+And also if you have made a setup completely from initial, you need to update your ansible playbooks to target to new repo in which this build.sh is updated and deploy.sh is updated in our previous session
+
+Playbook to update
+
+---
+- name: Playbook to build our docker image
+  hosts: localhost
+  tasks:  
+   - name: remove existing bashscripts directory and ignore task if bashscripts folder is not there
+     ansible.builtin.shell:
+       cmd: sudo rm -r bashscripts
+     ignore_errors: yes    
+       
+   - name: create new bashscripts directory
+     ansible.builtin.shell:
+       cmd: sudo mkdir bashscripts         
+
+   - name: clone bash scripts repo into server
+     ansible.builtin.shell:
+       cmd: sudo git clone https://github.com/Hari0o/react-nginx-bashscripts-post-helm.git
+       chdir: bashscripts/
+
+   - name: giving ownership to build.sh and giving excecuting permissions to build.sh
+     ansible.builtin.shell:
+       cmd: sudo chown ubuntu build.sh && sudo chmod 744 build.sh
+       chdir: bashscripts/react-nginx-bashscripts-post-helm
+
+   - name: running script to make build
+     ansible.builtin.shell: 
+       cmd: ./build.sh
+       chdir: bashscripts/react-nginx-bashscripts-post-helm/
+
+Changes you need to do if you setup from previous projects
+
+If you have already setup your environment based on previous projects, you only need to create s3 bucket and change the name buildartifactorydemo to your s3 bucket name,post that update your docker file and ansible playbook,also install nodejs and npm in your BuildServer, 
+
+Also you need to take care of ansible playbook repo to point to repo where you can run build.sh and deploy.sh, as you using the same repo might result you in errors because of s3 bucket name
+
+this concludes our blog
