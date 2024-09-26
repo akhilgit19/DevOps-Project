@@ -1,0 +1,188 @@
+efore working with topics of S3 Bucket, you need to have aws cli installed in your AWS EC2
+AWS CLI 1 might require python installation but AWS CLI2 comes along with python package
+
+you can install AWS CLI 2 directly from AWS Document- AWS CLI Install Doc
+
+
+
+sudo apt install unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip 
+sudo ./aws/install
+Copy
+
+
+
+AWS CLI might take few mins to install
+
+
+once aws cli is installed you can verify
+
+
+
+Now let us a upload a file directly to S3 Bucket
+search for S3 in AWS console and once you are at s3, click create Bucket, Bucket name will only be available if it is not used anywhere globally
+
+
+
+
+
+i have modified name to testuploadbucket2345, once bucket is up, click on bucket name and click on upload > Add files
+
+
+
+
+
+select the testfile to be uploaded from your local and click on upload
+
+
+
+
+
+click on the file that you have uploaded to get the full path of it in s3 url
+
+copy the details of s3 uri as shown in below screenshot
+
+
+
+in our case it is s3://testuploadbucket2345/testupload.txt, this is the path where our file is stored
+
+
+
+Upload files from S3 Bucket to AWS EC2 using Access keys
+now to copy files from s3 bucket , you can use aws s3 cli commands like aws s3 cp
+
+
+aws s3 cp $s3_bucket_object_path $destination_path
+
+in our case above command changes to
+
+aws s3 cp s3://testuploadbucket2345/testupload.txt /home/ubuntu/
+Copy
+
+You can face the following error though EC2 and S3 are in same VPC, this is because EC2 does not have access to other resources in AWS,
+
+
+
+now we can solve this by using Access Keys and Access Secrets,search for IAM in AWS console
+
+once you are in IAM console, check for security credentials as shown in below screenshot
+
+
+
+
+once you click on security credentials, you will find option of Access Keys, click on Create Access keys
+
+
+
+
+
+
+
+once access keys are created, click on Download .csv file , your downloaded file will have the below information
+
+
+
+Now lets jump back into our AWS EC2 and configure these credentials with command
+
+aws configure
+Copy
+give the credentials that we got from .csv file ,and remaining can be left as defaults as shown in below screenshot
+
+
+
+
+Now our AWS EC2 is configured with access that of Root Account, if the Access keys are created with IAM account, then our AWS EC2 will have access only to resources that IAM account has
+
+since these access keys are generated within root account, our EC2 will be able to access all resources which is not recommended,since it is a demo project, we are going with root account
+
+Now if we run the above command
+aws s3 cp s3://testuploadbucket2345/testupload.txt /home/ubuntu/
+Copy
+
+
+
+As you could see from above screenshot, we got our file now into AWS EC2
+
+Now, also if you want to check AWS Credentials inside AWS EC2, you can check at this path
+
+
+
+
+
+removing .aws folder also deletes credentials from EC2 , and EC2 will no longer have access to other resources in AWS
+
+
+
+As you could see from above screenshot, we were no longer able to access s3 bucket once we removed credentials file.
+
+let us also delete file that we uploaded to play with other methods as mentioned in the blog
+
+
+
+we have deleted the file and also not to be confused "aws" folder as per screenshot is downloaded with awscli installation and ".aws" is a hidden file used to store credentials that we have deleted now
+
+if you have did the demo on root account, it is important to delete Access Keys from console for better security as exposing these credentials can lead to unwanted chaos
+
+
+deactivate and delete access keys
+
+Upload files from S3 Bucket to AWS EC2 using IAM Roles
+Now since we have removed access keys, if we run the command that we used previously 
+
+
+
+In order to avoid using credentials, we can also use Roles where we can make an IAM Role to have permissions only to s3 bucket and not to all the resources in AWS like the root account posses
+
+let us create an IAM Role, search for IAM in AWS Console
+
+
+
+click on Roles > Create Role
+
+
+
+
+In service, select EC2 and in next step, we will select permission policies, Policies are to decide what permissions does this role can have!
+
+
+
+
+
+let us give s3full access for this Role
+
+
+
+
+Always prefer a name that any person from your organization can understand for the same use case to avoid having multiple IAM Roles with same permissions
+
+
+
+
+
+once role is created, let us go back to our AWS EC2 console,
+
+
+
+Click on Actions > Security > Modify IAM Role
+
+select the role that you created and click on Update IAM role
+
+
+Now if you run previous command, you will be able to see the file in AWS EC2
+
+aws s3 cps3://testuploadbucket2345/testupload.txt /home/ubuntu/
+Copy
+
+
+
+
+
+As you could see from above screenshot, we were able to download the file without credentials,since we have given s3bucketfullaccess to EC2, we can also delete the file from Bucket from EC2, literally any tasks can be performed as the role attached has full access
+
+aws s3 rm s3://testuploadbucket2345/testupload.txt
+Copy
+
+
+
+Before moving to next, delete the file to play with other methods mentioned in the blog
