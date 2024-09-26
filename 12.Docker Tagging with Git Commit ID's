@@ -1,0 +1,209 @@
+To Put it in simple flow, we integrated Jenkins with Webhook from Github Repo,
+and Jenkins server has SSH connection to Build Server , Build Server has SSH connection to Deploy Server.
+
+Build Server has Docker and Ansible Installed.
+
+Deploy Server has Kubernetes and Helm Charts Installed.
+
+According to the way we designed this Project, whenever we push a commit to our code in Github, Jenkins gets triggered, and Jenkins runs Ansible Playbook in Build Server.
+
+This Ansible Playbook is written to go and fetch this Repo - Bash Scripts 
+
+
+
+
+Now this playbook runs build.sh on build server , which fetches our repo, Builds image and pushes to Docker hub
+
+
+
+and once this task is done, now it runs deploy.sh script on Deploy Server, which deletes the existing pods and as a result latest image from the Docker Hub will be fetched again, the below script is written before helm charts
+
+
+
+
+How to tag Docker Image with Git Commit Id
+It is simple command that we are integrating here,once you clone the git repo, you can get latest git commit ID using this command
+
+git rev-parse HEAD
+Copy
+
+
+
+
+Now we have improved our build.sh script to get this value and save it in our script
+
+
+
+
+
+ 
+As you can see from the above screenshot, we have improved our build.sh script to tag with commit id as we saved git commit id in variable git_commit and now we push it to Docker hub and now our images are formed with Tags as you can see in below screenshot
+
+
+
+
+Now it is time, we have to get this commit id value to update in our Helm chart values, request you to complete Helm Charts chapter to understand what we are trying to do.
+Helm Charts makes our kubernetes pods up and values.yaml files serves as the main and by default we have left the value of docker image tag as "latest'', this fetches recent image that is pushed to our docker hub, but we want to have this value as commit id, to track it better
+
+
+
+We want this latest value to be updated with latest commit id that is pushed,and for this , we have created IAM role to give full s3 bucket access and we have attached this to both our Build Server and Deploy Server , also we have installed aws cli in both the servers, for this process, you can check the blog - Upload files to AWS EC2
+Now we have created an s3 bucket and named it as gitcommitids
+
+
+
+
+and we have created two empty files in it, one is new_value.txt and other is old_value.txt
+
+
+
+Now we have updated our build.sh script to be in this way
+#!/bin/bash
+sudo docker container prune -f && sudo docker image prune -a -f && sudo docker volume prune -f && sudo docker network prune -f && sudo docker system prune -a -f
+##this above step is not recommned step, i am deleting existing images to save space
+sudo rm -r gold
+sudo mkdir gold
+cd gold/
+sudo git clone https://github.com/Hari0o/Gold_Site_Ecommerce.git
+cd Gold_Site_Ecommerce/git_commit=$(sudo git rev-parse HEAD)
+sudo docker build -t react-nginx:$git_commit -f golddockerfile .
+sudo docker tag react-nginx:$git_commit sagarkakkala385/react-nginx:$git_commit ##make sure you did docker login
+sudo docker push sagarkakkala385/react-nginx:$git_commit
+aws s3 rm s3://gitcommitids/new_value.txtsudo touch new_value.txt
+sudo chmod 777 new_value.txt
+sudo echo $git_commit > new_value.txt
+aws s3 cp new_value.txt s3://gitcommitids/
+sudo rm new_value.txt
+Copy
+Now if you see the above what we are doing is , whenever there is a new commit, it updates the commit value and pushed to docker hub, once that is done, since it has full access over s3 bucket , we have deleted new_value.txt file from s3 bucket, created new file "new_value.txt" in Build Server and updated it with git commit id value and pushed "new_value.txt" to s3 bucket , and removed the file that we created in Build Server
+
+To put it simple, delete file "new_value.txt" in s3 bucket, create file "new_value.txt" and update file with git commit id in Build Server instance, send updated file "new_value.txt" to S3 Bucket
+
+Now our deploy.sh script as well is updated in this way
+
+#!/bin/bash
+cd /home/ubuntu/react-chart/
+aws s3 cp s3://gitcommitids/old_value.txt .
+aws s3 cp s3://gitcommitids/new_value.txt .
+old_value=$(cat old_value.txt)new_value=$(cat new_value.txt)
+sed -i "s/${old_value}/${new_value}/g" values.yamlhelm upgrade react-chart .
+aws s3 rm s3://gitcommitids/old_value.txtecho $new_value > old_value.txt
+aws s3 cp old_value.txt s3://gitcommitids/rm old_value.txt new_value.txt
+Copy
+
+
+Now we have updated deploy.sh, in such a way to get both the files old_value.txt and new_value.txt from s3 bucket to Deploy Server, and put them in variables like old_value and new_value, and we have used sed command to replace old value with new value , and then upgrade the helm, helm upgrade helps us in deploying latest image to our website, once helm upgrade is done, since we have deployed already with new git commit id, we are updating it as old value.txt
+
+
+
+To put it simple, from above screenshot, we are pushing new generated git commit id value to s3 bucket in new_value.txt and after that we are asking deploy server to fetch the values of old_value.txt and new_value.txt, old_value.txt consists of tag which is now already running the website, which is deployed already, we are asking to fetch both old and new values, now using sed command we are asking to replace old value of tag in values.yaml with new value that is generated now, once helm is deployed , now updated the old_value.txt with the value that is already deployed.
+
+
+Let us understand the logic better by deploying project, checking the values before commit and after commit
+
+let us observe our old values before commiting, 
+Website:
+
+
+
+
+Git Hub last commit id:
+d449a005a4bffd0328c5483d0b1827d2cb149560
+
+
+
+
+Docker Hub:
+
+
+
+
+S3 Bucket:
+
+new_value.txt: d449a005a4bffd0328c5483d0b1827d2cb149560
+
+old_value.txt: d449a005a4bffd0328c5483d0b1827d2cb149560
+
+The values are same because, In logic we said once deployed, take new_value and update it in old_value.txt
+
+Docker tag value in Helm Values.yaml: 
+
+
+
+
+let us observe our old values after commiting,
+Website:
+
+
+ 
+Github latest commit id: 
+
+e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72
+
+
+
+Docker Hub:
+
+
+
+
+S3 Bucket : 
+
+new_value.txt: e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72
+
+old_value.tx: e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72
+
+Docker tag value in Helm Values.yaml:
+
+
+
+
+To summarize what happened when we committed a new change:
+A new commit id e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72 was generated and this was tagged and pushed to docker hub
+
+From Build server we have deleted new_value.txt  in s3 bucket which has value of d449a005a4bffd0328c5483d0b1827d2cb149560
+
+we created new file "new_value.txt"
+
+we updated e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72 in "new_value.txt" and pushed it to s3 bucket
+
+Now in Build Server, we copied both new_value.txt which has value e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72 and old_value.txt which has value of d449a005a4bffd0328c5483d0b1827d2cb149560
+
+and also till our helm values.yaml value has tag of d449a005a4bffd0328c5483d0b1827d2cb149560
+
+now using sed command by this way
+
+sed -i "s/${old_value}/${new_value}/g" values.yaml
+
+
+sed -i "s/d449a005a4bffd0328c5483d0b1827d2cb14956/e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72/g" values.yaml
+
+now our helm chart values.yaml has tag of e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72
+
+once it has tag , it deployed our website
+
+once it is deployed, we have asked Deploy server to delete old_value.txt from S3 bucket
+
+aws s3 rm s3://gitcommitids/old_value.txt
+
+and also update the new git commit id e3676aa7d4090d8b2c2b6411e3db7c4d5a3c5b72 as old_value.txt as it is already deployed
+
+How does Docker tagging with git commit id help us 
+
+We will be able to easily track with what changes our Website is running and if it is done with Git commit, we will be able to easily find who have done the changes, and higher authorities can make a question in case something breaks to the person who committed it
+
+lets say something breaks in production, we can check with what image is website running,
+
+As you can see when i have run kubectl describe pod command, it showed me the image with docker tag which is our git commit id
+
+
+
+Now , using this commit id, i can check who committed it and can question on why these changes were pushed by him and justification for making changes that broke the production
+
+
+
+This concludes the blog here
+
+##I Post most of my content in Telugu related to contrafactums(changing lyrics to original songs),fun vlogs, Travel stories and much more to explore, You can subscribe here at sagar kakkala's world Youtube,You can also follow me on other sites Sagar Kakkala LinkedIn, Sagar Kakkalas world Instagram , Entertainment meme Page ##
+
+🖊feedback,queries and suggestions about blog are welcome in the comments.
