@@ -1280,7 +1280,7 @@ Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.242+0000 [i>
 lines 1-20/20 (END)
 [1]+  Stopped                 sudo systemctl status jenkins
 ubuntu@ip-172-31-94-156:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-f1f35a866ed0451ab8d4539951d832c6
+e3c2bd61f6e04fd9b282ce67cbf34b44
 ubuntu@ip-172-31-94-156:~$ 
 ubuntu@ip-172-31-94-156:~$ 
 ubuntu@ip-172-31-94-156:~$ 
