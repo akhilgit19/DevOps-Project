@@ -1,4 +1,11 @@
-    1  microk8s kubectl get all --all-namespaces
+
+    1  sudo snap install microk8s --classic
+       sudo usermod -a -G microk8s ubuntu
+       mkdir ~/.kube
+       sudo microk8s kubectl config view --raw > ~/.kube/config
+       sudo su - root
+       sudo su - ubuntu
+       microk8s kubectl get all --all-namespaces
     2  alias kubectl="microk8s kubectl"
     3  kubectl create ns react-nginx-namespace
     4  sudo vi deployment.yaml
