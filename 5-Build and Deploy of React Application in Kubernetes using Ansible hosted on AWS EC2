@@ -470,6 +470,8 @@ The key's randomart image is:
 |            .    |
 +----[SHA256]-----+
 ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/ansible.cfg
+ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
+root@ip-172-31-87-138:~# sudo su - ubuntu
 ubuntu@ip-172-31-87-138:~$ ansible --version
 ansible [core 2.16.10]
   config file = /etc/ansible/ansible.cfg
@@ -496,7 +498,7 @@ In build server
 -----------------
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
 root@ip-172-31-87-138:~# sudo su - ubuntu
-ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/hosts
+ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/hosts (((Note remove everthing add the private ip of kuberntes)
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
 root@ip-172-31-87-138:~# 
 ubuntu@ip-172-31-87-138:~$ ansible all -m ping
