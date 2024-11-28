@@ -1,5 +1,6 @@
 
     1  sudo snap install microk8s --classic
+       microk8s status --wait-ready
        sudo usermod -a -G microk8s ubuntu
        mkdir ~/.kube
        sudo microk8s kubectl config view --raw > ~/.kube/config
