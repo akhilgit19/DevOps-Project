@@ -1280,7 +1280,7 @@ Aug 31 07:19:29 ip-172-31-94-156 jenkins[3957]: 2024-08-31 07:19:29.242+0000 [i>
 lines 1-20/20 (END)
 [1]+  Stopped                 sudo systemctl status jenkins
 ubuntu@ip-172-31-94-156:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-e3c2bd61f6e04fd9b282ce67cbf34b44
+e0c7cdd477b341a2bba10fdb69e70db9
 ubuntu@ip-172-31-94-156:~$ 
 ubuntu@ip-172-31-94-156:~$ 
 ubuntu@ip-172-31-94-156:~$ 
@@ -1331,6 +1331,9 @@ ubuntu@ip-172-31-87-138:~$
 get back to jenkins server and check the connectiviity:
 
 jenkins@ip-172-31-94-156:~/.ssh$ ssh -i /var/lib/jenkins/.ssh/id_ed25519 ubuntu@172.31.87.138
+
+
+
 The authenticity of host '172.31.87.138 (172.31.87.138)' can't be established.
 ED25519 key fingerprint is SHA256:eScJIS7/VzgaX51UT9f4ptckYj2/nZtzKCivb140tm0.
 This key is not known by any other names.
