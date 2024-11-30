@@ -75,6 +75,27 @@ output "demo_id" {
 
 
 
+Short log:
+
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform fmt
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform --version
+# Terraform v1.9.5
+# on darwin_arm64
+# + provider registry.terraform.io/hashicorp/aws v5.67.0
+# commands will detect it and remind you to do so if necessary.
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform init
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform plan
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform import aws_instance.demo i-08e0233d0a9960e5d
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform state show aws_instance.demo
+# # aws_instance.demo:
+# resource "aws_instance" "demo" {
+#     ami                                  = "ami-0866a3c8686eaeeba"
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform init
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform plan
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform apply --auto-approve
+# akhilpagadapoola@Akhils-MacBook-Air terraform % terraform destroy
+
+
 Log:
 
 
