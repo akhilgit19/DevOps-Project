@@ -1,0 +1,122 @@
+Why is Mail Integration needed?
+Mail Integration was to get alerts or specific files that we need to  send from server to specific mail or mail dl channel
+
+How to configure mail inside linux server
+we need to install ssmtp server 
+
+SSMTP stands for Simple SMTP (Simple Mail Transfer Protocol). It is a lightweight SMTP client that allows users to send emails from a local machine to a mail server, typically for relaying messages. It is commonly used in Unix-based systems to send emails from scripts or system services.
+
+Commands to install ssmtp
+sudo apt update
+Copy
+sudo apt install ssmtp
+Copy
+
+
+
+Steps before configuring ssmtp
+login to your Gmail account and click on "Manage Your Google Account"
+
+
+
+
+click on Security and Search for App Passwords
+
+
+
+
+Generate an App password and you would receive a 16 letter password something like below
+
+
+
+
+Configuring ssmtp in linux server
+now run the below command:
+
+sudo vi /etc/ssmtp/ssmtp.conf
+Copy
+
+and update the below data, the generated 16 letter App password must be placed in AuthPass
+
+
+root=sagar.kakkala@gmail.com #update your mail_id
+mailhub=smtp.gmail.com:587 
+AuthUser=sagar.kakkala@gmail.com #update your user name
+AuthPass=dpbgishuzfzlhgbw #update your app password
+UseSTARTTLS=YES
+hostname=ip-172-31-2-192.us-west-1.compute.internal #it would be by default
+Copy
+
+
+
+
+
+note: Make sure to add add Port 587 in inbound rules of security group
+
+Test the mail server 
+use the below commands to configure the mail server 
+
+echo -e "Subject: Test Email\n\nThis is a test email 2 from my Ubuntu server." > test_email.txt
+Copy
+
+
+
+ssmtp sagar.kakkala@gmail.com < test_email.txt
+Copy
+
+
+
+
+
+Open your Gmail and check you must have received the mail
+
+
+
+
+
+Uninstall ssmtp
+sudo apt remove ssmtp
+Copy
+
+this command was only for reference
+
+Why Mutt is being installed
+Mutt helps us in sending attachments as we cannot directly send attachments using ssmtp alternates for ssmtp can be mailx, sendmail . Mutt needs a mail agent like SSMTP or MTA to send or receive mails
+
+so, in our case ,Our primary objective stands to send attachments
+
+Installing mutt
+sudo apt install mutt
+Copy
+
+
+
+
+Testing mutt
+echo "hello this is a test " > test.txt
+Copy
+
+echo "Please find the attached file." | mutt -s "Test Email with Attachment" -a test.txt -- sagar.kakkala@gmail.com
+Copy
+
+
+
+
+
+you must now find the attachment in your Gmail account
+
+
+
+
+
+Uninstall mutt
+
+sudo apt remove mutt
+Copy
+
+#this command is only for reference
+Alternate to mail
+As Majority of companies, now use slack for alerts or to send files, we will discuss on slack bot integration in our next session
+
+This Concludes our blog
+Apart from DevOps,Post most of my content in Telugu related to contrafactum's(changing lyrics to original songs),fun vlogs, Travel stories and much more to explore, You can use this link as single point of link to access -
