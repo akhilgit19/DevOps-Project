@@ -1,0 +1,165 @@
+1.ubuntu@ip-172-31-1-251:~$ git clone https://github.com/akhilgit19/crud.git
+2.ubuntu@ip-172-31-1-251:~$ sudo vi java_and_maven.sh
+#!/bin/bash
+
+# Update package repository
+echo "Updating package repository..."
+sudo apt-get update -y
+
+# Install OpenJDK 17
+echo "Installing OpenJDK 17..."
+sudo apt-get install openjdk-17-jdk -y
+
+# Verify Java installation
+echo "Verifying Java installation..."
+java -version
+
+# Set JAVA_HOME environment variable
+JAVA_HOME=$(update-alternatives --config java | grep 'java-17-openjdk' | awk '{print $3}' | sed 's:/bin/java::')
+echo "Setting JAVA_HOME to $JAVA_HOME..."
+
+# Add JAVA_HOME to ~/.bashrc for persistence
+echo "export JAVA_HOME=$JAVA_HOME" >> ~/.bashrc
+echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> ~/.bashrc
+
+# Apply changes to current session
+export JAVA_HOME=$JAVA_HOME
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Verify JAVA_HOME
+echo "Verifying JAVA_HOME..."
+echo $JAVA_HOME
+
+# Install Maven manually
+echo "Downloading and installing Maven..."
+wget https://downloads.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz
+
+# Extract Maven
+tar -xvzf apache-maven-3.9.4-bin.tar.gz
+
+# Move Maven to /opt directory
+sudo mv apache-maven-3.9.4 /opt/maven
+
+# Set M2_HOME and update PATH for Maven
+echo "Setting up Maven environment variables..."
+echo "export M2_HOME=/opt/maven" >> ~/.bashrc
+echo "export PATH=\$M2_HOME/bin:\$PATH" >> ~/.bashrc
+
+# Apply Maven changes to current sessionexport M2_HOME=/opt/maven
+export PATH=$M2_HOME/bin:$PATH
+
+# Verify Maven installation
+echo "Verifying Maven installation..."
+mvn -version
+
+echo "Installation of OpenJDK 17 and Maven completed successfully!"
+
+3. ubuntu@ip-172-31-1-251:~$ sudo chmod +x java_and_maven.sh
+4. ubuntu@ip-172-31-1-251:~$ mvn --version
+5. ubuntu@ip-172-31-1-251:~$ sudo apt install maven
+6. ubuntu@ip-172-31-1-251:~$ ls
+   apache-maven-3.9.4-bin.tar.gz  crud  java_and_maven.sh
+7.ubuntu@ip-172-31-1-251:~$ cd crud
+  ubuntu@ip-172-31-1-251:~/crud$ ls
+  Dockerfile  HELP.md  README.md  mvnw  mvnw.cmd  pom.xml  src
+8.ubuntu@ip-172-31-1-251:~/crud$ mvn clean install
+9. ubuntu@ip-172-31-1-251:~$ ls
+   ubuntu@ip-172-31-1-251:~$ cd target
+   ubuntu@ip-172-31-1-251:~/crud$ ls
+   Dockerfile  HELP.md  README.md  mvnw  mvnw.cmd  pom.xml  src  target
+10. ubuntu@ip-172-31-1-251:~/crud$ cd target
+    ubuntu@ip-172-31-1-251:~/crud/target$ ls
+    classes                               generated-sources       maven-status
+    crudDemo-0.0.1-SNAPSHOT.jar           generated-test-sources  surefire-reports
+    crudDemo-0.0.1-SNAPSHOT.jar.original  maven-archiver          test-classes
+11. ubuntu@ip-172-31-1-251:~/crud/target$ java -jar crudDemo-0.0.1-SNAPSHOT.jar
+
+12.ubuntu@ip-172-31-1-251:~$ sudo docker build -t crud .
+13.sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+14.ubuntu@ip-172-31-1-251:~$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+15. ubuntu@ip-172-31-1-251:~$ docker --version
+16. ubuntu@ip-172-31-1-251:~/crud$ ls
+    Dockerfile  HELP.md  README.md  mvnw  mvnw.cmd  pom.xml  src  target
+    ubuntu@ip-172-31-1-251:~/crud$ sudo docker build -t crud .
+17. ubuntu@ip-172-31-1-251:~/crud$ sudo docker images
+18. ubuntu@ip-172-31-1-251:~/crud$ sudo docker run --name crud-docker-container -p 8080:8080 -d crud     
+   1664f095ca7fbf152a11895a1a778cf23a1410ae4a264c3cd2b10f53049fb85c
+19. ubuntu@ip-172-31-1-251:~/crud$ alias kubectl="microk8s kubectl"
+20. ubuntu@ip-172-31-1-251:~/crud$ sudo snap install microk8s --classic
+21. ubuntu@ip-172-31-1-251:~/crud$ sudo usermod -a -G microk8s ubuntu
+     mkdir ~/.kube
+     sudo microk8s kubectl config view --raw > ~/.kube/config
+22.root@ip-172-31-1-251:~# sudo su - ubuntu
+   ubuntu@ip-172-31-1-251:~$ microk8s kubectl get all --all-namespaces
+23. ubuntu@ip-172-31-1-251:~$ alias kubectl="microk8s kubectl"
+24. ubuntu@ip-172-31-1-251:~$ kubectl create ns crud
+namespace/crud created
+25. ubuntu@ip-172-31-1-251:~$ docker login
+26. ubuntu@ip-172-31-1-251:~$ sudo docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+crud         latest    fd0fa01adcee   6 hours ago   373MB
+ubuntu@ip-172-31-1-251:~$ sudo docker tag crud:latest akhilpagadapoola/crud:latest
+
+27.ubuntu@ip-172-31-1-251:~$ sudo docker push akhilpagadapoola/crud:latest
+The push refers to repository [docker.io/akhilpagadapoola/crud]
+2003a10d968c: Pushed 
+34f7184834b2: Mounted from library/openjdk 
+5836ece05bfd: Mounted from library/openjdk 
+72e830a4dff5: Mounted from library/openjdk 
+latest: digest: sha256:79fb6d4495f6404da53c34a25d1c1bf1d7762810d9dcc71505d0cb9807d26f1c size: 1163
+28. ubuntu@ip-172-31-1-251:~$ vi deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-deployment
+  namespace: crud-demo
+  labels:
+    app: crud-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crud-demo
+  template:
+    metadata:
+      labels:
+        app: crud-demo
+    spec:
+      containers:
+      - name: crud-demo
+        image: sagarkakkala385/crud-demo ##change image name to that of your docker hub
+        ports:
+        - containerPort: 8080
+
+29.ubuntu@ip-172-31-1-251:~$ kubectl apply -f deployment.yaml
+30. ubuntu@ip-172-31-1-251:~$ vi service.yaml
+apiVersion: v1
+kind: Service
+metadata:  name: crud-service
+  namespace: crud-demo
+spec:
+  type: NodePort
+  selector:
+    app: crud-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30000
+
+31. ubuntu@ip-172-31-1-251:~$ kubectl apply -f service.yaml
+
+
+
