@@ -1,0 +1,14 @@
+
+xoxb-8130983680517-8119609564327-fyyvgdozPcefUdLVYKnmAVTe
+C083Y00RT5H
+
+vulnerability.txt
+
+curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8119609564327-fyyvgdozPcefUdLVYKnmAVTe" -H "Content-Type: application/x-www-form-urlencoded" --data "filename=vulnerability.txt&length=$(stat -c%s vulnerability.txt)" https://slack.com/api/files.getUploadURLExternal
+
+{"ok":true,"upload_url":"https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAUo5DAC3JFOcCgACGA5_9ZRApBgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NExVR1YyR1kACgAEAAAAAAAAAHwACwACAAAAFO207oDTv75fEkuyrTOvhaoaFJN7AA","file_id":"F084LUGV2GY"}
+
+curl -F file=@vulnerability.txt -F "filename=vulnerability.txt" https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAUo5DAC3JFOcCgACGA5_9ZRApBgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NExVR1YyR1kACgAEAAAAAAAAAHwACwACAAAAFO207oDTv75fEkuyrTOvhaoaFJN7AA
+
+
+curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8119609564327-fyyvgdozPcefUdLVYKnmAVTe" -H "Content-Type: application/json" -d '{"files": [{"id":"F084LUGV2GY", "title":"slack-test"}], "channel_id": "C083Y00RT5H"}' https://slack.com/api/files.completeUploadExternal
