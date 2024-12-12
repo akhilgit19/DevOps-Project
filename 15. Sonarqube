@@ -11,7 +11,8 @@ sudo chmod a+r /etc/apt/keyrings/docker.asc
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
 
 4.sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 5.sudo docker pull sonarqube
@@ -133,3 +134,17 @@ Step 9: Checking SonarQube Configuration:
 Run the Jenkins pipeline job.
 Once the SonarQube stage executes, check the SonarQube dashboard (http://localhost:9000) for the analysis report.
 Verify that the code quality metrics are populated correctly.
+
+
+
+TRIVY:(Need to install in docker/build server)
+---------
+
+1.sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.listsudo apt-get updatesudo apt-get install trivy
+
+2.sudo snap install trivy
+3.trivy image akhilpagadapoola/react-nginx
+4.trivy image --severity HIGH,CRITICAL akhilpagadapoola/react-nginx
+5.trivy image --format json --output report.json akhilpagadapoola/react-nginx
