@@ -1,28 +1,27 @@
 
-xoxb-8130983680517-8119609564327-f76SfLor2OWHdfHWXXOK0YXn
-F083YDGS62W
-C083Y00RT5H
-vulnerability.txt
+xoxb-8130983680517-8167273630420-W9t61SP1G1665VTGqtajxoro
+F084ND2CB5L
+C084X72212Q
+image_vulnerability.txt
 
 #test-channel /invite @your-bot-name is the command we used to invite bot
 
 
-1.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8119609564327-f76SfLor2OWHdfHWXXOK0YXn" -H "Content-Type: application/x-www-form-urlencoded" --data "filename=vulnerability.txt&length=$(stat -c%s vulnerability.txt)" https://slack.com/api/files.getUploadURLExternal
+1.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8167273630420-W9t61SP1G1665VTGqtajxoro" -H "Content-Type: application/x-www-form-urlencoded" --data "filename=image_vulnerability.txt&length=$(stat -c%s image_vulnerability.txt)" https://slack.com/api/files.getUploadURLExternal
 
 {"ok":true,"upload_url":"https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAUo5DAC3JFOcCgACGA5_9ZRApBgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NExVR1YyR1kACgAEAAAAAAAAAHwACwACAAAAFO207oDTv75fEkuyrTOvhaoaFJN7AA","file_id":"F084LUGV2GY"}
 
-2.curl -F file=@vulnerability.txt -F "filename=vulnerability.txt" https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAZ3A00G0rRNaCgACGA6Fd5R6PMgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NEI1QUFQS0sACgAEAAAAAAAAAHwACwACAAAAFEWqelYfL5_irYh0adExnjwsieTPAA
+2.curl -F file=@image_vulnerability.txt -F "filename=image_vulnerability.txt" https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAezgj_KPyHEtCgACGBB2blQ2DvAMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4NFg4MUpKQ0MLAAMAAAALRjA4NE5EMkNCNUwACgAEAAAAAAAAAJsACwACAAAAFEoyd41cKWEw2vKflPIe0WnSNottAA
 
-
-3.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8119609564327-f76SfLor2OWHdfHWXXOK0YXn" -H "Content-Type: application/json" -d '{"files": [{"id":"F084B5AAPKK", "title":"slack-test"}], "channel_id": "C083Y00RT5H"}' https://slack.com/api/files.completeUploadExternal
+3.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8167273630420-W9t61SP1G1665VTGqtajxoro" -H "Content-Type: application/json" -d '{"files": [{"id":"F084ND2CB5L", "title":"slack-test"}], "channel_id": "C084X72212Q"}' https://slack.com/api/files.completeUploadExternal
 
 
 #!/bin/bash
 
 # Constants
-SLACK_TOKEN="xoxb-8130983680517-8119609564327-f76SfLor2OWHdfHWXXOK0YXn"
-CHANNEL_ID="C083Y00RT5H"
-FILENAME="vulnerability.txt"
+SLACK_TOKEN="xoxb-8130983680517-8167273630420-W9t61SP1G1665VTGqtajxoro"
+CHANNEL_ID="C084X72212Q"
+FILENAME="image_vulnerability.txt"
 
 # Step 1: Get upload URL and file ID from Slack API
 response=$(curl -s -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
