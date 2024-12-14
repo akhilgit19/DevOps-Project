@@ -19,7 +19,7 @@ image_vulnerability.txt
 #!/bin/bash
 
 # Constants
-SLACK_TOKEN="xoxb-8130983680517-8159911505991-uws2JWHA5FFVWKtY8xC1y0Pn"
+SLACK_TOKEN="xoxb-8130983680517-8159911505991-xpEJCHm7Vo8WSlEIlvv1cUDm"
 CHANNEL_ID="C084X72212Q"
 FILENAME="image_vulnerability.txt"
 
