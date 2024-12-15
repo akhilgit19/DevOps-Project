@@ -319,9 +319,72 @@ ubuntu@ip-172-31-64-155:~$
 
 
 
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit deploy react-chart -n react-nginx-namespace
+deployment.apps/react-chart edited
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit deploy react-chart -n react-nginx-namespace
+deployment.apps/react-chart edited
+
+###add these annotations to deployment
+##testing on release
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9113"
+    prometheus.io/scrape: "true"
 
 
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n react-nginx-namespace
+NAME                           READY   STATUS    RESTARTS   AGE
+react-chart-6f5958b467-dj2x7   2/2     Running   0          35s
+react-chart-6f5958b467-njtkw   2/2     Running   0          38s
+ubuntu@ip-172-31-64-155:~$ 
 
+ubuntu@ip-172-31-64-155:~$ helm upgrade prometheus prometheus-community/prometheus -f promotheus-values.yaml -n monitoring
+Error: failed to parse promotheus-values.yaml: error converting YAML to JSON: yaml: line 813: could not find expected ':'
+ubuntu@ip-172-31-64-155:~$ sudo vi promotheus-values.yaml
+##add this side car container for deployment
+- name: nginx-exporter
+  image: nginx/nginx-prometheus-exporter:latest
+  args:
+    - -nginx.scrape-uri=http://localhost:80/stub_status
+  ports:
+    - containerPort: 9113
+      name: metrics
+ubuntu@ip-172-31-64-155:~$ helm upgrade prometheus prometheus-community/prometheus -f promotheus-values.yaml -n monitoring
+Release "prometheus" has been upgraded. Happy Helming!
+NAME: prometheus
+LAST DEPLOYED: Sun Dec 15 09:39:08 2024
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+NOTES:
+The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+prometheus-server.monitoring.svc.cluster.local
+
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+prometheus-alertmanager               ClusterIP   10.152.183.183   <none>        9093/TCP   105m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   105m
+prometheus-kube-state-metrics         ClusterIP   10.152.183.63    <none>        8080/TCP   105m
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.175   <none>        9100/TCP   105m
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.88    <none>        9091/TCP   105m
+prometheus-server                     ClusterIP   10.152.183.99    <none>        80/TCP     105m
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS    RESTARTS   AGE
+prometheus-alertmanager-0                           1/1     Running   0          98m
+prometheus-kube-state-metrics-88947546-j4z92        1/1     Running   0          98m
+prometheus-prometheus-node-exporter-9457t           1/1     Running   0          98m
+prometheus-prometheus-pushgateway-9f8c968d6-pb4wj   1/1     Running   0          98m
+prometheus-server-6b884dc7f6-wqfk9                  2/2     Running   0          98m
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit svc prometheus-server -n monitoring
+service/prometheus-server edited
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+prometheus-alertmanager               ClusterIP   10.152.183.183   <none>        9093/TCP       107m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP       107m
+prometheus-kube-state-metrics         ClusterIP   10.152.183.63    <none>        8080/TCP       107m
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.175   <none>        9100/TCP       107m
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.88    <none>        9091/TCP       107m
+prometheus-server                     NodePort    10.152.183.99    <none>        80:30503/TCP   107m
 
 
 
