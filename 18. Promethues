@@ -234,6 +234,43 @@ spec:
 
 
 
+
+
+
+
+    scrape_configs:
+      - job_name: 'my-react-nginx-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: react-nginx-namespace #change namespace name to your preferred one
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - localhost:9090
+
+ubuntu@ip-172-31-64-155:~$ helm show values prometheus-community/prometheus -n monitoring > promotheus-values.yaml
+ubuntu@ip-172-31-64-155:~$ sudo vi promotheus-values.yaml
+ubuntu@ip-172-31-64-155:~$ sudo vi promotheus-values.yaml
+ubuntu@ip-172-31-64-155:~$ helm upgrade prometheus prometheus-community/prometheus -f promotheus-values.yaml -n monitoring
+Error: failed to parse promotheus-values.yaml: error converting YAML to JSON: yaml: line 799: block sequence entries are not allowed in this context
+ubuntu@ip-172-31-64-155:~$ sudo vi promotheus-values.yaml
+ubuntu@ip-172-31-64-155:~$ helm upgrade prometheus prometheus-community/prometheus -f promotheus-values.yaml -n monitoring
+Release "prometheus" has been upgraded. Happy Helming!
+NAME: prometheus
+LAST DEPLOYED: Sun Dec 15 07:20:00 2024
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+NOTES:
+The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+prometheus-server.monitoring.svc.cluster.local
+
+
+
 IF YOU GET PERMISSION ERROR TO THE path for prometheus path:
 =====================================================================
 Step-by-Step Solution
