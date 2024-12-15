@@ -271,6 +271,83 @@ prometheus-server.monitoring.svc.cluster.local
 
 
 
+
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl delete pods --all -n monitoring
+pod "prometheus-alertmanager-0" deleted
+pod "prometheus-kube-state-metrics-88947546-55xnj" deleted
+pod "prometheus-prometheus-node-exporter-lq465" deleted
+pod "prometheus-prometheus-pushgateway-9f8c968d6-nqk8w" deleted
+pod "prometheus-server-6b884dc7f6-qs94b" deleted
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS    RESTARTS   AGE
+prometheus-alertmanager-0                           1/1     Running   0          5s
+prometheus-kube-state-metrics-88947546-j4z92        0/1     Running   0          8s
+prometheus-prometheus-node-exporter-9457t           1/1     Running   0          6s
+prometheus-prometheus-pushgateway-9f8c968d6-pb4wj   0/1     Running   0          8s
+prometheus-server-6b884dc7f6-wqfk9                  1/2     Running   0          8s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+prometheus-alertmanager               ClusterIP   10.152.183.183   <none>        9093/TCP   7m16s
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   7m16s
+prometheus-kube-state-metrics         ClusterIP   10.152.183.63    <none>        8080/TCP   7m16s
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.175   <none>        9100/TCP   7m16s
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.88    <none>        9091/TCP   7m16s
+prometheus-server                     ClusterIP   10.152.183.99    <none>        80/TCP     7m16s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit svc prometheus-server -n monitoring
+service/prometheus-server edited
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit svc prometheus-server -n monitoring
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+prometheus-alertmanager               ClusterIP   10.152.183.183   <none>        9093/TCP       7m58s
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP       7m58s
+prometheus-kube-state-metrics         ClusterIP   10.152.183.63    <none>        8080/TCP       7m58s
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.175   <none>        9100/TCP       7m58s
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.88    <none>        9091/TCP       7m58s
+prometheus-server                     NodePort    10.152.183.99    <none>        80:32322/TCP   7m58s
+ubuntu@ip-172-31-64-155:~$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 IF YOU GET PERMISSION ERROR TO THE path for prometheus path:
 =====================================================================
 Step-by-Step Solution
