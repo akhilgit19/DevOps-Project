@@ -1,3 +1,239 @@
+ubuntu@ip-172-31-64-155:~$ helm uninstall prometheus -n monitoring
+release "prometheus" uninstalled
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+No resources found in monitoring namespace.
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pvc -n monitoring
+No resources found in monitoring namespace.
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pv -n monitoring
+No resources found
+ubuntu@ip-172-31-64-155:~$ helm install prometheus prometheus-community/prometheus -n monitoring
+NAME: prometheus
+LAST DEPLOYED: Sun Dec 15 04:25:14 2024
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+prometheus-server.monitoring.svc.cluster.local
+
+
+Get the Prometheus server URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=prometheus,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9090
+
+
+The Prometheus alertmanager can be accessed via port 9093 on the following DNS name from within your cluster:
+prometheus-alertmanager.monitoring.svc.cluster.local
+
+
+Get the Alertmanager URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=alertmanager,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9093
+#################################################################################
+######   WARNING: Pod Security Policy has been disabled by default since    #####
+######            it deprecated after k8s 1.25+. use                        #####
+######            (index .Values "prometheus-node-exporter" "rbac"          #####
+###### .          "pspEnabled") with (index .Values                         #####
+######            "prometheus-node-exporter" "rbac" "pspAnnotations")       #####
+######            in case you still need it.                                #####
+#################################################################################
+
+
+The Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:
+prometheus-prometheus-pushgateway.monitoring.svc.cluster.local
+
+
+Get the PushGateway URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus-pushgateway,component=pushgateway" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9091
+
+For more information on running Prometheus, visit:
+https://prometheus.io/
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS    RESTARTS   AGE
+prometheus-alertmanager-0                           0/1     Pending   0          3s
+prometheus-kube-state-metrics-88947546-hgm7z        0/1     Running   0          4s
+prometheus-prometheus-node-exporter-9rfb5           1/1     Running   0          4s
+prometheus-prometheus-pushgateway-9f8c968d6-8k4d8   0/1     Running   0          4s
+prometheus-server-6b884dc7f6-www2t                  0/2     Pending   0          4s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pv -n monitoring
+No resources found
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pvc -n monitoring
+NAME                                STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+prometheus-server                   Pending                                                     <unset>                 22s
+storage-prometheus-alertmanager-0   Pending                                                     <unset>                 22s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl describe pod prometheus-alertmanager-0 -n monitoring
+Name:             prometheus-alertmanager-0
+Namespace:        monitoring
+Priority:         0
+Service Account:  prometheus-alertmanager
+Node:             <none>
+Labels:           app.kubernetes.io/instance=prometheus
+                  app.kubernetes.io/name=alertmanager
+                  apps.kubernetes.io/pod-index=0
+                  controller-revision-hash=prometheus-alertmanager-5f46576954
+                  statefulset.kubernetes.io/pod-name=prometheus-alertmanager-0
+Annotations:      checksum/config: aebb4052a77bcfda4219bae6cb5938b3a29c8a109c1add1359d359a1af577bf5
+Status:           Pending
+IP:               
+IPs:              <none>
+Controlled By:    StatefulSet/prometheus-alertmanager
+Containers:
+  alertmanager:
+    Image:      quay.io/prometheus/alertmanager:v0.27.0
+    Port:       9093/TCP
+    Host Port:  0/TCP
+    Args:
+      --storage.path=/alertmanager
+      --config.file=/etc/alertmanager/alertmanager.yml
+    Liveness:   http-get http://:http/ delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/ delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      POD_IP:   (v1:status.podIP)
+    Mounts:
+      /alertmanager from storage (rw)
+      /etc/alertmanager from config (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-v9xr2 (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  storage-prometheus-alertmanager-0
+    ReadOnly:   false
+  config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      prometheus-alertmanager
+    Optional:  false
+  kube-api-access-v9xr2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  52s   default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+ubuntu@ip-172-31-64-155:~$ sudo vi prometheus-server-pv.yaml
+ubuntu@ip-172-31-64-155:~$ sudo vi alert-manger-pv.yaml
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl apply -f prometheus-server-pv.yaml -n monitoring
+persistentvolume/prometheus-server-pv created
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl apply -f alert-manger-pv.yaml -n monitoring
+persistentvolume/prometheus-alert-manager-pv created
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS              RESTARTS   AGE
+prometheus-alertmanager-0                           0/1     Pending             0          5m18s
+prometheus-kube-state-metrics-88947546-hgm7z        1/1     Running             0          5m19s
+prometheus-prometheus-node-exporter-9rfb5           1/1     Running             0          5m19s
+prometheus-prometheus-pushgateway-9f8c968d6-8k4d8   1/1     Running             0          5m19s
+prometheus-server-6b884dc7f6-www2t                  0/2     ContainerCreating   0          5m19s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS             RESTARTS     AGE
+prometheus-alertmanager-0                           0/1     Pending            0            5m23s
+prometheus-kube-state-metrics-88947546-hgm7z        1/1     Running            0            5m24s
+prometheus-prometheus-node-exporter-9rfb5           1/1     Running            0            5m24s
+prometheus-prometheus-pushgateway-9f8c968d6-8k4d8   1/1     Running            0            5m24s
+prometheus-server-6b884dc7f6-www2t                  1/2     CrashLoopBackOff   1 (2s ago)   5m24s
+ubuntu@ip-172-31-64-155:~$ 
+ubuntu@ip-172-31-64-155:~$ sudo mkdir -p /mnt/data/prometheus
+ubuntu@ip-172-31-64-155:~$ sudo chown -R 1000:1000 /mnt/data/prometheus
+ubuntu@ip-172-31-64-155:~$ sudo chmod -R 755 /mnt/data/prometheus
+ubuntu@ip-172-31-64-155:~$ sudo ls -l /mnt/data/prometheus
+total 0
+ubuntu@ip-172-31-64-155:~$ sudo chown -R 65534:65534 /mnt/data/prometheus
+ubuntu@ip-172-31-64-155:~$ sudo chmod -R 775 /mnt/data/prometheus
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl delete pvc prometheus-server-6b884dc7f6-www2t -n monitoring
+Error from server (NotFound): persistentvolumeclaims "prometheus-server-6b884dc7f6-www2t" not found
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl delete pod prometheus-server-6b884dc7f6-www2t -n monitoring
+pod "prometheus-server-6b884dc7f6-www2t" deleted
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pvc -n monitoring
+NAME                                STATUS   VOLUME                        CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+prometheus-server                   Bound    prometheus-server-pv          8Gi        RWO                           <unset>                 11m
+storage-prometheus-alertmanager-0   Bound    prometheus-alert-manager-pv   2Gi        RWO                           <unset>                 11m
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl delete  pvc prometheus-server  -n monitoring
+persistentvolumeclaim "prometheus-server" deleted
+
+
+^Z
+[3]+  Stopped                 microk8s kubectl delete pvc prometheus-server -n monitoring
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pvc -n monitoring
+NAME                                STATUS        VOLUME                        CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+prometheus-server                   Terminating   prometheus-server-pv          8Gi        RWO                           <unset>                 12m
+storage-prometheus-alertmanager-0   Bound         prometheus-alert-manager-pv   2Gi        RWO                           <unset>                 12m
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get pods -n monitoring
+NAME                                                READY   STATUS    RESTARTS   AGE
+prometheus-alertmanager-0                           1/1     Running   0          12m
+prometheus-kube-state-metrics-88947546-hgm7z        1/1     Running   0          12m
+prometheus-prometheus-node-exporter-9rfb5           1/1     Running   0          12m
+prometheus-prometheus-pushgateway-9f8c968d6-8k4d8   1/1     Running   0          12m
+prometheus-server-6b884dc7f6-wjbxn                  2/2     Running   0          3m8s
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+prometheus-alertmanager               ClusterIP   10.152.183.33    <none>        9093/TCP   15m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   15m
+prometheus-kube-state-metrics         ClusterIP   10.152.183.158   <none>        8080/TCP   15m
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.60    <none>        9100/TCP   15m
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.220   <none>        9091/TCP   15m
+prometheus-server                     ClusterIP   10.152.183.181   <none>        80/TCP     15m
+ubuntu@ip-172-31-64-155:~$ 
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl edit svc prometheus-server -n monitoring
+service/prometheus-server edited
+ubuntu@ip-172-31-64-155:~$ microk8s kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+prometheus-alertmanager               ClusterIP   10.152.183.33    <none>        9093/TCP       18m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP       18m
+prometheus-kube-state-metrics         ClusterIP   10.152.183.158   <none>        8080/TCP       18m
+prometheus-prometheus-node-exporter   ClusterIP   10.152.183.60    <none>        9100/TCP       18m
+prometheus-prometheus-pushgateway     ClusterIP   10.152.183.220   <none>        9091/TCP       18m
+prometheus-server                     NodePort    10.152.183.181   <none>        80:30826/TCP   18m
+ubuntu@ip-172-31-64-155:~$ 
+
+
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-server-pv
+  labels:
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/part-of: prometheus
+spec:
+  capacity:
+    storage: 8Gi  # Ensure this matches the PVC's request
+  accessModes:
+    - ReadWriteOnce  # Ensure this matches the PVC's access mode
+  volumeMode: Filesystem
+  hostPath:
+    path: /mnt/data/prometheus  # Adjust this to a valid path on the node(s)
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-alert-manager-pv
+  labels:
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/name: alertmanager
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/alertmanager
+    type: DirectoryOrCreat
+
+
+
 IF YOU GET PERMISSION ERROR TO THE path for prometheus path:
 =====================================================================
 Step-by-Step Solution
