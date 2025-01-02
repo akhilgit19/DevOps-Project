@@ -1,19 +1,19 @@
 
-xoxb-8130983680517-8238967809794-HfbAeL4mjcQ3iiV3xt2p31dP
-F087DL23P6V
+xoxb-8130983680517-8224555550167-uFWIpAVVzRIp2RuyjEEMiUDW
+F086LGTE2KH
 C084X72212Q
 image_vulnerability.txt
 
 #test-channel /invite @your-bot-name is the command we used to invite bot
 
 
-1.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8238967809794-HfbAeL4mjcQ3iiV3xt2p31dP" -H "Content-Type: application/x-www-form-urlencoded" --data "filename=image_vulnerability.txt&length=$(stat -c%s image_vulnerability.txt)" https://slack.com/api/files.getUploadURLExternal
+1.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8224555550167-uFWIpAVVzRIp2RuyjEEMiUDW" -H "Content-Type: application/x-www-form-urlencoded" --data "filename=image_vulnerability.txt&length=$(stat -c%s image_vulnerability.txt)" https://slack.com/api/files.getUploadURLExternal
 
-{"ok":true,"upload_url":"https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAUo5DAC3JFOcCgACGA5_9ZRApBgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NExVR1YyR1kACgAEAAAAAAAAAHwACwACAAAAFO207oDTv75fEkuyrTOvhaoaFJN7AA","file_id":"F084LUGV2GY"}
+{"ok":true,"upload_url":"https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAUo5DAC3JFOcCgACGA5_9ZRApBgMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4M0hIWEdMOU0LAAMAAAALRjA4NExVR1YyR1kACgAEAAAAAAAAAHwACwACAAAAFO207oDTv75fEkuyrTOvhaoaFJN7AA","file_id":"F086LFUPSTZ"}
 
-2.curl -F file=@image_vulnerability.txt -F "filename=image_vulnerability.txt" https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAR98e1YcS5XECgACGBbGj0gOH4gMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4NzBVRlBUUEMLAAMAAAALRjA4N0RMMjNQNlYACgAEAAAAAAAACKUACwACAAAAFLRpHUni4BC1PgPvdKxB2Q1LFlA5AA
+2.curl -F file=@image_vulnerability.txt -F "filename=image_vulnerability.txt" https:\/\/files.slack.com\/upload\/v1\/CwABAAAAXAoAAbD1EhO9TXDmCgACGBbJrzV5_gAMAAMLAAEAAAALVDA4M1VVWEwwRjcLAAIAAAALVTA4NkxHQkc2NFgLAAMAAAALRjA4NkxHVEUyS0gACgAEAAAAAAAACKUACwACAAAAFPzSLU1H5rDPqXjr5aMny2bnrnAmAA
 
-3.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8238967809794-HfbAeL4mjcQ3iiV3xt2p31dP" -H "Content-Type: application/json" -d '{"files": [{"id":"F087DL23P6V", "title":"slack-test"}], "channel_id": "C084X72212Q"}' https://slack.com/api/files.completeUploadExternal
+3.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8224555550167-uFWIpAVVzRIp2RuyjEEMiUDW" -H "Content-Type: application/json" -d '{"files": [{"id":"F086LGTE2KH", "title":"slack-test"}], "channel_id": "C084X72212Q"}' https://slack.com/api/files.completeUploadExternal
 
 
 #!/bin/bash
