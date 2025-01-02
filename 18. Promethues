@@ -230,7 +230,7 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /mnt/data/alertmanager
-    type: DirectoryOrCreat
+    type: DirectoryOrCreate
 
 
 
