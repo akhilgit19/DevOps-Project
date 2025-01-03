@@ -1,0 +1,54 @@
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ helm repo add grafana https://grafana.github.io/helm-charts
+"grafana" has been added to your repositories
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "grafana" chart repository
+...Successfully got an update from the "prometheus-community" chart repository
+Update Complete. ⎈Happy Helming!⎈
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl create ns dashboard
+namespace/dashboard created
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ 
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ helm install grafana-dashboard grafana/grafana -n dashboard
+NAME: grafana-dashboard
+LAST DEPLOYED: Fri Jan  3 08:37:35 2025
+NAMESPACE: dashboard
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get your 'admin' user password by running:
+
+   kubectl get secret --namespace dashboard grafana-dashboard -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+   grafana-dashboard.dashboard.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+     export POD_NAME=$(kubectl get pods --namespace dashboard -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana-dashboard" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace dashboard port-forward $POD_NAME 3000
+
+3. Login with the password from step 1 and the username: admin
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Grafana pod is terminated.                            #####
+#################################################################################
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl get svc -n dashboard
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+grafana-dashboard   ClusterIP   10.152.183.61   <none>        80/TCP    10s
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl edit svc grafana-dashboard  -n dashboard
+service/grafana-dashboard edited
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl get svc -n dashboard
+NAME                TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+grafana-dashboard   NodePort   10.152.183.61   <none>        80:31689/TCP   59s
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl get secrets -n dashboard
+NAME                                      TYPE                 DATA   AGE
+grafana-dashboard                         Opaque               3      96s
+sh.helm.release.v1.grafana-dashboard.v1   helm.sh/release.v1   1      96s
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl edit secret grafana-dashboard  -n dashboard
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ kubectl edit secret grafana-dashboard  -n dashboard
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ echo "MHdWWUFkbEdHUzlIVlh1U21TdDdHVUJKRVVpZjlSMEZEaGQ3U3k2ZQ==" | base64 -d
+0wVYAdlGGS9HVXuSmSt7GUBJEUif9R0FDhd7Sy6eubuntu@ip-172-31-85-30:~/react-chart/helmchart$ 
+ubuntu@ip-172-31-85-30:~/react-chart/helmchart$ 
