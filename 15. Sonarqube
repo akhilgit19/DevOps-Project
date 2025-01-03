@@ -29,7 +29,7 @@ ubuntu@ip-172-31-82-162:~$ sudo docker run -d --name sonarqube -p 9000:9000 sona
 5aab951978b7769aaba0c7a32f42d34191bdd0ab0ee97f698e4dd9485d792c8c
 ubuntu@ip-172-31-82-162:~$ sudo docker ps
 CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                       NAMES
-5aab951978b7   sonarqube   "/opt/sonarqube/dock…"   6 seconds ago   Up 4 seconds   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   sonarqube
+4d5cb5e777d9   sonarqube   "/opt/sonarqube/dock…"   6 seconds ago   Up 4 seconds   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   sonarqube
 ubuntu@ip-172-31-82-162:~$ sudo docker images
 REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
 sonarqube    latest    6bada21f1230   4 weeks ago   1.12GB
