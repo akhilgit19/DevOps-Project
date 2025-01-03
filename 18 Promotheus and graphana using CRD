@@ -1,0 +1,165 @@
+ubuntu@ip-172-31-80-10:~/react-chart/helmchart$ cd
+ubuntu@ip-172-31-80-10:~$ ls
+get_helm.sh  react-chart  snap
+ubuntu@ip-172-31-80-10:~$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+"prometheus-community" has been added to your repositories
+ubuntu@ip-172-31-80-10:~$ helm repo update
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "prometheus-community" chart repository
+Update Complete. ⎈Happy Helming!⎈
+ubuntu@ip-172-31-80-10:~$ kubectl create ns monitoring
+namespace/monitoring created
+ubuntu@ip-172-31-80-10:~$ helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+NAME: prometheus
+LAST DEPLOYED: Fri Jan  3 15:47:46 2025
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+kube-prometheus-stack has been installed. Check its status by running:
+  kubectl --namespace monitoring get pods -l "release=prometheus"
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.
+ubuntu@ip-172-31-80-10:~$ kubectl get pods -n monitoring
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          62s
+prometheus-grafana-578946f5d5-cqv2q                      3/3     Running   0          70s
+prometheus-kube-prometheus-operator-d9998c787-f6cdc      1/1     Running   0          70s
+prometheus-kube-state-metrics-6f5574c548-wt6pt           1/1     Running   0          70s
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   0          61s
+prometheus-prometheus-node-exporter-ktfqc                1/1     Running   0          70s
+ubuntu@ip-172-31-80-10:~$ kubectl get svc -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP   94s
+prometheus-grafana                        ClusterIP   10.152.183.134   <none>        80/TCP                       103s
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.152.183.143   <none>        9093/TCP,8080/TCP            103s
+prometheus-kube-prometheus-operator       ClusterIP   10.152.183.168   <none>        443/TCP                      103s
+prometheus-kube-prometheus-prometheus     ClusterIP   10.152.183.21    <none>        9090/TCP,8080/TCP            103s
+prometheus-kube-state-metrics             ClusterIP   10.152.183.50    <none>        8080/TCP                     103s
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                     93s
+prometheus-prometheus-node-exporter       ClusterIP   10.152.183.153   <none>        9100/TCP                     103s
+ubuntu@ip-172-31-80-10:~$ kubectl edit svc prometheus-grafana   -n monitoring
+service/prometheus-grafana edited
+ubuntu@ip-172-31-80-10:~$ kubectl edit svc  prometheus-kube-prometheus-prometheus  -n monitoring
+service/prometheus-kube-prometheus-prometheus edited
+ubuntu@ip-172-31-80-10:~$ kubectl edit svc  prometheus-kube-prometheus-prometheus  -n monitoring
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-80-10:~$ kubectl get svc -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      5m55s
+prometheus-grafana                        NodePort    10.152.183.134   <none>        80:30602/TCP                    6m4s
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.152.183.143   <none>        9093/TCP,8080/TCP               6m4s
+prometheus-kube-prometheus-operator       ClusterIP   10.152.183.168   <none>        443/TCP                         6m4s
+prometheus-kube-prometheus-prometheus     NodePort    10.152.183.21    <none>        9090:30381/TCP,8080:31756/TCP   6m4s
+prometheus-kube-state-metrics             ClusterIP   10.152.183.50    <none>        8080/TCP                        6m4s
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        5m54s
+prometheus-prometheus-node-exporter       NodePort    10.152.183.153   <none>        9100:31098/TCP                  6m4s
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ kubectl get secrets -n monitoring
+NAME                                                                                  TYPE                 DATA   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager                                  Opaque               1      7m36s
+alertmanager-prometheus-kube-prometheus-alertmanager-generated                        Opaque               1      7m27s
+alertmanager-prometheus-kube-prometheus-alertmanager-tls-assets-0                     Opaque               0      7m27s
+alertmanager-prometheus-kube-prometheus-alertmanager-web-config                       Opaque               1      7m27s
+prometheus-grafana                                                                    Opaque               3      7m36s
+prometheus-kube-prometheus-admission                                                  Opaque               3      7m39s
+prometheus-prometheus-kube-prometheus-prometheus                                      Opaque               1      7m26s
+prometheus-prometheus-kube-prometheus-prometheus-thanos-prometheus-http-client-file   Opaque               1      7m26s
+prometheus-prometheus-kube-prometheus-prometheus-tls-assets-0                         Opaque               1      7m26s
+prometheus-prometheus-kube-prometheus-prometheus-web-config                           Opaque               1      7m26s
+sh.helm.release.v1.prometheus.v1                                                      helm.sh/release.v1   1      7m43s
+ubuntu@ip-172-31-80-10:~$ kubectl edit secret prometheus-grafana  -n monitoring
+Edit cancelled, no changes made.
+ubuntu@ip-172-31-80-10:~$ echo "cHJvbS1vcGVyYXRvcg==" | base64 -d
+prom-operatorubuntu@ip-172-31-80-10:~$ kubect get pods -n react-nging-namespace
+
+ubuntu@ip-172-31-80-10:~$ kubectl get svc -n react-nginx-namespace
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+react-chart   ClusterIP   10.152.183.36   <none>        80/TCP    106s
+ubuntu@ip-172-31-80-10:~$ kubectl get pods -n react-nginx-namespace
+NAME                           READY   STATUS    RESTARTS   AGE
+react-chart-6b56f5466f-cqpkd   1/1     Running   0          2m2s
+react-chart-6b56f5466f-rspbt   1/1     Running   0          2m2s
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ kubectl create ns test
+namespace/test created
+ubuntu@ip-172-31-80-10:~$ kubectl run nginx --image=nginx -n test
+pod/nginx created
+ubuntu@ip-172-31-80-10:~$ kubectl get pods -n test
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          17s
+
+
+
+ubuntu@ip-172-31-80-10:~$ kubectl get crd
+NAME                                                  CREATED AT
+alertmanagerconfigs.monitoring.coreos.com             2025-01-03T15:47:41Z
+alertmanagers.monitoring.coreos.com                   2025-01-03T15:47:41Z
+bgpconfigurations.crd.projectcalico.org               2025-01-03T15:41:01Z
+bgppeers.crd.projectcalico.org                        2025-01-03T15:41:01Z
+blockaffinities.crd.projectcalico.org                 2025-01-03T15:41:02Z
+caliconodestatuses.crd.projectcalico.org              2025-01-03T15:41:02Z
+clusterinformations.crd.projectcalico.org             2025-01-03T15:41:02Z
+felixconfigurations.crd.projectcalico.org             2025-01-03T15:41:02Z
+globalnetworkpolicies.crd.projectcalico.org           2025-01-03T15:41:02Z
+globalnetworksets.crd.projectcalico.org               2025-01-03T15:41:02Z
+hostendpoints.crd.projectcalico.org                   2025-01-03T15:41:02Z
+ipamblocks.crd.projectcalico.org                      2025-01-03T15:41:02Z
+ipamconfigs.crd.projectcalico.org                     2025-01-03T15:41:02Z
+ipamhandles.crd.projectcalico.org                     2025-01-03T15:41:02Z
+ippools.crd.projectcalico.org                         2025-01-03T15:41:02Z
+ipreservations.crd.projectcalico.org                  2025-01-03T15:41:02Z
+kubecontrollersconfigurations.crd.projectcalico.org   2025-01-03T15:41:02Z
+networkpolicies.crd.projectcalico.org                 2025-01-03T15:41:03Z
+networksets.crd.projectcalico.org                     2025-01-03T15:41:03Z
+podmonitors.monitoring.coreos.com                     2025-01-03T15:47:42Z
+probes.monitoring.coreos.com                          2025-01-03T15:47:42Z
+prometheusagents.monitoring.coreos.com                2025-01-03T15:47:42Z
+prometheuses.monitoring.coreos.com                    2025-01-03T15:47:43Z
+prometheusrules.monitoring.coreos.com                 2025-01-03T15:47:44Z
+scrapeconfigs.monitoring.coreos.com                   2025-01-03T15:47:44Z
+servicemonitors.monitoring.coreos.com                 2025-01-03T15:47:44Z
+thanosrulers.monitoring.coreos.com                    2025-01-03T15:47:45Z
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ kubectl edit svc react-chart -n react-nginx-namespace
+service/react-chart edited
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl edit deploy react-chart -n react-nginx-namespace
+deployment.apps/react-chart edited
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ sudo vi servicemonitor.yaml
+ubuntu@ip-172-31-80-10:~$ kubectl apply -f servicemonitor.yaml
+servicemonitor.monitoring.coreos.com/react-chart-servicemonitor created
+ubuntu@ip-172-31-80-10:~$ kubectl get servicemonitor -n react-nginx-namespace
+NAME                         AGE
+react-chart-servicemonitor   18s
+
+ubuntu@ip-172-31-80-10:~$ kubectl get pods -n monitoring 
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          3m1s
+prometheus-grafana-578946f5d5-rrkgd                      3/3     Running   0          3m4s
+prometheus-kube-prometheus-operator-d9998c787-vjfpg      1/1     Running   0          3m4s
+prometheus-kube-state-metrics-6f5574c548-97sjz           1/1     Running   0          3m4s
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   0          2m59s
+prometheus-prometheus-node-exporter-hjmnk                1/1     Running   0          3m2s
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ kubectl get svc -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      39m
+prometheus-grafana                        NodePort    10.152.183.134   <none>        80:30602/TCP                    39m
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.152.183.143   <none>        9093/TCP,8080/TCP               39m
+prometheus-kube-prometheus-operator       ClusterIP   10.152.183.168   <none>        443/TCP                         39m
+prometheus-kube-prometheus-prometheus     NodePort    10.152.183.21    <none>        9090:30381/TCP,8080:31756/TCP   39m
+prometheus-kube-state-metrics             ClusterIP   10.152.183.50    <none>        8080/TCP                        39m
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        39m
+prometheus-prometheus-node-exporter       NodePort    10.152.183.153   <none>        9100:31098/TCP                  39m
