@@ -21,6 +21,23 @@ sudo apt-get update
 5.sudo docker pull sonarqube
 6.sudo docker run -d --name sonarqube -p 9000:9000 sonarqube
 7.sudo docker ps
+
+
+Note:
+==================
+ubuntu@ip-172-31-82-162:~$ sudo docker run -d --name sonarqube -p 9000:9000 sonarqube
+5aab951978b7769aaba0c7a32f42d34191bdd0ab0ee97f698e4dd9485d792c8c
+ubuntu@ip-172-31-82-162:~$ sudo docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+5aab951978b7   sonarqube   "/opt/sonarqube/dock…"   6 seconds ago   Up 4 seconds   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   sonarqube
+ubuntu@ip-172-31-82-162:~$ sudo docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+sonarqube    latest    6bada21f1230   4 weeks ago   1.12GB
+ubuntu@ip-172-31-82-162:~$ sudo systemctl enable docker
+Synchronizing state of docker.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable docker
+
+===============
 8. Option(when u have seperate database)
 sudo docker exec -it 9b4 /bin/bash
 sonarqube@9b428fbf7cd7:/opt/sonarqube$ ls
