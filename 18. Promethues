@@ -244,10 +244,7 @@ spec:
           - source_labels: [__meta_kubernetes_namespace]
             action: keep
             regex: react-nginx-namespace #change namespace name to your preferred one
-      - job_name: prometheus
-        static_configs:
-          - targets:
-            - localhost:9090
+      
 
 ubuntu@ip-172-31-64-155:~$ helm show values prometheus-community/prometheus -n monitoring > promotheus-values.yaml
 ubuntu@ip-172-31-64-155:~$ sudo vi promotheus-values.yaml
