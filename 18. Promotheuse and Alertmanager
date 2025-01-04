@@ -377,3 +377,28 @@ ubuntu@ip-172-31-80-10:~$
 
 
 ubuntu@ip-172-31-80-10:~$ microk8s kubectl get alertmanagers.monitoring.coreos.com -n monitoring -o yaml
+
+ubuntu@ip-172-31-80-10:~$ sudo vi alertmanagersecrets.yaml
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl apply -f alertmanagersecrets.yaml
+secret/slack-webhook created
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get secrets -n monitoring
+NAME                                                                                  TYPE                 DATA   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager                                  Opaque               1      32m
+alertmanager-prometheus-kube-prometheus-alertmanager-generated                        Opaque               1      32m
+alertmanager-prometheus-kube-prometheus-alertmanager-tls-assets-0                     Opaque               0      32m
+alertmanager-prometheus-kube-prometheus-alertmanager-web-config                       Opaque               1      32m
+prometheus-grafana                                                                    Opaque               3      32m
+prometheus-kube-prometheus-admission                                                  Opaque               3      10h
+prometheus-prometheus-kube-prometheus-prometheus                                      Opaque               1      32m
+prometheus-prometheus-kube-prometheus-prometheus-thanos-prometheus-http-client-file   Opaque               1      32m
+prometheus-prometheus-kube-prometheus-prometheus-tls-assets-0                         Opaque               1      32m
+prometheus-prometheus-kube-prometheus-prometheus-web-config                           Opaque               1      32m
+sh.helm.release.v1.prometheus.v1                                                      helm.sh/release.v1   1      33m
+slack-webhook                                                                         Opaque               1      17s
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ sudo vi alertmanagernotifications.yaml
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl apply -f alertmanagernotifications.yaml
+alertmanagerconfig.monitoring.coreos.com/react-demo created
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get alertmanagerconfigs -n monitoring
+NAME         AGE
+react-demo   28s
