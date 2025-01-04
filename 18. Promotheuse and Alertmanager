@@ -356,3 +356,24 @@ ubuntu@ip-172-31-80-10:~$ sudo vi promo_values.yaml
 ubuntu@ip-172-31-80-10:~$ helm upgrade prometheus prometheus-community/kube-prometheus-stack -n monitoring -f promo_values.yaml
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+
+If it is taking time delete the chart-helm uninstall prometheus -n monitoring
+
+
+ubuntu@ip-172-31-80-10:~$ helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f promo_values.yaml
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
+NAME: prometheus
+LAST DEPLOYED: Sat Jan  4 01:59:49 2025
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+kube-prometheus-stack has been installed. Check its status by running:
+  kubectl --namespace monitoring get pods -l "release=prometheus"
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.
+ubuntu@ip-172-31-80-10:~$ 
+
+
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get alertmanagers.monitoring.coreos.com -n monitoring -o yaml
