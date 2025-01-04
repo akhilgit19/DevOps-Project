@@ -402,3 +402,42 @@ alertmanagerconfig.monitoring.coreos.com/react-demo created
 ubuntu@ip-172-31-80-10:~$ microk8s kubectl get alertmanagerconfigs -n monitoring
 NAME         AGE
 react-demo   28s
+
+
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl delete pods --all -n monitoring
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get pods -n monitoring
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          26s
+prometheus-grafana-578946f5d5-2fg27                      3/3     Running   0          27s
+prometheus-kube-prometheus-operator-d9998c787-tj24p      1/1     Running   0          22s
+prometheus-kube-state-metrics-6f5574c548-wjs97           1/1     Running   0          21s
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   0          17s
+prometheus-prometheus-node-exporter-s65w7                1/1     Running   0          20s
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get svc -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP   38m
+prometheus-grafana                        ClusterIP   10.152.183.189   <none>        80/TCP                       38m
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.152.183.169   <none>        9093/TCP,8080/TCP            38m
+prometheus-kube-prometheus-operator       ClusterIP   10.152.183.165   <none>        443/TCP                      38m
+prometheus-kube-prometheus-prometheus     ClusterIP   10.152.183.219   <none>        9090/TCP,8080/TCP            38m
+prometheus-kube-state-metrics             ClusterIP   10.152.183.37    <none>        8080/TCP                     38m
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                     38m
+prometheus-prometheus-node-exporter       ClusterIP   10.152.183.109   <none>        9100/TCP                     38m
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl edit svc prometheus-grafana -n monitoring
+service/prometheus-grafana edited
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl edit svc prometheus-kube-prometheus-prometheus -n monitoring
+service/prometheus-kube-prometheus-prometheus edited
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get svc -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      39m
+prometheus-grafana                        NodePort    10.152.183.189   <none>        80:30962/TCP                    39m
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.152.183.169   <none>        9093/TCP,8080/TCP               39m
+prometheus-kube-prometheus-operator       ClusterIP   10.152.183.165   <none>        443/TCP                         39m
+prometheus-kube-prometheus-prometheus     NodePort    10.152.183.219   <none>        9090:31000/TCP,8080:32343/TCP   39m
+prometheus-kube-state-metrics             ClusterIP   10.152.183.37    <none>        8080/TCP                        39m
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        39m
+prometheus-prometheus-node-exporter       ClusterIP   10.152.183.109   <none>        9100/TCP                        39m
+ubuntu@ip-172-31-80-10:~$ 
+ubuntu@ip-172-31-80-10:~$ microk8s kubectl get alertmanagerconfigs -n monitoring
+NAME         AGE
+react-demo   6m28s
