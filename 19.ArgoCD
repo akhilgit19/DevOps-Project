@@ -153,3 +153,18 @@ ubuntu@ip-172-31-85-30:~$ microk8s kubectl get secrets argocd-initial-admin-secr
 dkx4THZrSzYzclFHOHpTWA==
 ubuntu@ip-172-31-85-30:~$ microk8s kubectl get secrets argocd-initial-admin-secret -n argocd -o json | jq -r .data.password | base64 -d
 vLxLvkK63rQG8zSXubuntu@ip-172-31-85-30:~$ 
+ubuntu@ip-172-31-85-30:~$ argod cd 52.87.182.250:31288
+argod: command not found
+ubuntu@ip-172-31-85-30:~$ argocd login 52.87.182.250:31288
+WARNING: server certificate had error: tls: failed to verify certificate: x509: cannot validate certificate for 52.87.182.250 because it doesn't contain any IP SANs. Proceed insecurely (y/n)? y
+Username: admin
+Password: 
+'admin:login' logged in successfully
+Context '52.87.182.250:31288' updated
+
+ubuntu@ip-172-31-85-30:~$ argocd account update-password
+*** Enter password of currently logged in user (admin): 
+*** Enter new password for user admin: 
+*** Confirm new password for user admin: 
+Password updated
+Context '52.87.182.250:31288' updated
