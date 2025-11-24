@@ -1,6 +1,10 @@
 # DevOps-Project
 
 
+AWS
+- T3 micro
+- allow port 80 for nginx
+- update dns ip in go daddy account
     
     1  sudo apt install git
     2  git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
@@ -22,6 +26,8 @@
    18  ls
    19  cd /home/ubuntu/Gold_Site_Ecommerce-1
    20  sudo vi /etc/nginx/sites-available/default
+       update /var/www/html/build
+       you can provide server name as your goddayd account server ip
    21  sudo cp -R build/ /var/www/html/
    22  sudo systemctl restart nginx
    23  sudo systemctl status nginx
