@@ -4,7 +4,7 @@
 AWS
 - T3 micro
 - allow port 80 for nginx
-- update dns ip in go daddy account
+
     
     1  sudo apt install git
     2  git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
@@ -26,12 +26,23 @@ AWS
    18  ls
    19  cd /home/ubuntu/Gold_Site_Ecommerce-1
    20  sudo vi /etc/nginx/sites-available/default
-       update /var/www/html/build
+       add build in root /var/www/html;
+       as
+       root /var/www/html/build;
+       
        you can provide server name as your goddayd account server ip
    21  sudo cp -R build/ /var/www/html/
    22  sudo systemctl restart nginx
    23  sudo systemctl status nginx
+   24. Log into your GoDaddy Console and My Products >Domain > DNS.In A records, paste the AWS EC2 public IP
+       add the ip in the record value of T
+       type A
+       Name @
+       value 13.49.67.11, TTL custom, seconds -60
 
+
+
+ 
 
 ===============================
 Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
