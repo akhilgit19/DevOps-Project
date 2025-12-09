@@ -272,171 +272,13 @@ AWS public IP changes once the system is stopped and started back. to avoid this
 
 
 
-=================================
+=================================Lab  
 
 ubuntu@ip-172-31-87-138:~$ sudo apt update
 sudo apt install software-properties-common
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt install ansible 
-Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
-Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
-Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease 
-Hit:4 https://download.docker.com/linux/ubuntu noble InRelease                 
-Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease               
-Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [469 kB]
-Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [337 kB]
-Fetched 932 kB in 1s (1147 kB/s)                        
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-81 packages can be upgraded. Run 'apt list --upgradable' to see them.
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-software-properties-common is already the newest version (0.99.48).
-software-properties-common set to manually installed.
-0 upgraded, 0 newly installed, 0 to remove and 81 not upgraded.
-Repository: 'Types: deb
-URIs: https://ppa.launchpadcontent.net/ansible/ansible/ubuntu/
-Suites: noble
-Components: main
-'
-Description:
-Ansible is a radically simple IT automation platform that makes your applications and systems easier to deploy. Avoid writing scripts or custom code to deploy and update your applications— automate in a language that approaches plain English, using SSH, with no agents to install on remote systems.
 
-http://ansible.com/
-
-If you face any issues while installing Ansible PPA, file an issue here:
-https://github.com/ansible-community/ppa/issues
-More info: https://launchpad.net/~ansible/+archive/ubuntu/ansible
-Adding repository.
-Hit:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
-Hit:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease   
-Hit:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease 
-Hit:4 https://download.docker.com/linux/ubuntu noble InRelease                 
-Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease               
-Get:6 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble InRelease [17.8 kB]
-Get:7 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 Packages [776 B]
-Get:8 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main Translation-en [472 B]
-Fetched 19.1 kB in 1s (21.1 kB/s)
-Reading package lists... Done
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-The following additional packages will be installed:
-  ansible-core python3-jmespath python3-kerberos python3-nacl
-  python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm
-  python3-resolvelib python3-winrm python3-xmltodict sshpass
-Suggested packages:
-  python-nacl-doc python3-gssapi python3-invoke
-The following NEW packages will be installed:
-  ansible ansible-core python3-jmespath python3-kerberos python3-nacl
-  python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm
-  python3-resolvelib python3-winrm python3-xmltodict sshpass
-0 upgraded, 13 newly installed, 0 to remove and 81 not upgraded.
-Need to get 18.5 MB of archives.
-After this operation, 203 MB of additional disk space will be used.
-Do you want to continue? [Y/n] y
-Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-packaging all 24.0-1 [41.1 kB]
-Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-resolvelib all 1.0.1-1 [25.7 kB]
-Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-jmespath all 1.0.1-1 [21.3 kB]
-Get:4 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-kerberos amd64 1.1.14-3.1build9 [21.2 kB]
-Get:5 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-nacl amd64 1.5.0-4build1 [57.9 kB]
-Get:6 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-ntlm-auth all 1.5.0-1 [21.3 kB]
-Get:7 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-paramiko all 2.12.0-2ubuntu4 [137 kB]
-Get:8 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-requests-ntlm all 1.1.0-3 [6308 B]
-Get:9 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 python3-xmltodict all 0.13.0-1 [13.4 kB]
-Get:10 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-winrm all 0.4.3-2 [31.9 kB]
-Get:11 http://us-east-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
-Get:12 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible-core all 2.16.10-1ppa~noble [1032 kB]
-Get:13 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible all 9.9.0-1ppa~noble [17.1 MB]
-Fetched 18.5 MB in 2s (7480 kB/s)    
-Selecting previously unselected package python3-packaging.
-(Reading database ... 98601 files and directories currently installed.)
-Preparing to unpack .../00-python3-packaging_24.0-1_all.deb ...
-Unpacking python3-packaging (24.0-1) ...
-Selecting previously unselected package python3-resolvelib.
-Preparing to unpack .../01-python3-resolvelib_1.0.1-1_all.deb ...
-Unpacking python3-resolvelib (1.0.1-1) ...
-Selecting previously unselected package ansible-core.
-Preparing to unpack .../02-ansible-core_2.16.10-1ppa~noble_all.deb ...
-Unpacking ansible-core (2.16.10-1ppa~noble) ...
-Selecting previously unselected package ansible.
-Preparing to unpack .../03-ansible_9.9.0-1ppa~noble_all.deb ...
-Unpacking ansible (9.9.0-1ppa~noble) ...
-Selecting previously unselected package python3-jmespath.
-Preparing to unpack .../04-python3-jmespath_1.0.1-1_all.deb ...
-Unpacking python3-jmespath (1.0.1-1) ...
-Selecting previously unselected package python3-kerberos.
-Preparing to unpack .../05-python3-kerberos_1.1.14-3.1build9_amd64.deb ...
-Unpacking python3-kerberos (1.1.14-3.1build9) ...
-Selecting previously unselected package python3-nacl.
-Preparing to unpack .../06-python3-nacl_1.5.0-4build1_amd64.deb ...
-Unpacking python3-nacl (1.5.0-4build1) ...
-Selecting previously unselected package python3-ntlm-auth.
-Preparing to unpack .../07-python3-ntlm-auth_1.5.0-1_all.deb ...
-Unpacking python3-ntlm-auth (1.5.0-1) ...
-Selecting previously unselected package python3-paramiko.
-Preparing to unpack .../08-python3-paramiko_2.12.0-2ubuntu4_all.deb ...
-Unpacking python3-paramiko (2.12.0-2ubuntu4) ...
-Selecting previously unselected package python3-requests-ntlm.
-Preparing to unpack .../09-python3-requests-ntlm_1.1.0-3_all.deb ...
-Unpacking python3-requests-ntlm (1.1.0-3) ...
-Selecting previously unselected package python3-xmltodict.
-Preparing to unpack .../10-python3-xmltodict_0.13.0-1_all.deb ...
-Unpacking python3-xmltodict (0.13.0-1) ...
-Selecting previously unselected package python3-winrm.
-Preparing to unpack .../11-python3-winrm_0.4.3-2_all.deb ...
-Unpacking python3-winrm (0.4.3-2) ...
-Selecting previously unselected package sshpass.
-Preparing to unpack .../12-sshpass_1.09-1_amd64.deb ...
-Unpacking sshpass (1.09-1) ...
-Setting up python3-ntlm-auth (1.5.0-1) ...
-Setting up python3-resolvelib (1.0.1-1) ...
-Setting up python3-kerberos (1.1.14-3.1build9) ...
-Setting up sshpass (1.09-1) ...
-Setting up python3-xmltodict (0.13.0-1) ...
-Setting up python3-packaging (24.0-1) ...
-Setting up python3-jmespath (1.0.1-1) ...
-Setting up python3-nacl (1.5.0-4build1) ...
-Setting up python3-requests-ntlm (1.1.0-3) ...
-Setting up ansible-core (2.16.10-1ppa~noble) ...
-Setting up python3-winrm (0.4.3-2) ...
-Setting up ansible (9.9.0-1ppa~noble) ...
-Setting up python3-paramiko (2.12.0-2ubuntu4) ...
-Processing triggers for man-db (2.12.0-4build2) ...
-Scanning processes...                                                           
-Scanning candidates...                                                          
-Scanning linux images...                                                        
-
-Pending kernel upgrade!
-Running kernel version:
-  6.8.0-1012-aws
-Diagnostics:
-  The currently running kernel version is not the expected kernel version
-6.8.0-1014-aws.
-
-Restarting the system to load the new kernel will not be handled automatically,
-so you should consider rebooting.
-
-Restarting services...
-
-Service restarts being deferred:
- /etc/needrestart/restart.d/dbus.service
- systemctl restart docker.service
- systemctl restart getty@tty1.service
- systemctl restart networkd-dispatcher.service
- systemctl restart serial-getty@ttyS0.service
- systemctl restart systemd-logind.service
- systemctl restart unattended-upgrades.service
-
-No containers need to be restarted.
-
-User sessions running outdated binaries:
- ubuntu @ session #2: sshd[1092,1205]
- ubuntu @ user manager service: systemd[1096]
-
-No VM guests are running outdated hypervisor (qemu) binaries on this host.
 ubuntu@ip-172-31-87-138:~$ ansible --version
 ansible [core 2.16.10]
   config file = /etc/ansible/ansible.cfg
@@ -448,7 +290,11 @@ ansible [core 2.16.10]
   jinja version = 3.1.2
   libyaml = True
 ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/ansible.cfg
-ubuntu@ip-172-31-87-138:~$ ssh-keygen
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+private_key_file = /path/to/your/private/key
+ubuntu@ip-172-31-87-138:$ sudo su - ubuntu
+ubuntu@ip-172-31-87-138:~# ssh-keygen
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519): 
 Enter passphrase (empty for no passphrase): 
@@ -499,6 +345,8 @@ In build server
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
 root@ip-172-31-87-138:~# sudo su - ubuntu
 ubuntu@ip-172-31-87-138:~$ sudo vi /etc/ansible/hosts (((Note remove everthing add the private ip of kuberntes)
+[deployserver]
+1.2.34.1
 ubuntu@ip-172-31-87-138:~/.ssh$ sudo su - root
 root@ip-172-31-87-138:~# 
 ubuntu@ip-172-31-87-138:~$ ansible all -m ping
@@ -549,6 +397,7 @@ ubuntu@ip-172-31-87-138:~$ cat build.yaml
      ansible.builtin.shell: 
        cmd: ./build.sh
        chdir: bashscripts/react-nginx_bashscripts/
+
 ubuntu@ip-172-31-87-138:~$ ansible-playbook build.yaml --syntax-check
 
 playbook: build.yaml
@@ -647,3 +496,32 @@ ubuntu@ip-172-31-86-66:~$ microk8s kubectl get pods -n react-nginx-namespace
 NAME                               READY   STATUS    RESTARTS   AGE
 react-deployment-959dfb7cb-5f4fr   1/1     Running   0          100s
 react-deployment-959dfb7cb-msf69   1/1     Running   0          100s
+
+
+
+build.sh
+==========
+#!/bin/bash
+sudo docker rmi -f $(sudo docker images -q) ##this is not recommned step, i am deleting existing images to save space
+sudo rm -r gold ## these steps are not recommened instead you can modify script as shown below
+sudo mkdir gold
+cd gold/
+sudo git clone https://github.com/akhilgit19/Gold_Site_Ecommerce-1.git
+cd Gold_Site_Ecommerce-1/
+sudo docker build -t react-nginx-image -f golddockerfile .
+sudo docker tag react-nginx-image:latest akhilpagadapoola/react-nginx:latest ##make sure you did docker login
+sudo docker push akhilpagadapoola/react-nginx:latest
+
+##recommended script###
+#!/bin/bash
+#cd gold/Gold_Site_Ecommerce
+#sudo git pull
+#sudo docker build -t react-nginx -f goldockerfile .
+#sudo docker tag react-nginx:latest reactdemo/react-nginx:latest ##make sure you did docker login
+#sudo docker push reactdemo/react-nginx:latest
+
+Deploy.sh
+===========
+#!/bin/bash
+pods_id=$(microk8s kubectl get pods -n react-nginx-namespace |grep react |awk {'print $1'})
+microk8s kubectl delete pod $pods_id -n react-nginx-namespace
