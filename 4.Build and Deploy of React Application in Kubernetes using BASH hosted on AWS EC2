@@ -1,3 +1,10 @@
+4 -read
+2 - write
+1- execite
+UGO
+      cd ..
+      ls -lhtr or ll
+      chmod 744 build.sh
 
    1  sudo vi build.sh
    2  cat build.sh
