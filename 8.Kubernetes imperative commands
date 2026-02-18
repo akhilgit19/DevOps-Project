@@ -41,6 +41,7 @@ ubuntu@ip-172-31-83-13:~$ sudo su - root
 root@ip-172-31-83-13:~# sudo su - ubuntu
 ubuntu@ip-172-31-83-13:~$ kubectl create ns react-nginx-namespace
 namespace/react-nginx-namespace created
+
 ubuntu@ip-172-31-83-13:~$ kubectl run pod --help
 Create and run a particular image in a pod.
 
@@ -176,6 +177,9 @@ Usage:
 [--overrides=inline-json] [--command] -- [COMMAND] [args...] [options]
 
 Use "kubectl options" for a list of global command-line options (applies to all commands).
+
+
+
 ubuntu@ip-172-31-83-13:~$ kubectl run nginx-pod --image=nginx -n react-nginx-namespace
 pod/nginx-pod created
 ubuntu@ip-172-31-83-13:~$ kubectl get ns
@@ -190,6 +194,8 @@ Error from server (NotFound): pods "react-nginx-namespace" not found
 ubuntu@ip-172-31-83-13:~$ kubectl get pods -n react-nginx-namespace
 NAME        READY   STATUS    RESTARTS   AGE
 nginx-pod   1/1     Running   0          33s
+
+
 ubuntu@ip-172-31-83-13:~$ kubectl run nginx-pod --image=nginx -n react-nginx-namespace --dry-run=client -o yaml
 apiVersion: v1
 kind: Pod
