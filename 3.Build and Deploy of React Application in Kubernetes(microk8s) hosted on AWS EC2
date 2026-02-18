@@ -3,15 +3,27 @@
 
 AWS EC2
 
-        Docker Containers
 
-                            React-docker images
-                             80 / container port
-
+      ingresss 80
+                      svc 80-- 
 
 
-80- nodeport/hostport
+                    pods  pods
+                    80      80
 
+
+
+
+- click on new instance
+- name- kubernets
+- AMI- ubuntu
+- instance type t3.medium
+- key pair- react-kubernets
+- networksetting-defualt
+- SG- default
+- click on create instance
+
+- ssh -i keypair ubuntu @ ip adress of kubernets
 
     1  sudo snap install microk8s --classic
        microk8s status --wait-ready
@@ -63,6 +75,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+
    10  kubectl apply -f react-service.yaml
    11  kubectl get svc -n react-nginx-namespace
    12  curl http://10.152.183.53:80
@@ -249,281 +262,3 @@ NAME            CLASS    HOSTS        ADDRESS   PORTS   AGE
 react-ingress   public   hkhnet.xyz             80      12s
 ubuntu@ip-172-31-86-66:~$ curl http://hkhnet.xyz
 <!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,900;1,700&family=Pacifico&family=Roboto&family=Tilt+Warp&family=Ubuntu&display=swap" rel="stylesheet"><title>Gold App</title><style>*{font-family:Montserrat,sans-serif;font-family:Roboto,sans-serif}</style><script defer="defer" src="/static/js/main.1d9b5862.js"></script><link href="/static/cubuntu@ip-172-31-86-66:~$
-
-
-===================================
-Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
-
-The series focuses mainly on Build and Deploy and also may not follow best practises of DevOps but we will speak about the best practises and places where in our project to be improved to make it a secured setup.
-
-
-##Note: The video above here demonstrates blog in Telugu, recommend watching the video in separate tab and blog in seperate tab for easy practise.
-
-click here to navigate to YouTube
-
-We recommend access the blog through your laptop/Computer for better visibility.The coloured texts are links that can help you navigate to particular topic and each code snippet has copy button appears when hovered, This blog particularly designed with screenshots to help you practise and gain confidence on DevOps world##
-
-What Can you expect from Blog:
-How to tag Docker image and push to Docker Hub
-How Different components like Ingress, Service and Deployment areDeployed
-How to Deploy Deployment and link with Service
-How to link Between Ingress and Service
-How to host Website on GoDaddy Domain when application is running on AWS EC2       
-Configuration to be used for this project:
-Image: Ubuntu Server 24.04
-
-Type: t3.medium
-
-cost charges may occur on t3.medium, make sure to turn off the instance
-
-#Note: AWS Free Tier is only for 750 Hours per year, so make sure you stop instance once you are done with the project
-
-Now let us Dockerize our React application,We will install docker on our AWS EC2
-Now before we start ,we recommend you to watch Part-2 as Docker images plays a major part in this     project
-
-As we have already created docker image in Part-2 Project, we will use the same docker image here
-
-We will make an account in Dockerhub first. and then we will push our image to dockerhub.
-
-By default we get one public repositories free from Dockerhub,we will make use of it.
-
-once you created, click on create repository inside docker hub
-
-you will be able to find two commands at right corner of the screen
-
-
-
-docker tag local-image:tagname new-repo:tagname
-docker push new-repo:tagname
-Copy
-
-
-
-Now let us sign into AWS EC2,at which we created docker image as part of our last project
-
-
-
-sudo docker login
-Copy
-
-
-
-once logged in, now let us use the commands that we have used copied from docker hub 
-
-and change commands according to our need
-
-check the docker images to make sure
-
-sudo docker images
-Copy
-
-
-
-Now let us make changes for docker hub commands we copied accordingly
-our local-image name is react-docker and tagname can be latest,our new repo name will be username/repo-name, our username is testdemo880 for docker hub and repo-name can be react-docker-hub. you can give it any name. dockerhub creates repo if repo does not exist
-
-so our command modifies as follows
-
-
-
-sudo docker tag react-docker:latest testdemo880/react-docker-hub:latest
-sudo docker push testdemo880/react-docker-hub:latest
-Copy
-
-
-
-
-
-Once docker image is pushed, you will be able to see our docker image in docker hub
-
-
-We can now logout of our AWS EC2 server in which we have our docker image
-
-Kubernetes(microk8s)
-Now let us launch a new AWS EC2 instance install microk8s on by following instructions from official documentation.
-We are proceeding with microk8s for this sample project as kubernetes setup is bit complex
-We will use alias command to get the feel just like we work in kubernetes
-sudo snap install microk8s --classic
-Copy
-
-
-Now lets add ubuntu user to microk8s group
-sudo usermod -a -G microk8s ubuntu
-mkdir ~/.kube
-sudo microk8s kubectl config view --raw > ~/.kube/config
-Copy
-make sure to sign out and sign in from ubuntu user for the next commands to work
-sudo su - root
-sudo su - ubuntu
-Copy
-
-
-let us check microk8s pods by
-microk8s kubectl get all --all-namespaces
-Copy
-
-
-Now let us use alias command to work like kubernetes
-alias kubectl="microk8s kubectl"
-Copy
-
-
-Deployment of React in Kubernetes
-
-Now to start with Deployment of kubernetes, we need pods to deploy our application,service to access our application, And Ingress to access our application through ingress.
-Now to start with Deployment of kubernetes, we need pods to deploy our application,service to access our application, And Ingress to access our application through ingress,so we will create three manifest files, react-deployment.yaml, react-service.yaml and react-ingress.yaml
-let us create one by one
-Before that , let us create a namespace
-kubectl create ns react-microk8s
-Copy
-you can give any name for namespace of your choice, i have given name as react-microk8s
-Now lets create deployment file
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: react-deployment
-  namespace: react-microk8s
-  labels:
-    app: react-demo
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: react-demo
-  template:
-    metadata:
-      labels:
-        app: react-demo
-    spec:
-      containers:
-      - name: react-demo
-        image: testdemo880/react-docker-hub
-        ports:
-        - containerPort: 80
-Copy
-
-As you could see in image, i have used our dockerhub repo name
-
-
- 
-by default it takes latest tag, if you have specified any other tag apart from latest then update image name to be testdemo880/react-docker-hub:1.2 , here 1.2 can be referred as tagname
-let us create deployment by command and also i have exposed our pod at port 80
-
-
-kubectl apply -f deployment.yaml
-Copy
-
-
-Now check pods created by deployment with command
-kubectl get pods -n react-microk8s
-Copy
-
-Now overview of our setup looks like this
-
-
- 
-Now let us create a service,Service and deployment must be in the same namespace
-Service and deployment connects together through labels
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: react-service
-  namespace: react-microk8s
-spec:
-  selector:
-    app: react-demo
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-Copy
-
-TargetPort must be the Port number that you opened on our pod, in our case it is 80,We matched our deployment and service using labels as you can see in see in selector,labels,specified are same as that mentioned in deployment
-
-lets start our service by command
-kubectl apply -f react-service.yaml
-Copy
-
-
-Now check the service by command
-kubectl get svc -n react-microk8s
-Copy
-
-
-
-
-r
-By default service creates ClusterIp, there are different services like NodePort and Loadbalancer,each service having its own significance,since service is up,we will be able to access our website internally,you can use curl http://{CLUSTER-IP}:{SERVICE-PORT}
-
-
-
-the above screenshot shows our website is accessible,Now our setup looks like this
-
-Now since clusterip can only be accessed internally, let us go to create ingress to access by our domain. Ingress must be in the same namespace where service and deployment are available,but before creating ingress, we need ingress controller pod to be created.
-since kubernetes has its own nginx controller pod, we need to enable it
-since we are using microk8s, enable ingress by command
-
-microk8s enable ingress
-Copy
-
-
-
-you can find new ingress-nginx pod
-kubectl get all --all-namespaces
-Copy
-
-Now let us write our ingress file
-
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: react-ingress
-  namespace: react-microk8s
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-  - host: hari-dev.shop
-    http:
-      paths:
-      - pathType: Prefix
-        path: /
-        backend:
-          service:
-            name: react-service
-            port:
-              number: 80
-Copy
-
-here hari-dev.shop is our domain name and react-service is the name of service we created and port number 80 is the service port
-
-lets create ingress by the command
-kubectl apply -f react-ingress.yaml
-Copy
-
-Verify ingress by the command
-kubectl get ingress -n react-microk8s
-Copy
-
-
-Now we give curl http://hari-dev.shop from inside our server, we will be able to access our website
-
-
-Deployment is successful
-Now our setup looks like this
-
-
-Domain visibility
-Go for AWS EC2, security groups and In inbound rules allow port 80,as our nginx listens on port 80
-
-
-post that copy AWS EC2 public IP,
-
-Log into your GoDaddy Console and My Products >Domain > DNS.In A records, paste the AWS EC2 public IP
-
-Now we will be able to access our domain in which we can see our React application that we have built and deployed
-
-AWS public IP changes once the system is stopped and started back. to avoid this, we can use AWS Elastic IP with some cost charges
