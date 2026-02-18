@@ -1,5 +1,19 @@
-Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
+-Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
 
+
+
+
+Jenkins Server---ssh----- Build Server --------ssh----- deplyserver
+
+                          Ansible
+                         build.sh deploy.sh
+- click on launch instance
+- name- jenkins
+- ubuntu-os
+- keypair- react-nginx-aws-deploy
+- T3 micro
+- allow ssh port 22 for ipv4/ipv6 0.0.0.0/0
+- allow custom tcp port 8080 for jenkins 0.0.0./0
 
 
 sudo apt update
@@ -307,3 +321,67 @@ Connection to 172.31.87.138 closed.
 jenkins@ip-172-31-94-156:~/.ssh$ client_loop: send disconnect: Broken pipe
 akhilpagadapoola@Akhils-MacBook-Air Jenkins_keypair % 
 
+
+
+- click on new item
+- jobname - react-demo
+- description
+- build triggers- github hook trigger for SCM polling
+- pipeline
+  Defintion- pipeline script from  SCM
+- SCM-  Git
+- Repositories
+  - https://github.com/akhilgit19/Gold_Site_Ecommerce-1
+
+-
+Pipeline
+
+Jenkins file
+
+pipeline {
+    agent any
+    
+    stages {
+        // Uncomment the below stage if you configured SonarQube
+        stage('Run Sonarqube') {
+            environment {
+                scannerHome = tool 'sonarqubescanner'
+            }
+            steps {
+                withSonarQubeEnv(credentialsId: 'sonarqubetoken', installationName: 'sonarqubeserver') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+        stage('Build Docker images on Build Server') {
+            steps {
+                script {
+                    // Execute Ansible playbook on Build Server
+                    sh "ssh ubuntu@172.31.93.4 'ansible-playbook /home/ubuntu/build.yaml'"                    // 'ansible-playbook /home/ubuntu/playbook.yaml'"
+                
+                    
+                    }
+            }
+        }
+        
+        stage('Deploy Script on Deploy Server') {
+            steps {
+                script {
+                    // Execute deployment playbook on Deploy Server
+                    sh "ssh ubuntu@172.31.93.4 'ansible-playbook /home/ubuntu/deploy.yaml'"
+                }
+            }
+        }
+    }
+}
+
+
+Github:
+- In setings
+- developer setting
+- webhook 
+- payload URL
+  http://16.16.67.42:8080/github-webhoo/
+- contenty type
+  application/json
+- click on webhook
