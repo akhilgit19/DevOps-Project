@@ -1,73 +1,16 @@
-Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
-
-The series focuses mainly on Build and Deploy and also may not follow best practises of DevOps but we will speak about the best practises and places where in our project to be improved to make it a secured setup.
-
-##Note: The video above here demonstrates blog in Telugu, recommend watching the video in separate tab and blog in seperate tab for easy practise.
-
-
-
-
-
-click here to navigate to YouTube
-
-We recommend access the blog through your laptop/Computer for better visibility.The coloured texts are links that can help you navigate to particular topic and each code snippet has copy button appears when hovered, This blog particularly designed with screenshots to help you practise and gain confidence on DevOps world##
-
-What Can you expect from Blog:
-Installation of Ansible
-Troubleshoot Ansible Installation if config file is missed
-How to make connection between servers for Ansible using SSH
-How to update default hosts file with groups
-How to check ansible hosts connection using ping
-How to run ansible playbooks, updating ignore_errors and syntax check 
-Configuration to be used for this project:
-Image: Ubuntu Server 24.04
-
-Type: t3.micro
-
-In case, you want to use same as Docker image, make project with t3.large . make sure you set remote configurations and ssh key connection if you are using t3.micro
-
-the below project is setup in assumption of having both docker and ansible in single server and with type t3.large
-
-#Note: AWS Free Tier is only for 750 Hours per year, so make sure you stop instance once you are done with the project
-
-
-Before We start this Ansible, i recommend you to watch all the other series, as we are making changes to single react project from the start
-
-We will use the same project here
-
-Ansible is widely popular configuration management tool and can be installed in one server and you can run tasks in other servers if Ansible Master(server in which ansible is installed ) and other servers have SSH connection
-
-Ansible files must be saved with .yaml or .yml extension
-
-Before, We proceed on Ansible, let us move Bash scripts that we have written in Part-4 to Github repository
-
-
-We will use this repository as a part of our project
-We will install Ansible in our Build Server and then we will make an SSH  connection to our Deployserver from BuildServer
-
-We will ask Ansible to run build.sh script in Buildserver and then deploy.sh in Deployserver
-
-We will write a ansible playbook to achieve this, playbook is a set of tasks to be performed
-
-let us now start with project by installing Ansible
-
-login to Buildserver and install ansible by running these commands
-
-
+- cat etc/os/release
+-
 sudo apt update
 sudo apt install software-properties-common
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt install ansible 
-Copy
 
-
-
+-
 check ansible installation by command
 
 ansible --version
-Copy
 
-
+-
 ansible config file shows None, by default ansible creates config file.
 ##note: if config file does not show none for you , no need to create config file
 ###if config file shows none#######################################
@@ -75,7 +18,8 @@ let us create a default config file
 sudo mkdir -p /etc/ansible
 sudo touch /etc/ansible/ansible.cfg
 sudo touch /etc/ansible/hosts
-Copy
+
+-
 We have created ansible directory in etc and and ansible.cfg file and hosts file inside ansible directory
 
 Now lets edit the config file
@@ -86,11 +30,14 @@ Paste the contents
 inventory = /etc/ansible/hosts
 remote_user = ubuntu
 private_key_file = /path/to/your/private/key
-Copy
-Now before we make changes to private key path, let us create a ssh-key file for ansible using command
-ssh-keygen
-Copy
 
+-
+Now before we make changes to private key path, let us create a ssh-key file for ansible using command
+sudo su - ubuntu
+ssh-keygen
+
+
+-
 copy the private key path that is shown in brackets of Enter file in which to save the key(),
 if you have used the default
 so now our ansible.cfg file is updated in this way
@@ -336,7 +283,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIORMZ+YKwu4Q4h6TgrN2bitxYIh6TnX7X4BZyW65g/dL
 In deploy server
 -----------------
 ubuntu@ip-172-31-36-29:~$ sudo vi /home/ubuntu/.ssh/authorized_keys
-ubuntu@ip-172-31-36-29:~$ 
+ubuntu@ip-172-31-36-29:~$ paste the public key of build server in deploy server which is in authorized key
 ubuntu@ip-172-31-89-173:~$ sudo su - root
 root@ip-172-31-89-173:~# sudo su - ubuntu
 ubuntu@ip-172-31-89-173:~$
