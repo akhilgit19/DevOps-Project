@@ -1,3 +1,129 @@
+- In Name cheap
+- In SSL certificate
+  you can see the certificate
+- click on reissue
+- it will ask for CSR and primary domain to get that go to the server issue belwo commands
+ CSR - Certificate signin 
+
+- sudo  su - ubuntu
+- mkdir test
+- cd test
+- sudo openssl req -new -newkey rsa:2048 -nodes -keyout haridev.key -out haridev.csr
+- Press enter till you see Common Name and give your domain www.hari-dev.shop
+
+- above will generate CSR and private key as haridev.csr and haridev.key
+- copy and past here
+- it will ask for CSR and primary domain , paste CSR you will automatically primary domain
+- click on next
+- In DCV method- add CNAME
+  You will get target value, that target and value copy it and go to godaddy click on 
+- type CName- add cname but dont give hari.dev.shop at last just the value
+- click on next
+- it will active after verifyin
+- click on download
+- you will see the certificate in the local server
+
+- Now upload them in the github,
+- click on new respository, ssl 
+- now in local server
+- cd test
+- git clone url
+- ls
+ssl haridev.csr  haridev.key
+- cd ssl
+- sudo apt install unzip
+- unzip www_ari-dev.shop.zip
+- microk8s kubectl get secrets
+- alias kubectl="microk8s kubectl"
+- ls -a
+- sudo vi .bashrc
+- 
+#for examples
+alias kubectl="microk8s kubectl"
+:wq
+
+- kubedtl get pods -n react-nginx
+- sudo su - root
+- sudo su - ubuntu
+- kubectl get pods-n react-nginx
+- kubectl create secret -- help ( yo uwill get to know how to create for tls , generic, docker-registry)
+- kubectl create secret tls hari-dev-ssl --cert=combined_tls.crt --key=haridev.key -n react-nginx
+- Now in test
+www_hari-dev.shop.zip   www_hari-dev_shop.ca-bundle www_hari-dev_shop.crt www_hari-dev_shop.p7b
+
+- sudo openssl pkcs7 -print_certs -in www_hari-dev_shop.p7b -out haridev_tls.crt
+
+-cat www_hari-dev_shop.ca-bundle haridev_tls.crt > combined_tls.crt
+
+- kubectl create secret tls hari-dev-ssl --cert=combined_tls.crt --key=haridev.key -n react-nginx
+
+- kubectl get secrets -n react-nginx
+
+NAME          TYPE                  DATA    AGE
+hari-dev-ssl  kubernetes.io/tls       2      2d4h
+
+-kubectl edit secret hari-dev-ssl -n react-nginx
+- kubectl create  secret generic  my-secret --from-literal=key1=supersecret --from-literal=key2=topsecret
+secret/my-secret created
+- kubectl edit secret my-secret
+
+- echo "dGhpc19pc19BX3RvcF9zZWNyZXQ=" | base64 -d
+supersecret 
+
+- ls
+- kubectl get ingress -n react-nginx
+- kubectl edit ingress react-ingress -n react-nginx (Not recommende temporary edi)
+
+- sudo vi react-ingress.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-ingress
+  namespace: react-microk8s
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+      - hari-dev.shop
+    secretName: hari-dev-ssl
+  rules:
+  - host: hari-dev.shop
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: react-service
+            port:
+               number: 80
+
+
+- kubectl apply -f react-ingress.yaml
+- Now if you see in go dadday You can see your site will be securd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 What Can you expect from Blog:
 How SSL works in simple terms
 Difference between free and paid SSL
@@ -153,7 +279,6 @@ change the name of www_hari-dev_shop.p7b with the name that is available in your
 Now we will merge ca_buncle file and the new crt output that we generated from .p7b files into single file
 cat www_hari-dev_shop.ca-bundle haridev_tls.crt > combined_tls.crt
 Copy
-
 
 Now copy the private key that we have generated along with CSR at the beginning copy the private key to path where combined_tls.crt is present to make our work easier
 cp haridev.key SSL_temporary/
