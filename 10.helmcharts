@@ -104,344 +104,90 @@ ubuntu@ip-172-31-46-243:~/react-chart$ chmod 600 ~/.kube/config
 ubuntu@ip-172-31-46-243:~/react-chart$ ls
 Chart.yaml  charts  templates  values.yaml
 ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ helm install react-chart .
-NAME: react-chart
-LAST DEPLOYED: Sat Sep  7 07:43:56 2024
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-NOTES:
-1. Get the application URL by running these commands:
-  http://hkhnet.xyz/
-ubuntu@ip-172-31-46-243:~/react-chart$ kubectl get pods -n react-nginx
-No resources found in react-nginx namespace.
-ubuntu@ip-172-31-46-243:~/react-chart$ kubectl get pods -n react-nginx-namespace
-NAME                           READY   STATUS    RESTARTS   AGE
-react-chart-64c79b4d84-4m6nn   1/1     Running   0          12s
-react-chart-64c79b4d84-t7wzc   1/1     Running   0          13s
-ubuntu@ip-172-31-46-243:~/react-chart$ client_loop: send disconnect: Broken pipe
-akhilpagadapoola@Akhils-MacBook-Air Kubernetes_keypair % ssh -i "kubernetes_key_pair.pem" ubuntu@ec2-3-94-122-176.compute-1.amazonaws.com
-Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-1012-aws x86_64)
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/pro
+- echo "# helm chart >> READ.md
+- git add .
+- git init
+- git commit -m "first commit"
+- git branch -M main
+- git remote add origin https://
+- git push -u origin main
+- click on github profile
+- click on devellpe settings
+- click on personali access tokes, click on tokens
+- Note- helmauthentication
+- expiration - 
+- organization
+- click on genarate token
+- now past the paswword it will 
 
- System information as of Sat Sep  7 07:52:04 UTC 2024
+- now git clone the repo in VS code
+- click on open folder
+- open the folder in the VS code
+- git branch
+*main
+- git checkout -b feature/kan-2
+- git branch 
+*feature/kan-2
+main
+- now open values.yaml file in vs 
+- replicateCount: 2
+- repository: akhilpagadapoo/react-nginx
+- tag: "latest" (otherwise overrides the chat app version in the image and you will see  error immage pul lrequest)
+- In service account
+   create: false
+   automount: falase
+- service:
+    type: ClusterIP
+    port: 80
+- ingress
+   enabled: true
+  hosts
+    host: har.dev.shop
+- tls: 
+    - secretName:  hari-dev-ssl
+   hosts:
+      -www.hari-dev-shop
 
-  System load:  0.24              Temperature:           -273.1 C
-  Usage of /:   51.5% of 6.71GB   Processes:             165
-  Memory usage: 24%               Users logged in:       2
-  Swap usage:   0%                IPv4 address for ens5: 172.31.46.243
+- In deployment.yaml
+  after name
+  add
+  namespace: {{ .Values.namespace }}
+- In ingress.yaml
+  metadata:
+   name: 
+  namespace: {{ .Values.namespace }}
+- In service.yaml
+  metadata:
+   name: 
+  namespace: {{ .Values.namespace }}
 
-
-Expanded Security Maintenance for Applications is not enabled.
-
-0 updates can be applied immediately.
-
-Enable ESM Apps to receive additional future security updates.
-See https://ubuntu.com/esm or run: sudo pro status
-
-
-The list of available updates is more than a week old.
-To check for new updates run: sudo apt update
-
-Last login: Sat Sep  7 07:34:03 2024 from 49.43.217.231
-ubuntu@ip-172-31-46-243:~$ ls
-get_helm.sh  react-chart  snap
-ubuntu@ip-172-31-46-243:~$ cd react-chart
-ubuntu@ip-172-31-46-243:~/react-chart$ ls
-Chart.yaml  charts  templates  values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ helm upgrade react-chart .
-Release "react-chart" has been upgraded. Happy Helming!
-NAME: react-chart
-LAST DEPLOYED: Sat Sep  7 07:54:17 2024
-NAMESPACE: default
-STATUS: deployed
-REVISION: 2
-NOTES:
-1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
-ubuntu@ip-172-31-46-243:~/react-chart$ kubectl get pods -n react-nginx-namespace
-Command 'kubectl' not found, but can be installed with:
-sudo snap install kubectl
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
-NAME                           READY   STATUS    RESTARTS   AGE
-react-chart-64c79b4d84-4m6nn   1/1     Running   0          11m
-react-chart-64c79b4d84-t7wzc   1/1     Running   0          11m
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl delete pod react-chart-64c79b4d84-4m6nn react-chart-64c79b4d84-t7wzc -n react-nginx-namespace
-pod "react-chart-64c79b4d84-4m6nn" deleted
-pod "react-chart-64c79b4d84-t7wzc" deleted
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
-NAME                           READY   STATUS    RESTARTS   AGE
-react-chart-64c79b4d84-5vgpz   1/1     Running   0          5s
-react-chart-64c79b4d84-nzzzn   1/1     Running   0          5s
-ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ helm upgrade react-chart .
-Release "react-chart" has been upgraded. Happy Helming!
-NAME: react-chart
-LAST DEPLOYED: Sat Sep  7 07:57:08 2024
-NAMESPACE: default
-STATUS: deployed
-REVISION: 3
-NOTES:
-1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=react-chart,app.kubernetes.io/instance=react-chart" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
-NAME                           READY   STATUS             RESTARTS   AGE
-react-chart-64c79b4d84-5vgpz   1/1     Running            0          52s
-react-chart-64c79b4d84-nzzzn   1/1     Running            0          52s
-react-chart-7c5f97fc98-5b7fr   0/1     ImagePullBackOff   0          7s
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl delete pod react-chart-64c79b4d84-5vgpz react-chart-64c79b4d84-nzzzn  -n react-nginx-namespace
-pod "react-chart-64c79b4d84-5vgpz" deleted
-pod "react-chart-64c79b4d84-nzzzn" deleted
-ubuntu@ip-172-31-46-243:~/react-chart$ microk8s kubectl get pods -n react-nginx-namespace
-NAME                           READY   STATUS         RESTARTS   AGE
-react-chart-64c79b4d84-5tnls   1/1     Running        0          5s
-react-chart-64c79b4d84-n97tn   1/1     Running        0          5s
-react-chart-7c5f97fc98-5b7fr   0/1     ErrImagePull   0          43s
-ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
-ubuntu@ip-172-31-46-243:~/react-chart$ helm history react-chart
-REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION     
-1       	Sat Sep  7 07:43:56 2024	superseded	react-chart-0.1.0	1.16.0     	Install complete
-2       	Sat Sep  7 07:54:17 2024	superseded	react-chart-0.1.0	1.16.0     	Upgrade complete
-3       	Sat Sep  7 07:57:08 2024	deployed  	react-chart-0.1.0	1.16.0     	Upgrade complete
-ubuntu@ip-172-31-46-243:~/react-chart$ helm rollback react-chart 2 .
-Rollback was a success! Happy Helming!
-ubuntu@ip-172-31-46-243:~/react-chart$ helm rollback react-chart 1 .
-Rollback was a success! Happy Helming!
-ubuntu@ip-172-31-46-243:~/react-chart$ 
-Broadcast message from root@ip-172-31-46-243 (Sat 2024-09-07 08:06:05 UTC):
-
-The system will power off now!
-
-Connection to ec2-3-94-122-176.compute-1.amazonaws.com closed by remote host.
-Connection to ec2-3-94-122-176.compute-1.amazonaws.com closed.
-akhilpagadapoola@Akhils-MacBook-Air Kubernetes_keypair % 
-
-
-=================================================
-
-
-ubuntu@ip-172-31-37-74:~$ sudo snap install microk8s --classic
-microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
-ubuntu@ip-172-31-37-74:~$ microk8s status --wait-ready
-Insufficient permissions to access MicroK8s.
-You can either try again with sudo or add the user ubuntu to the 'microk8s' group:
-
-    sudo usermod -a -G microk8s ubuntu
-    sudo chown -R ubuntu ~/.kube
-
-After this, reload the user groups either via a reboot or by running 'newgrp microk8s'.
-ubuntu@ip-172-31-37-74:~$ sudo usermod -a -G microk8s ubuntu
-    sudo chown -R ubuntu ~/.kube
-chown: cannot access '/home/ubuntu/.kube': No such file or directory
-ubuntu@ip-172-31-37-74:~$ mkdir ~/.kube
-sudo microk8s kubectl config view --raw > ~/.kube/config
-ubuntu@ip-172-31-37-74:~$ sudo su - root
-root@ip-172-31-37-74:~# sudo su - ubuntu
-ubuntu@ip-172-31-37-74:~$ microk8s kubectl get all --all-namespaces
-NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
-kube-system   pod/calico-kube-controllers-796fb75cc-zlmxc   1/1     Running   0          94s
-kube-system   pod/calico-node-7dr4r                         1/1     Running   0          95s
-kube-system   pod/coredns-5986966c54-jk5mf                  1/1     Running   0          94s
-
-NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
-default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  102s
-kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   98s
-
-NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   96s
-
-NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           96s
-kube-system   deployment.apps/coredns                   1/1     1            1           98s
-
-NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       94s
-kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       94s
-ubuntu@ip-172-31-37-74:~$ alias kubectl="microk8s kubectl"
-ubuntu@ip-172-31-37-74:~$ kubectl create ns react-nginx-namespace
-namespace/react-nginx-namespace created
-ubuntu@ip-172-31-37-74:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-Downloading https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
-Verifying checksum... Done.
-Preparing to install helm into /usr/local/bin
-helm installed into /usr/local/bin/helm
-ubuntu@ip-172-31-37-74:~$ ls
-get_helm.sh  snap
-ubuntu@ip-172-31-37-74:~$ helm version
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
-version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
-ubuntu@ip-172-31-37-74:~$ helm create react-chart
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
-Creating react-chart
-ubuntu@ip-172-31-37-74:~$ ls
-get_helm.sh  react-chart  snap
-ubuntu@ip-172-31-37-74:~$ cd react-chart
-ubuntu@ip-172-31-37-74:~/react-chart$ ls
-Chart.yaml  charts  templates  values.yaml
-ubuntu@ip-172-31-37-74:~/react-chart$ 
-ubuntu@ip-172-31-37-74:~/react-chart$ echo "# helm" >> README.md
-ubuntu@ip-172-31-37-74:~/react-chart$ git init
-hint: Using 'master' as the name for the initial branch. This default branch name
-hint: is subject to change. To configure the initial branch name to use in all
-hint: of your new repositories, which will suppress this warning, call:
-hint: 
-hint: 	git config --global init.defaultBranch <name>
-hint: 
-hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
-hint: 'development'. The just-created branch can be renamed via this command:
-hint: 
-hint: 	git branch -m <name>
-Initialized empty Git repository in /home/ubuntu/react-chart/.git/
-ubuntu@ip-172-31-37-74:~/react-chart$ git add .
-ubuntu@ip-172-31-37-74:~/react-chart$ git commit -m "first commit"
-[master (root-commit) f4409eb] first commit
- Committer: Ubuntu <ubuntu@ip-172-31-37-74.ec2.internal>
-Your name and email address were configured automatically based
-on your username and hostname. Please check that they are accurate.
-You can suppress this message by setting them explicitly. Run the
-following command and follow the instructions in your editor to edit
-your configuration file:
-
-    git config --global --edit
-
-After doing this, you may fix the identity used for this commit with:
-
-    git commit --amend --reset-author
-
- 12 files changed, 443 insertions(+)
- create mode 100644 .helmignore
- create mode 100644 Chart.yaml
- create mode 100644 README.md
- create mode 100644 templates/NOTES.txt
- create mode 100644 templates/_helpers.tpl
- create mode 100644 templates/deployment.yaml
- create mode 100644 templates/hpa.yaml
- create mode 100644 templates/ingress.yaml
- create mode 100644 templates/service.yaml
- create mode 100644 templates/serviceaccount.yaml
- create mode 100644 templates/tests/test-connection.yaml
- create mode 100644 values.yaml
-ubuntu@ip-172-31-37-74:~/react-chart$ git branch -M main
-ubuntu@ip-172-31-37-74:~/react-chart$ git remote add origin https://github.com/akhilgit19/helm.git
-ubuntu@ip-172-31-37-74:~/react-chart$ git push -u origin main
-Username for 'https://github.com': akhilgit19
-Password for 'https://akhilgit19@github.com': 
-Enumerating objects: 16, done.
-Counting objects: 100% (16/16), done.
-Delta compression using up to 2 threads
-Compressing objects: 100% (14/14), done.
-Writing objects: 100% (16/16), 5.70 KiB | 1.90 MiB/s, done.
-Total 16 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), done.
-To https://github.com/akhilgit19/helm.git
- * [new branch]      main -> main
-branch 'main' set up to track 'origin/main'.
-ubuntu@ip-172-31-37-74:~/react-chart$ 
-
-
-
-akhilpagadapoola@Akhils-MacBook-Air ~ % cd Documents
-akhilpagadapoola@Akhils-MacBook-Air Documents % ls
-Aws_EC2_Instance                Hibernate error doc.txt         Pay Slips                       itadmin_credentials.numbers
-Cobol                           Hibernate new error doc.txt     React_nginx_keypair             token.txt
-Devops notes                    Jenkins_keypair                 Web Development Projects        vmwarefusion
-Docker_react_nginx_aws_keypair  Keys                            coorg.txt
-HelloWorld.class                Kubernetes_keypair              git.txt
-HelloWorld.java                 Mainframe                       ias.txt
-akhilpagadapoola@Akhils-MacBook-Air Documents % git clone https://github.com/akhilgit19/helm.git
-Cloning into 'helm'...
-remote: Enumerating objects: 16, done.
-remote: Counting objects: 100% (16/16), done.
-remote: Compressing objects: 100% (13/13), done.
-remote: Total 16 (delta 1), reused 16 (delta 1), pack-reused 0 (from 0)
-Receiving objects: 100% (16/16), 5.70 KiB | 2.85 MiB/s, done.
-Resolving deltas: 100% (1/1), done.
-akhilpagadapoola@Akhils-MacBook-Air Documents % ls         
-Aws_EC2_Instance                Hibernate error doc.txt         Pay Slips                       ias.txt
-Cobol                           Hibernate new error doc.txt     React_nginx_keypair             itadmin_credentials.numbers
-Devops notes                    Jenkins_keypair                 Web Development Projects        token.txt
-Docker_react_nginx_aws_keypair  Keys                            coorg.txt                       vmwarefusion
-HelloWorld.class                Kubernetes_keypair              git.txt
-HelloWorld.java                 Mainframe                       helm
-akhilpagadapoola@Akhils-MacBook-Air Documents % 
-
-
-
-
-akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a
-* main
-  remotes/origin/HEAD -> origin/main
-  remotes/origin/main
-akhilpagadapoola@Akhils-MacBook-Air helm % git checkout -b feature/kan-2
-Switched to a new branch 'feature/kan-2'
-akhilpagadapoola@Akhils-MacBook-Air helm % git branch -a                
+- git branch 
 * feature/kan-2
-  main
-  remotes/origin/HEAD -> origin/main
-  remotes/origin/main
-akhilpagadapoola@Akhils-MacBook-Air helm % git add .
-akhilpagadapoola@Akhils-MacBook-Air helm % git commit -m "helm" 
-[feature/kan-2 bb1b69e] helm
- 4 files changed, 12 insertions(+), 8 deletions(-)
-akhilpagadapoola@Akhils-MacBook-Air helm % git push
-fatal: The current branch feature/kan-2 has no upstream branch.
-To push the current branch and set the remote as upstream, use
+main
 
-    git push --set-upstream origin feature/kan-2
+- git add .
+- git commit -m "added helm files"
+- git push
+- Now in main branch you will see pr request, click on compare and pull request
+- tile
+  description- this is added with regarding helm chart iimplementation
+- assign mysefl
+  reviewer manger
+- click on pull request
+- update the pull request url in ticket in jira- 
 
-To have this happen automatically for branches without a tracking
-upstream, see 'push.autoSetupRemote' in 'git help config'.
+  comment- Created PR to impatement helm charts
+       cc
+- Now manager will confirm merge
+- now go to the server
+- ls
+chart.yaml charts templates values.yaml
+- git pull ( Changes will downloaded)
+- 
 
-akhilpagadapoola@Akhils-MacBook-Air helm % git push --set-upstream origin feature/kan-2
-Enumerating objects: 13, done.
-Counting objects: 100% (13/13), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (7/7), done.
-Writing objects: 100% (7/7), 775 bytes | 775.00 KiB/s, done.
-Total 7 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
-remote: 
-remote: Create a pull request for 'feature/kan-2' on GitHub by visiting:
-remote:      https://github.com/akhilgit19/helm/pull/new/feature/kan-2
-remote: 
-To https://github.com/akhilgit19/helm.git
- * [new branch]      feature/kan-2 -> feature/kan-2
-branch 'feature/kan-2' set up to track 'origin/feature/kan-2'.
-akhilpagadapoola@Akhils-MacBook-Air helm % 
 
-ubuntu@ip-172-31-37-74:~/react-chart$ ls
-Chart.yaml  README.md  charts  templates  values.yaml
-ubuntu@ip-172-31-37-74:~/react-chart$ git pull
-remote: Enumerating objects: 14, done.
-remote: Counting objects: 100% (14/14), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 8 (delta 6), reused 7 (delta 6), pack-reused 0 (from 0)
-Unpacking objects: 100% (8/8), 1.60 KiB | 409.00 KiB/s, done.
-From https://github.com/akhilgit19/helm
-   f4409eb..cee38f9  main          -> origin/main
- * [new branch]      feature/kan-2 -> origin/feature/kan-2
-Updating f4409eb..cee38f9
-Fast-forward
- templates/deployment.yaml |  1 +
- templates/ingress.yaml    |  1 +
- templates/service.yaml    |  1 +
- values.yaml               | 17 +++++++++--------
- 4 files changed, 12 insertions(+), 8 deletions(-)
+
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl config view --raw > ~/.kube/config
 ubuntu@ip-172-31-37-74:~/react-chart$ chmod 600 ~/.kube/config
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl config view
@@ -615,6 +361,31 @@ REVISION: 2
 NOTES:
 1. Get the application URL by running these commands:
   http://hkhnet.xyz/
+
+
+
+- kubectl get pods -n react-nginx
+you will not see as we didnt ad namespace in value.yaml
+
+- in the vs code
+- git checkout -b feature2/minorchant
+ now in values.yaml
+- add namespace: react-nginx
+replicaCount:2
+namespace: react-nginx
+-
+- in the terminal
+- git add .
+- git commit -m "feature2/minorchant"
+- git push
+- now got to the remote server ,click on Pull request, click on merge request
+- now go to the local serer
+- cd charts
+- helm list
+- helm uninstall react-chart-helm
+- git pull
+- helm install react-chart-helm .
+
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl get pods -n react-nginx-namespace
 NAME                                READY   STATUS    RESTARTS   AGE
 react-chart-helm-5457c9c8dc-5jngg   1/1     Running   0          51s
@@ -637,9 +408,7 @@ ubuntu@ip-172-31-37-74:~/react-chart$ helm list
 NAME            	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART            	APP VERSION
 react-chart-helm	default  	2       	2024-09-06 01:56:14.233405273 +0000 UTC	deployed	react-chart-0.1.0	1.16.0     
 ubuntu@ip-172-31-37-74:~/react-chart$ 
-ubuntu@ip-172-31-37-74:~/react-chart$ 
-ubuntu@ip-172-31-37-74:~/react-chart$ 
-ubuntu@ip-172-31-37-74:~/react-chart$ 
+
 ubuntu@ip-172-31-37-74:~/react-chart$ 
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl get pods -n react-nginx-namespace
 NAME                                READY   STATUS    RESTARTS   AGE
