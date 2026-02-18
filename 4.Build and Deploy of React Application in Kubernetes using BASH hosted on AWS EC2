@@ -1,7 +1,24 @@
+- echo "good morning" >> test.sh
+- cat test.sh
+good morning
+-sudo rm -r test
+-vi test.sh 
+#!/bin/bash
+mkdir test
+cd test
+touch test.txt
+echo "this is a test file" >> test.txt
+:wq
+-ls -lhtr
+- chmod 744 test.sh
+- /home/ubuntu/test.sh or ./test.sh
+- cd /test/
+
+ 
 4 -read
 2 - write
 1- execite
-UGO
+User Group Others
       cd ..
       ls -lhtr or ll
       chmod 744 build.sh
@@ -26,6 +43,7 @@ sudo docker push akhilpagadapoola/react-nginx:latest
 #sudo docker build -t react-nginx -f goldockerfile .
 #sudo docker tag react-nginx:latest reactdemo/react-nginx:latest ##make sure you did docker login
 #sudo docker push reactdemo/react-nginx:latest
+
    3  sudo chown ubuntu build.sh
    4  sudo chmod 744 build.sh
    5  ls
@@ -47,134 +65,6 @@ pod "react-deployment-959dfb7cb-ztdrc" deleted
 NAME                               READY   STATUS    RESTARTS   AGE
 react-deployment-959dfb7cb-jsmd7   1/1     Running   0          28s
 react-deployment-959dfb7cb-rmdjm   1/1     Running   0          28s
-
-=========================================================================================================
-Build of React Application
-##Note: Bash scripts must be saved with .sh and first line to be #!/bin/bash except first line "#" is considered to be a comment###
- Now our goal here is to Build docker image in AWS EC2 server and push it to Docker hub
-
- we will write a simple bash script to automate our process
-
- we will be deleting our existing images to save some space, generally this is not recommended, i am running this as  i don't want to get space issue for docker images to be piled up whenever we run build
-
-we can pull the existing repository, but in this, i am deleting and re-creating git to update latest repository
-
-i am running the script as i can use the same script to deploy in new servers if needed
-
-code:
-
-#!/bin/bash
-sudo docker rmi -f $(sudo docker images -q) ##this is not recommned step, i am deleting existing images to save space
-sudo rm -r gold ## these steps are not recommened instead you can modify script as shown below
-sudo mkdir gold
-cd gold/
-sudo git clone https://github.com/Hari0o/Gold_Site_Ecommerce.git
-cd Gold_Site_Ecommerce/
-sudo docker build -t react-nginx -f golddockerfile .
-sudo docker tag react-nginx:latest reactdemo/react-nginx:latest ##make sure you did docker login
-sudo docker push reactdemo/react-nginx:latest
-
-##recommended script###
-#!/bin/bash
-#cd gold/Gold_Site_Ecommerce
-#sudo git pull
-#sudo docker build -t react-nginx -f goldockerfile .
-#sudo docker tag react-nginx:latest reactdemo/react-nginx:latest ##make sure you did docker login
-#sudo docker push reactdemo/react-nginx:latest
-
-
-save the script in file that ends with .sh, in our case, we saved it as build.sh
-
-As we see, build.sh folder has root as owner
-
-
-
-Now give permissions to the file, since we will be running our scripts from ubuntu, let us change ownership from root to ubuntu by command
-sudo chown ubuntu build.sh
-Copy
-
-Now let us give execute permissions for script to run
- sudo chmod 744 build.sh
-Copy
-
-
-Now let us run the script if you are in the same path of script you can run ./build.sh,if you are in different path use full path of script like /home/ubuntu/build.sh and In ./build.sh "." represents present working directory
-/home/ubuntu/build.sh
-Copy
-
-
-once script is run, you can verify latest images by sudo docker images
-
-sudo docker images
-Copy
-
-
-Alternately, you can check your docker hub account
-
-Verify latest push time,this shows our Build has been successful and pushed to docker image.
-
-Now to avoid confusion, let us rename our AWS-EC2 server in which we have built our docker images to BuildServer and and our server in which we are running kubernetes to DeployServer
-
-
-
-Deployment of React Application
-
-Since we have already made setup as Part-3, we will restart pods, so that when pod is up,
-it fetches latest image from Dockerhub.
-
-We will write a Bash script inside our Deploy server to restart pods
-Since we have placed pods in Deployment, Deleting existing pods will bring up new pods automatically
-
-
-#!/bin/bash
-pods_id=$(microk8s kubectl get pods -n react-nginx |grep react |awk {'print $1'})
-microk8s kubectl delete pod $pods_id -n react-nginx 
-Copy
-Change the namespace to the name you have given according to last project
-
-in the above script pods_id is variable and it helps to get pod_ids in deployment
-second command deletes the existing pods, this lets kubernetes deployment to bring up new pods
-
-change ownership of our script file to ubuntu or change it to any user you want to run script with
-sudo chown ubuntu deploy.sh
-Copy
-
-
-
-Now give execute permissions for file to run
-sudo chmod 744 deploy.sh
-Copy
-
-
-
-if you are in same directory as that of script, we can simply run the command by
-./deploy.sh
-Copy
-
-
-Now check deployment if pods are restarted or not by command
-since we are in microk8s run alias command that is specified in part-3,
-
-kubectl get pods -n react-nginx
-Copy
-
-
-Our Deployment is successful
-
-Note: Helm Charts are recommended way to Deploy kubernetes,to put in simple words Helm charts are like package of your complete kubernetes, It will re-install our kubernetes components like ingress service,deployment and all that are actually required to make our application up.We will talk about Helm Charts in upcoming projects
-
-I have only used restart pod to show that pod restart would fetch image from container registry.
-
-This Bash script would not help us if we have change in service or ingress file. either we can use commands to update these components individually else we can drop all the components into helm charts and then updating helm with single command
-
-In this complete series, i will be using only the pod restart method as an deployment part
-
-
-
-Domain visibility
-
-Go for AWS EC2, security groups and In inbound rules allow port 80, as our nginx listens on port 80
-
 
 
 
