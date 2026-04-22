@@ -1,14 +1,18 @@
 # DevOps-Project
 
+==============================================================================
 Build and Deploy Series | How to Deploy React Application in Nginx and AWS
+==============================================================================
 
-
+Architecture:
+--------------------
 AWS2
 
-       NGINX - REACT
+       NGINX 
+              REACT
 
 
-
+Step1:
 - click on launch instance
 - name- reast-nginx-aws
 - ubuntu-os
