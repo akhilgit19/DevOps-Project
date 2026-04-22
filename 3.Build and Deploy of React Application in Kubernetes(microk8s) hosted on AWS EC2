@@ -83,6 +83,9 @@ spec:
    10  kubectl apply -f react-service.yaml
    11  kubectl get svc -n react-nginx-namespace
    12  curl http://10.152.183.53:80
+If you give nodeport in the svc you can do with node port
+curl http://10.152.183.53:3320
+
    13  microk8s enable ingress
    14  kubectl get all --all-namespaces
    15  sudo vi react-ingress.yaml
