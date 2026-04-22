@@ -2,19 +2,30 @@
 Build and Deploy Series | How to Deploy React Application in Docker
 ======================================================================
 
+Architecture:
+================
 AWS EC2
 
         Docker Containers
 
                             React-docker images
-                             80 / container port
+          
+                            80 / container port
+                     
+80- nodeport/hostport/AWS EC2
 
 
 
-80- nodeport/hostport
 
-
-
+Step1:
+------
+- click on launch instance
+- name- reast-nginx-aws
+- ubuntu-os
+- keypair- react-nginx-docker
+- T3 medium
+- allow ssh port 22 for ipv4/ipv6 0.0.0.0/0
+- allow custom tcp port 80 for ipv4/ipv6 0.0.0./0
 
 
 
@@ -60,6 +71,8 @@ EXPOSE 80
 #Start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
 
+Step2:
+---------
 9.  sudo docker build -t react-docker -f golddockerfile .
 10. sudo docker images
 11  sudo docker run --name react-docker-container -p 80:80 -d react-docker
