@@ -1,3 +1,9 @@
+=====================================================================================
+Build and Deploy of React Application in Kubernetes using BASH hosted on AWS EC2
+=====================================================================================
+
+Step1:
+-------
 - echo "good morning" >> test.sh
 - cat test.sh
 good morning
