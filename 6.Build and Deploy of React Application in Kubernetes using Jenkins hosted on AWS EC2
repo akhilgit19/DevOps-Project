@@ -1,12 +1,13 @@
--Build and Deploy series: The Series here does not focus on individual tools but focuses more on how different DevOps tools are connected to each other
-
-
+======================================================================================================================================================
+-Build and Deploy series: Build and Deploy Series | Automate Deployment of React using Jenkins 
+==========================================================================================================================================================================
 
 
 Jenkins Server---ssh----- Build Server --------ssh----- deplyserver
 
                           Ansible
                          build.sh deploy.sh
+
 - click on launch instance
 - name- jenkins
 - ubuntu-os
@@ -332,8 +333,13 @@ akhilpagadapoola@Akhils-MacBook-Air Jenkins_keypair %
 - SCM-  Git
 - Repositories
   - https://github.com/akhilgit19/Gold_Site_Ecommerce-1
+- Branches to build
+  main / master check your github  url
+- Script path
+   Jenkinsfile
 
--
+
+
 Pipeline
 
 Jenkins file
