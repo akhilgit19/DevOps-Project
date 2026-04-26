@@ -1,4 +1,100 @@
-efore working with topics of S3 Bucket, you need to have aws cli installed in your AWS EC2
+============================================
+Upload files to AWS EC2 in various Ways
+=============================================
+
+AWS 
+- Regions
+- Availablity zones
+- EC2 - Elastic Compute machine
+- EBS- Elastic Block Storage
+- Route 53 
+- AWS Certifcate Manager
+- AWS Cloud Watch
+- AWS Priciing Calculator
+- IAM- Identiy Access Managment
+
+Creating User
+- In IAM
+- click on users
+- User name- dev
+- chooose i want to create an IAM users
+- choose custom password
+- uncheck (userss must create a new password at next sign-in)
+- click on next
+- permission options
+  choose attach policies directly
+- serach for ec2
+ ec2FullAccess
+- click on next
+- Download the .csvfile
+
+Upload files to AWS EC2 in various Ways
+-----------------------------------------
+- Click on instance
+- name- testuploadserver
+- ami- ubuntu
+- instancy type- t2.micro
+- key pair
+- networsetting- default
+- storage -default
+- click on launch instance
+
+
+To upload files in various way, We can use Winscp, Powershell, github,s3 bucket using iAM and access keys
+
+- click on testuploadserver
+- click on connect
+
+WinSCP
+-------
+- CLICK ON NEW TAB
+-File protocol- SFTP
+-Hostname: 13.60.1666.34
+-Username - ubuntu
+- click on advanced
+- click on authentication
+- enable allow agent forwardin
+- priate key file- which u have downloade from aws upload it here
+- click on 
+- click on login
+- you can just drag and drop debg.from onserver to another serer
+
+PowerShell
+-------------
+- scp -i .\testuploadserver debug.log ubuntu@13.60.1666.34:/home/ubuntu
+
+S3 Bucket
+--------------
+- git clone URL
+- In aws, click on S3
+- Buck name- test
+- Click on s3 bukcet
+- click on uploads and upload one file from local server
+Installation AWS CLI
+- 
+sudo apt install unzip
+sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo unzip awscliv2.zip 
+sudo ./aws/install
+
+- aws s3 cp object url  path
+- aws s3 cp s3://testuploadbucket2345/testupload.txt /home/ubuntu/
+- aws configure
+aws kesy access
+key id
+- ASKDLSFJDIH
+
+Creating Role
+To create cerficate manager
+- select the instance click on actions,
+  select security, click on modify IAM  rule
+- IAM role
+name  ec2s3test
+- select the role
+- click on okay
+
+
+Before working with topics of S3 Bucket, you need to have aws cli installed in your AWS EC2
 AWS CLI 1 might require python installation but AWS CLI2 comes along with python package
 
 you can install AWS CLI 2 directly from AWS Document- AWS CLI Install Doc
@@ -11,7 +107,8 @@ sudo unzip awscliv2.zip
 sudo ./aws/install
 Copy
 
-
+- aws s3 cp s3://testuploadbucket2345/testupload.txt /home/ubuntu/
+- aws s3 cp s3:///home/ubuntu/home/ubuntu/ debugin
 
 AWS CLI might take few mins to install
 
