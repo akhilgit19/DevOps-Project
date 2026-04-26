@@ -85,6 +85,7 @@ key id
 - ASKDLSFJDIH
 
 Creating Role
+----------------
 To create cerficate manager
 - select the instance click on actions,
   select security, click on modify IAM  rule
@@ -92,6 +93,7 @@ To create cerficate manager
 name  ec2s3test
 - select the role
 - click on okay
+
 
 
 Before working with topics of S3 Bucket, you need to have aws cli installed in your AWS EC2
