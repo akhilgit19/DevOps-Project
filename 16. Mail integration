@@ -1,35 +1,17 @@
-Why is Mail Integration needed?
-Mail Integration was to get alerts or specific files that we need to  send from server to specific mail or mail dl channel
 
-How to configure mail inside linux server
-we need to install ssmtp server 
+======================
+Mail integration
+======================
 
-SSMTP stands for Simple SMTP (Simple Mail Transfer Protocol). It is a lightweight SMTP client that allows users to send emails from a local machine to a mail server, typically for relaying messages. It is commonly used in Unix-based systems to send emails from scripts or system services.
-
-Commands to install ssmtp
-sudo apt update
-Copy
-sudo apt install ssmtp
-Copy
-
-
-
-Steps before configuring ssmtp
+In Build Server
+- sudo apt update
+- sudo apt install ssmtp
+-Steps before configuring ssmtp
 login to your Gmail account and click on "Manage Your Google Account"
-
-
-
-
+- 
 click on Security and Search for App Passwords
 
-
-
-
-Generate an App password and you would receive a 16 letter password something like below
-
-
-
-
+-
 Configuring ssmtp in linux server
 now run the below command:
 
@@ -47,22 +29,21 @@ UseSTARTTLS=YES
 hostname=ip-172-31-2-192.us-west-1.compute.internal #it would be by default
 Copy
 
+-
+sudo touch image_vulnerability.txt
+sudo chmod 777 image_vulnerability.txt
+trivy image akhilpagadapoola/react-nginx > image_vulnerability.txt
 
-
-
-
-note: Make sure to add add Port 587 in inbound rules of security group
-
+-
 Test the mail server 
 use the below commands to configure the mail server 
 
 echo -e "Subject: Test Email\n\nThis is a test email 2 from my Ubuntu server." > test_email.txt
 Copy
 
-
-
+-
 ssmtp sagar.kakkala@gmail.com < test_email.txt
-Copy
+
 
 
 
@@ -118,5 +99,17 @@ Copy
 Alternate to mail
 As Majority of companies, now use slack for alerts or to send files, we will discuss on slack bot integration in our next session
 
-This Concludes our blog
-Apart from DevOps,Post most of my content in Telugu related to contrafactum's(changing lyrics to original songs),fun vlogs, Travel stories and much more to explore, You can use this link as single point of link to access -
+
+note: Make sure to add add Port 587 in inbound rules of security group
+
+
+script:
+--------
+ sudo touch image_vulnerability.txt
+sudo chmod 777 image_vulnerability.txt
+trivy image akhilpagadapoola/react-nginx > image_vulnerability.txt
+echo "Starting slack.sh..." 
+##/home/ubuntu/gold/Gold_Site_Ecommerce-1/slack.sh
+. slack.sh
+echo "Please find the attached Trivy file file." | mutt -s "Image Vulnerability" -a image_vulnerability.txt -- akhilpagadapoola123@gmail.com
+
