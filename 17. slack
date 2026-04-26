@@ -1,3 +1,46 @@
+==========
+slack
+========
+
+- click on channels, click on create
+- click on create channe
+- name # trivy-channel
+- clic on next
+- click on create
+- click on workspace like react0demo- tools 7SETTINGS - MANAGE APPS
+- click on build, click on cretae new app
+- click on from scraetch
+- app name- trivy-02
+- wokrkspace - react-demo
+- click on create app
+- now in features, click on incoming webhooks
+- enable activate incoming webhooks
+- scroll dpwn click on oadd new webhook to workspace
+
+- where shoule trvy02 post?
+  select trivy-channel\-02
+- click on alloqw
+- now in features, click on auth and permissions
+- In scopes, click on add an OAuth Scope
+- choose files:write
+- click on reinstall your app pop up
+- where shoule trvy02 post?
+  select trivy-channel\-02
+- click on alloqw
+
+- Now in OAuth tokens
+  copy OAuth tokens 
+  BoT User OAuth token
+- Now go for trivy-channel-02 
+ click on channel details
+- clikck on integrations, clik on add 
+- seracch for trivy and click on integrate,clik on add  app to this channel
+
+
+
+to get the id, cick on trivy-channel-02  at down you can see id
+
+
 
 xoxb-8130983680517-8229645815751-8y1XW467p7szh8CJPISVOU1m
 F08762L9ZPV
@@ -15,6 +58,10 @@ image_vulnerability.txt
 
 3.curl -X POST -H "Authorization: Bearer xoxb-8130983680517-8229645815751-8y1XW467p7szh8CJPISVOU1m" -H "Content-Type: application/json" -d '{"files": [{"id":"F08762L9ZPV", "title":"slack-test"}], "channel_id": "C084X72212Q"}' https://slack.com/api/files.completeUploadExternal
 
+-
+/home/ubuntu/gold/Gold_Site_Ecommerce-1/slack.sh
+
+- slack_bash.sh
 
 #!/bin/bash
 
