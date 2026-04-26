@@ -3,8 +3,14 @@
 Docker Tagging with Git Commit ID's
 
 =====================================
+                                                
+Architecture:                               ---|Build Server|--build.sh-docker-- docker hub
+       Webhook              ssh             |                                        |
+Github------------> jenkins-----> Ansible---|                                       AWS S3
+                                            |                                        |
+                                            ---ssh--|Deploy Server|-- deploy.sh--- Helm charts
 
-In Build Server:
+In Build Server:                      
 
 - In build.sh
 
