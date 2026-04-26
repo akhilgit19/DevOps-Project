@@ -15,12 +15,11 @@ Jenkins Server---ssh----- Build Server --------ssh----- deplyserver
 - T3 micro
 - allow ssh port 22 for ipv4/ipv6 0.0.0.0/0
 - allow custom tcp port 8080 for jenkins 0.0.0./0
-
-
+-
 sudo apt update
 sudo apt install fontconfig openjdk-17-jre
 java -version
-Copy
+-
 Now lets install jenkins
 
 sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
@@ -30,62 +29,49 @@ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt-get update
 sudo apt-get install jenkins
-Copy
+-
 Verify Jenkins installation by command
 jenkins --version
-Copy
 
-
+-
 Now let us enable jenkins so that even if system is rebooted, jenkins runs as soon as system
 is up , also start jenkins and check status of jenkins
 
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
-Copy
 
-
+-
 Now lets configure Jenkins, Jenkins by default runs on port 8080
 
 Add 8080 to inbound rules of AWSEC2 server in which jenkins is running
-
-
+-
 Now your jenkins URL will be http://{AWS_PUBLIC_IP}:8080,access this URL to configure jenkins and If you are accessing for first time, you will be displayed this page
 
-
-
-
+-
 Now get the password from your AWS EC2 server by running command
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-Copy
-
-
+-
 Copy and paste the password in jenkins page, once password is authenticated
 
-
+-
 go with install suggested plugins, we can install custom plugins later based on requirement
-
-
+-
 its recommended to create an Admin user
 
-
 and then 
-
-
 since our public Ip changes, everytime as we are not using AWS elastic IP, i will be skipping this step
 
 Our final page after configuration
 
 We configure jenkins successfully
 
-
 Only for first time, we need to configure jenkins from next time, we will login with username and password that we created as first admin
-
 
 you can login with First admin user created or you can give username as admin and password is the password fetched from /var/lib/jenkins/secrets/initialAdminPassword when we initially logged in
 
 
-
+-
 Now before we began, In last project we have used installed Ansible in BuildServer and we have written two playbooks inside Buildserver, we asked ansible to run build.yaml in BuildServer and deploy.yaml in DeployServer, we triggered both the playbooks from inside BuildServer 
 
 Now lets make a connection between JenkinsServer and BuildServer,so we can ask Jenkins to run ansible playbooks that are inside BuildServer
@@ -97,25 +83,24 @@ Copy
 ssh-keygen
 Copy
 
-
+-
 as you can see from above screenshot keys were created in path /var/lib/jenkins/.ssh, get the contents of public key from that path
-
 
 copy the contents of public key and log in to BuildServer
 sudo vi /home/ubuntu/.ssh/authorized_keys
 Copy
 
-
+-
 Now come back to Jenkins server, and let us test the connection, copy AWS private IP of BuildServer and test connection
 ssh ubuntu@{BuildServer_Private_IP}
 Copy
 
-
+-
 now we are inside buildserver from JenkinsServer, type exit to come back to our Jenkins Server
 exit
 Copy
 
-
+-
 Build and Deploy of React Application
 since we established connection, let us write our Jenkinsfile first
 
@@ -148,20 +133,14 @@ pipeline {
 Copy
 
 In the above jenkins file, agent- any is where we are asking jenkins to run on any nodes that are available. since we have not configured any nodes, these pipelines will run on master jenkins server. ".sh" indicates shell and command followed by it indicates jenkins to login to buildserver and run playbook build.yaml in stage-1 and run playbook deploy.yaml in stage-2, the IP mentioned is Private IP address of Build Server
-
+-
 Now, lets include this file in the Github react project in which we want to deploy
 name it as Jenkinsfile
-
-
 
 Now go back to our Jenkins URL. click on New item
 
 
-
-
 give a name and click on pipeline project
-
-
 
 now make sure to select this option as we will use webhooks
 
@@ -237,7 +216,7 @@ click on Console output , you can check logs even when pipeline is running.
 
 
 With this Our Build and Deploy Series has been completed
-================
+================================================================
 
 
 Last login: Sat Aug 31 11:45:12 on ttys000
