@@ -1,5 +1,24 @@
 
-note sonar docker container id-d0fd6a48b98a
+=============
+Sonarqube
+===========
+                    sonarqube
+Architecture:          |                      ---|Build Server|--build.sh-docker-- docker hub -- docker image-- trivy scan
+       Webhook              ssh             |                                        |
+Github------------> jenkins-----> Ansible---|                                       AWS S3
+                                            |                                        |
+                                            ---ssh--|Deploy Server|-- deploy.sh--- Helm charts
+
+
+
+- Instance
+- Name- sonarqube
+- AMI- ubuntu
+- instance type- t3.mediu,
+- keypair
+- network- default
+- storage- default
+- ssh -i keypair ubuntu@ipadrrs
 
 1.cat /etc/os-release
 2.for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
