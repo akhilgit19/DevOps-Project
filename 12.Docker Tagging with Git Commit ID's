@@ -1,3 +1,85 @@
+
+=====================================
+Docker Tagging with Git Commit ID's
+
+=====================================
+
+In Build Server:
+
+- In build.sh
+
+#!/bin/bash
+sudo docker container prune -f && sudo docker image prune -a -f && sudo docker volume prune -f && sudo docker network prune -f && sudo docker system prune -a -f
+##this above step is not recommned step, i am deleting existing images to save space
+sudo rm -r gold
+sudo mkdir gold
+cd gold/
+sudo git clone https://github.com/Hari0o/Gold_Site_Ecommerce.git
+cd Gold_Site_Ecommerce/git_commit=$(sudo git rev-parse HEAD)
+sudo docker build -t react-nginx:$git_commit -f golddockerfile .
+sudo docker tag react-nginx:$git_commit sagarkakkala385/react-nginx:$git_commit ##make sure you did docker login
+sudo docker push sagarkakkala385/react-nginx:$git_commit
+aws s3 rm s3://gitcommitids/new_value.txt 
+sudo touch new_value.txt
+sudo chmod 777 new_value.txt
+sudo echo $git_commit > new_value.txt
+aws s3 cp new_value.txt s3://gitcommitids/
+sudo rm new_value.txt
+
+
+In Deploy server
+
+#!/bin/bash
+cd /home/ubuntu/react-chart/
+aws s3 cp s3://gitcommitids/old_value.txt .
+aws s3 cp s3://gitcommitids/new_value.txt .
+old_value=$(cat old_value.txt)
+new_value=$(cat new_value.txt)
+sed -i "s/${old_value}/${new_value}/g" values.yaml
+helm upgrade react-chart .
+aws s3 rm s3://gitcommitids/old_value.txt
+echo $new_value > old_value.txt
+aws s3 cp old_value.txt s3://gitcommitids/
+rm old_value.txt new_value.txt
+
+
+
+- install AWS CLI and role for ec2 and s3 in both build and deploy server
+- cd bashscripts
+- cd react-nginx-bascripts-post-helm/
+- ls
+build.sh deploy.sh gold
+- cd gold
+- cd Gold_Site_Ecommerce
+sudo git rev-parse HEAD
+- cd react-chart
+- vi values.yaml
+in tag "give here commit id"
+- Now go ahead updating those scripts in the ansible.sh files and run the jobs in the jenkins
+
+
+
+sed explanation:
+----------------
+echo nikhil jagathi > sagar.txt
+cat sagar.txt
+nikhil jagati
+
+echo nikhil nikhil nikhil > nikhil.txt
+
+sed -i s/nikhil/akhil/2g nikhil.txt
+cat nikhil.txt
+
+nikhil akhil akhil
+
+sed -i s/nikhil/akhil/g nikhil.txt
+cat nikhil.txt
+
+akhil akhil akhil
+
+
+Theory:
+---------
 To Put it in simple flow, we integrated Jenkins with Webhook from Github Repo,
 and Jenkins server has SSH connection to Build Server , Build Server has SSH connection to Deploy Server.
 
