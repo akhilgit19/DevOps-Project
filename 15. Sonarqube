@@ -1,6 +1,6 @@
 
 =============
-Sonarqube
+Sonarqub e
 ===========
                     sonarqube
 Architecture:          |                      ---|Build Server|--build.sh-docker-- docker hub -- docker image-- trivy scan
@@ -19,6 +19,19 @@ Github------------> jenkins-----> Ansible---|                                   
 - network- default
 - storage- default
 - ssh -i keypair ubuntu@ipadrrs
+
+Prerequisites:
+Installed Docker
+Installed Jenkins
+Basic familiarity with Docker and Jenkins
+
+Modern software development workflows, ensuring code quality is paramount. 
+SonarQube and Jenkins are two powerful tools that, when integrated, 
+can help achieve this goal efficiently. In this guide, 
+we’ll walk through the process of setting up SonarQube using Docker, 
+configuring it in Jenkins UI, and integrating it into a Jenkins pipeline job 
+to scan code before building.
+
 
 1.cat /etc/os-release
 2.for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -40,6 +53,11 @@ sudo apt-get update
 5.sudo docker pull sonarqube
 6.sudo docker run -d --name sonarqube -p 9000:9000 sonarqube
 7.sudo docker ps
+
+- allow ssh port 22 for ipv4/ipv6 0.0.0.0/0
+- allow alltraffice tcp port 80 ipv4/ipv6 0.0.0./0
+
+- ip:9000
 
 
 Note:
@@ -70,28 +88,25 @@ exit
 
 9.
 
-dern software development workflows, ensuring code quality is paramount. SonarQube and Jenkins are two powerful tools that, when integrated, can help achieve this goal efficiently. In this guide, we’ll walk through the process of setting up SonarQube using Docker, configuring it in Jenkins UI, and integrating it into a Jenkins pipeline job to scan code before building.
-
-Prerequisites:
-Installed Docker
-Installed Jenkins
-Basic familiarity with Docker and Jenkins
-Step 1: Setting Up SonarQube
-Using Docker First, let’s pull the SonarQube Docker image and run it.
-
-docker pull sonarqube
-docker run -d --name sonarqube -p 9000:9000 sonarqube
 Access SonarQube UI by navigating to http://your-IP-address:9000 in your web browser. Follow the setup wizard to create an admin account.
 
 Default login credentials are admin/admin.
 
 Step 2: Generate SonarQube Token
 2.1. Log in to SonarQube using the admin credentials.
+    username and passwor is admin
 
 2.2. Navigate to “My Account” -> “Security” -> “Generate Tokens”.
 
 2.3. Provide a name for the token and click on “Generate”. Save the generated token securely.
 
+   Name-sonartoken
+   type- global analysis token
+   click on generate
+
+   save the token id
+
+-
 To set up SonarQube credentials in Jenkins:
 
 Go to “Manage Jenkins” > “Manage Credentials”.
@@ -101,6 +116,14 @@ Select the credential type (e.g., “Secret text” for tokens, “Username with
 Enter the credential details.
 Provide an ID and description.
 Save the credentials.
+
+ kind- secreatext
+ secret - tokentid
+ id- sonarqube
+ describpit-  sonarqube
+click on create
+
+- 
 Step 3: Create a New Project:
 Once logged in, you need to create a new project in SonarQube. Follow these steps:
 
@@ -110,6 +133,17 @@ Provide a unique project key and a display name for your project.
 Choose the appropriate language for your project. SonarQube supports various programming languages.
 Click on “Set Up” to proceed.
 Configure Analysis Settings: After setting up the project, you’ll be prompted to configure the analysis settings. This involves configuring how SonarQube will analyze your code.
+- click on projects
+- click on local project
+- project display name
+  hari-dev-project
+- project key
+  hari-dev-project
+- click on next
+- In choose the baseline for new code for this project
+  select use the global setting
+- click on create project
+
 
 Step 4: Configuring SonarQube Properties:
 It can offer benefits in terms of organization, consistency, and ease of maintenance, especially for projects with specific configuration needs
@@ -117,10 +151,12 @@ It can offer benefits in terms of organization, consistency, and ease of mainten
 Create a sonar-project.properties file in your project directory.
 Add necessary properties, e.g.,
 sonar.projectKey=lil_sonar_project
+
 Step 5: Installing SonarQube Scanner in Jenkins
 Open Jenkins dashboard and navigate to Manage Jenkins > Global Tool Configuration.
 Scroll down to the SonarQube Scanner section.
 Click on Add SonarQube Scanner and provide a name for the installation.
+name- sonarqubescanner
 Specify the path to the SonarQube scanner installation directory.
 Save the configuration.
 
@@ -135,34 +171,54 @@ Go to the “Available” tab, search for “SonarQube Scanner” plugin, and in
 Step 7: Configure SonarQube in Jenkins
 Navigate to Jenkins Dashboard -> “Manage Jenkins” -> “Configure System”.
 Scroll down to the “SonarQube servers” section and click on “Add SonarQube”.
-Provide a name for the SonarQube server.
+Provide a name for the SonarQube server
+name- sonarqubeserver
+
 Enter the SonarQube server URL (http://IP_SonarQube:9000).
 Paste the SonarQube token generated in Step 2.
 Save the configuration.
+
+
+- Now in the repo you create a file sonar-project.properties
+  sonar.projectKey=hari-dev-project
+
 
 Step 8: Integrate SonarQube into Jenkins Pipeline
 Open or create a Jenkinsfile in your project.
 
 Define the SonarQube scanner configuration within the pipeline script:
-
 pipeline {
-    agent any 
+    agent any
     
-    stages { 
-        stage('SCM Checkout') {
-            steps{
-           git branch: 'main', url: 'https://github.com/lily4499/lil-node-app.git'
-            }
-        }
-        // run sonarqube test
+    stages {
+        // Uncomment the below stage if you configured SonarQube
         stage('Run Sonarqube') {
             environment {
-                scannerHome = tool 'lil-sonar-tool';
+                scannerHome = tool 'sonarqubescanner'
             }
             steps {
-              withSonarQubeEnv(credentialsId: 'lil-sonar-credentials', installationName: 'lil sonar installation') {
-                sh "${scannerHome}/bin/sonar-scanner"
-              }
+                withSonarQubeEnv(credentialsId: 'sonarqubetoken', installationName: 'sonarqubeserver') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+        stage('Build Docker images on Build Server') {
+            steps {
+                script {
+                    // Execute Ansible playbook on Build Server
+                    sh "ssh ubuntu@172.31.93.4 'ansible-playbook /home/ubuntu/build.yaml'"                    // 'ansible-playbook /home/ubuntu/playbook.yaml'"
+                
+                    
+                    }
+            }
+        }
+        
+        stage('Deploy Script on Deploy Server') {
+            steps {
+                script {
+                    // Execute deployment playbook on Deploy Server
+                    sh "ssh ubuntu@172.31.93.4 'ansible-playbook /home/ubuntu/deploy.yaml'"
+                }
             }
         }
     }
@@ -185,5 +241,6 @@ echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main |
 
 2.sudo snap install trivy
 3.trivy image akhilpagadapoola/react-nginx
+  triy repo repourl
 4.trivy image --severity HIGH,CRITICAL akhilpagadapoola/react-nginx
 5.trivy image --format json --output report.json akhilpagadapoola/react-nginx
