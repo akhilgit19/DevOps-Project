@@ -1,5 +1,39 @@
+Git Branching Strategy:
+===========================
 
-=================================================
+Dev               UAT             PROD
+|                  |                |
+devbranch       uatbranch        mainbranch
+
+PR- Pull Request.
+
+- In a production, If there is any issue, They use a feature branch and assign it
+  to dev branch.
+- So once it is pushed to dev branch, Once QA confirms the code is perfect
+- PR will be raised to UAT and again there will be test in UAT to push it to prod
+  with all the approvals, it will be deployed to Prod.
+- All these processe are done before before bussines hours.
+- Every wed or mon or tuess you might have production release date
+
+v.1.2.3.4 - Version number
+1- Major
+2- Minor
+3- Patch
+4- Hotfix
+
+- Below is kubernets architecture which was developed in the last time:
+                                 deployment
+ 
+Ingress --->----SVC------->------- Pods   Pods
+                80                  8080    8080
+
+
+- Now we will use helm chart so that entire acrchitecure can be deployed through and
+  values can be modified.
+- Helm chart gives us as a package.
+
+-Step1: Install Microk8s
+=========
 ubuntu@ip-172-31-46-243:~$ sudo snap install microk8s --classic
 microk8s (1.30/stable) v1.30.4 from Canonical✓ installed
 ubuntu@ip-172-31-46-243:~$ sudo usermod -a -G microk8s ubuntu
@@ -27,11 +61,18 @@ kube-system   deployment.apps/coredns                   1/1     1            1  
 NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
 kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       111s
 kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       111s
+
+Step2: Create react-nginx namespace:
+=====================================
+
 ubuntu@ip-172-31-46-243:~$ alias kubectl="microk8s kubectl"
 ubuntu@ip-172-31-46-243:~$ kubectl create ns react-nginx-namespace
 namespace/react-nginx-namespace created
 ubuntu@ip-172-31-46-243:~$ kubectl get pods -n react-nginx-namespace
 No resources found in react-nginx-namespace namespace.
+
+Step3: Install Ingress
+=====================================
 ubuntu@ip-172-31-46-243:~$ microk8s enable ingress
 Infer repository core for addon ingress
 Enabling Ingress
@@ -70,6 +111,9 @@ kube-system   deployment.apps/coredns                   1/1     1            1  
 NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
 kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       3m9s
 kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       3m9s
+
+Step4:   Installation of helm:
+================================
 ubuntu@ip-172-31-46-243:~$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
@@ -77,20 +121,26 @@ Downloading https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz
 Verifying checksum... Done.
 Preparing to install helm into /usr/local/bin
 helm installed into /usr/local/bin/helm
+
 ubuntu@ip-172-31-46-243:~$ helm version
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
 version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
+
 ubuntu@ip-172-31-46-243:~$ helm create react-chart
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ubuntu/.kube/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/ubuntu/.kube/config
 Creating react-chart
 ubuntu@ip-172-31-46-243:~$ ls
 get_helm.sh  react-chart  snap
+
 ubuntu@ip-172-31-46-243:~$ cd react-chart
+
 ubuntu@ip-172-31-46-243:~/react-chart$ ls
 Chart.yaml  charts  templates  values.yaml
+
 ubuntu@ip-172-31-46-243:~/react-chart$ cd templates
+
 ubuntu@ip-172-31-46-243:~/react-chart/templates$ ls
 NOTES.txt     deployment.yaml  ingress.yaml  serviceaccount.yaml
 _helpers.tpl  hpa.yaml         service.yaml  tests
@@ -119,13 +169,14 @@ ubuntu@ip-172-31-46-243:~/react-chart$ sudo vi values.yaml
 - expiration - 
 - organization
 - click on genarate token
-- now past the paswword it will 
+- now past the paswword it will give
 
 - now git clone the repo in VS code
 - click on open folder
 - open the folder in the VS code
 - git branch
 *main
+- git branch -a ( total brances)
 - git checkout -b feature/kan-2
 - git branch 
 *feature/kan-2
@@ -365,7 +416,7 @@ NOTES:
 
 
 - kubectl get pods -n react-nginx
-you will not see as we didnt ad namespace in value.yaml
+you will not see as we didnt add namespace in value.yaml
 
 - in the vs code
 - git checkout -b feature2/minorchant
@@ -441,7 +492,11 @@ ubuntu@ip-172-31-37-74:~/react-chart$ kubectl get pods -n react-nginx-namespace
 NAME                                READY   STATUS    RESTARTS   AGE
 react-chart-helm-5457c9c8dc-5jngg   1/1     Running   0          20m
 react-chart-helm-5457c9c8dc-vhq98   1/1     Running   0          20m
+
+Suppose if you change anything in values.yaml by putting ingress enable as false now application wont work
+  
 ubuntu@ip-172-31-37-74:~/react-chart$ sudo vi values.yaml
+
 ubuntu@ip-172-31-37-74:~/react-chart$ helm upgrade react-chart-helm .
 Release "react-chart-helm" has been upgraded. Happy Helming!
 NAME: react-chart-helm
@@ -466,7 +521,9 @@ NAME                                READY   STATUS             RESTARTS   AGE
 react-chart-helm-5457c9c8dc-5jngg   1/1     Running            0          21m
 react-chart-helm-5457c9c8dc-vhq98   1/1     Running            0          21m
 react-chart-helm-d495d88cf-m8csd    0/1     ImagePullBackOff   0          10s
-ubuntu@ip-172-31-37-74:~/react-chart$ 
+ubuntu@ip-172-31-37-74:~/react-chart$  
+
+
 ubuntu@ip-172-31-37-74:~/react-chart$ helm rollback react-chart-helm 2
 Rollback was a success! Happy Helming!
 ubuntu@ip-172-31-37-74:~/react-chart$ kubectl get pods -n react-nginx-namespace
